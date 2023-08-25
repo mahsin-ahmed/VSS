@@ -1,0 +1,56 @@
+<a href="javascript:void(0)" *ngIf="!isList" (click)="isList=true">Go to List</a>
+<a href="javascript:void(0)" *ngIf="isList" (click)="isList=false;reset();">Go to Entry</a>
+<div *ngIf="isList">
+    <h4 class="text-center">List of Designation</h4>
+  <table class="table table-bordered">
+    <tr class="table-secondary">
+        <th scope="col">#</th>
+        <th>Full Form</th>
+        <th>Short Form</th>
+        <th>#</th>
+        <th>#</th>
+    </tr>
+    <tr *ngFor="let item of listDesignate; let i = index">
+        <td>{{i+1}}</td>
+        <td>{{item.Name}}</td>
+        <td>{{item.Short}}</td>
+        <td><button class="btn btn-sm btn-outline-primary" (click)="edit(item)">Edit</button></td>
+        <td><button class="btn btn-sm btn-outline-danger" (click)="designat=item" data-bs-toggle="modal" data-bs-target="#confirmModal">Remove</button></td>
+    </tr>
+  </table>
+</div>
+<div *ngIf="!isList">
+    <h4 class="text-center">Entry of Designation</h4>
+    <div class="row g-3">
+        <div class="col-md-4">
+            <label class="form-label" for="Name">Full Form:</label>
+            <input type="text" id="Name" [(ngModel)]="designat.Name" class="form-control" />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label" for="Short">Short Form:</label>
+            <input type="text" id="Short" [(ngModel)]="designat.Short" class="form-control" />
+        </div>
+        <div class="col-md-12 mt-5">
+            <button type="button" class="btn btn-success" *ngIf="designat.DesignateId==0" (click)="add();">Add</button>
+            <button type="button" class="btn btn-success" *ngIf="designat.DesignateId>0" (click)="update();">update</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title text-primary">Are you sure to remove?</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-danger">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" (click)="reset();">No</button>
+            <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal" (click)="remove(designat)">Yes</button>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Close</button>
+        </div>
+        </div>
+    </div>
+</div>

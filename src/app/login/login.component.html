@@ -1,0 +1,18 @@
+<!-- src/app/login/login.component.html -->
+<div class="row g-3">
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+        <h4 class="text-center text-uppercase">Login</h4>
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="Username" [(ngModel)]="User.Username" placeholder="user-name">
+            <label for="Username">User-name</label>
+        </div>
+        <div class="form-floating">
+            <input type="password" class="form-control" id="Password" [(ngModel)]="User.Password" placeholder="pass-word">
+            <label for="Password">Pass-word</label>
+        </div>
+        <br/>
+        <button (click)="login()" class="btn btn-success">Log in</button>
+    </div>
+    <div class="col-md-4"></div>
+</div>

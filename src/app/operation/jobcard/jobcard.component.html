@@ -1,0 +1,357 @@
+<a href="javascript:void(0)" *ngIf="!isList" (click)="isList=true">Go to List</a>
+<a href="javascript:void(0)" *ngIf="isList" (click)="isList=false">Go to Entry</a>
+
+<div *ngIf="isList">
+  <h4 class="text-center">List of Job Card</h4>
+  <table class="table table-bordered">
+    <tr class="table-secondary">
+        <th scope="col">
+          <a href="javascript:void(0)" (click)="openWin()">View</a>
+        </th>
+        <th>Job Card No.</th>
+        <th>Vehicle Reg.</th>
+        <th>Bay</th>
+        <th>Client</th>
+        <th>Date</th>
+        <th>Status</th>
+        <th>#</th>
+    </tr>
+    <tr *ngFor="let item of listJobCar; let i = index">
+        <td>{{i+1}}</td>
+        <td>{{item.JcNo}}</td>
+        <td>{{item.VehicleNo}}</td>
+        <td>{{item.Bay}}</td>
+        <td>{{item.ClientId}}</td>
+        <td>{{item.ReceiveDate}}</td>
+        <td>OPEN</td>
+        <td><button class="btn btn-sm btn-primary" (click)="edit(item)">Edit</button></td>
+    </tr>
+  </table>
+</div>
+
+<div *ngIf="!isList">
+  <h4 class="text-center">Entry of Job Card</h4>
+  <div class="accordion" id="accordionExample">
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading2">
+        <button class="accordion-button btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2" aria-expanded="true" aria-controls="collapse2">
+          Vehicle Info
+        </button>
+      </h2>
+      <div id="collapse2" class="accordion-collapse collapse show" aria-labelledby="heading2" data-bs-parent="#accordionExample">
+        <div class="accordion-body">
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label for="JcNo" class="form-label">Job Card No.:</label>
+              <input type="text" id="JcNo" [(ngModel)]="JobCard.JcNo" class="form-control" readonly />
+            </div>
+            <div class="col-md-4">
+              <label for="VehicleNo" class="form-label">
+                Vehicle No.: 
+                <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#searchVehicleNoModal">Search</a>  
+              </label>
+              <input type="text" id="VehicleNo" [(ngModel)]="JobCard.VehicleNo" class="form-control" placeholder="example: DM-GA-11-1632" />
+            </div>
+            <div class="col-md-4">
+              <label for="Model" class="form-label">Model:</label>
+              <input type="text" id="Model" [(ngModel)]="JobCard.Model" class="form-control" placeholder="model number" />
+            </div>
+            <div class="col-md-4">
+              <label for="Mileage" class="form-label" title="">Milage(KM):</label>
+              <input type="number" id="Mileage" [(ngModel)]="JobCard.Mileage" class="form-control" placeholder="milage in KM" />
+            </div>
+            <div class="col-md-4">
+              <label for="Vin" class="form-label" title="">VIN/Frame:</label>
+              <input type="text" id="Vin" [(ngModel)]="JobCard.Vin" class="form-control" placeholder="vin or frame number" />
+            </div>
+            <div class="col-md-4">
+              <label for="ArriveDate" class="form-label" title="">Client Arrive:</label>
+              <input type="datetime-local" id="ArriveDate" [(ngModel)]="JobCard.ArriveDate" class="form-control" placeholder="arrival time" />
+            </div>
+            <div class="col-md-4">
+              <label for="Bay" class="form-label">Bay:</label>
+              <select id="Bay" class="form-control" [(ngModel)]="JobCard.Bay">
+                <option *ngFor="let item of listBay" value="{{item}}">{{item}}</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label for="EstiCostTotal" class="form-label" title="">Total Estimated Cost</label>
+              <input type="text" id="EstiCostTotal" [(ngModel)]="JobCard.EstiCostTotal" class="form-control" placeholder="total estimated cost" />
+            </div>
+            <div class="col-md-4">
+              <label for="EstiCostJob" class="form-label" title="">Estimated Cost of Jobs</label>
+              <input type="text" id="EstiCostJob" [(ngModel)]="JobCard.EstiCostJob" class="form-control" placeholder="Cost of jobs" />
+            </div>
+            <div class="col-md-4">
+              <label for="EstiCostSpare" class="form-label" title="">Estimated Cost of Spare</label>
+              <input type="text" id="EstiCostSpare" [(ngModel)]="JobCard.EstiCostSpare" class="form-control" placeholder="Cost of spare" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading1">
+        <button class="accordion-button btn btn-secondary collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1" aria-expanded="false" aria-controls="collapse1">
+            Client Info
+        </button>
+      </h2>
+      <div id="collapse1" class="accordion-collapse collapse" aria-labelledby="heading1" data-bs-parent="#accordionExample">
+        <div class="accordion-body">
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label for="client_name" class="form-label">Client:</label>
+              <input type="text" id="client_name" class="form-control" placeholder="client-name" readonly value="{{ClientName}}" />
+            </div>
+            <div class="col-md-4">
+              <label for="client_name" class="form-label">New/Choose:</label>
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" [(ngModel)]="isNew">
+                <button *ngIf="isNew" type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#newClientModal">
+                  New Client
+                </button>
+                <button *ngIf="!isNew" type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#chooseClientModal">
+                  Choose Client
+                </button>    
+              </div>
+            </div>
+            <div class="col-md-4">
+            </div>
+            <div class="col-12">
+              <label class="form-label">Description:</label>
+              <textarea id="VehicleNo" [(ngModel)]="JobCard.Description" class="form-control "></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+      
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading3">
+        <button class="accordion-button btn btn-secondary collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3" aria-expanded="false" aria-controls="collapse3">
+          Job Details
+        </button>
+      </h2>
+      <div id="collapse3" class="accordion-collapse collapse" aria-labelledby="heading3" data-bs-parent="#accordionExample">
+        <div class="accordion-body">
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label for="JobGroup" class="form-label">Job Group</label>
+              <select id="JobGroup" class="form-control" [(ngModel)]="JobGroup" (change)="changeJG()">
+                <option *ngFor="let item of listJobGroup" value="{{item.GroupId}}">{{item.Name}}</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label for="Job" class="form-label">Job</label>
+              <select id="Job" class="form-control" [(ngModel)]="Job" (change)="changeJob()">
+                <option *ngFor="let item of listJob" value="{{item.JobId}}">{{item.Description}}</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label for="EngineId" class="form-label">Engine Size</label>
+              <select id="EngineId" class="form-control" [(ngModel)]="EngineId" (change)="changeEngine()">
+                <option *ngFor="let item of listEngine" value="{{item.EngineId}}">{{item.Code}} {{item.CC}}</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label for="JobPrice" class="form-label" title="">Price:</label>
+              <input type="text" id="JobPrice" [(ngModel)]="JobPrice" class="form-control" placeholder="" readonly />
+            </div>
+            <div class="col-md-4">
+              <label for="Duration" class="form-label" title="">Duration (Minutes):</label>
+              <input type="text" id="Duration" [(ngModel)]="Duration" class="form-control" placeholder="" readonly />
+            </div>
+            <div class="col-md-4">
+              <label for="JobStatus" class="form-label">Status</label>
+              <select id="JobStatus" class="form-control" [(ngModel)]="JobStatus">
+                <option *ngFor="let item of listJobStatus" value="{{item.Id}}">{{item.Name}}</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label for="Employees" class="form-label">Resource</label>
+              <select id="Employees" class="form-control" [(ngModel)]="Employees" multiple (change)="changeEmployee()">
+                <option *ngFor="let item of listEmp" value="{{item.EmployeeId}}">{{item.FirstName}} ({{item.Designation}})</option>
+              </select>
+            </div>
+            <div class="col-md-4 mt-5">
+                <button class="btn btn-sm btn-success" (click)="addJob();"><i class="fa fa-plus"></i> Add</button>
+            </div>
+          </div>
+            <table class="table table-bordered">
+                <tr class="table-secondary">
+                    <th scope="col">#</th>
+                    <th>Group</th>
+                    <th>Job</th>
+                    <th>Engine</th>
+                    <th>Price</th>
+                    <th>Duration</th>
+                    <th>Status</th>
+                    <th>Resource</th>
+                    <th>#</th>
+                </tr>
+                <tr *ngFor="let item of listJcJob; let i = index">
+                    <td>{{i+1}}</td>
+                    <td>{{item.JobGroupId}}</td>
+                    <td>{{item.JobId}}</td>
+                    <td>{{item.EngineSizeId}}</td>
+                    <td>{{item.Price}}</td>
+                    <td>{{item.Duration}}</td>
+                    <td>{{item.JobStatus}}</td>
+                    <td>{{item.Resources}}</td>
+                    <td><button class="btn btn-sm btn-danger" (click)="removeJob(item)">Remove</button></td>
+                </tr>
+            </table>
+        </div>
+      </div>
+    </div>
+  
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading4">
+        <button class="accordion-button btn btn-secondary collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse4" aria-expanded="false" aria-controls="collapse4">
+          Spare Parts
+        </button>
+      </h2>
+      <div id="collapse4" class="accordion-collapse collapse" aria-labelledby="heading4" data-bs-parent="#accordionExample">
+        <div class="accordion-body">
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label for="ItemId" class="form-label">Spare</label>
+              <select id="ItemId" class="form-control" [(ngModel)]="ItemId" (change)="changeItem()">
+                <option *ngFor="let item of listItem" value="{{item.ItemCode}}">{{item.ItemName}}</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label for="Brand" class="form-label" title="">Brand:</label>
+              <input type="text" id="Brand" [(ngModel)]="Brand" class="form-control" placeholder="Brand.." readonly />
+            </div>
+            <div class="col-md-4">
+              <label for="Quantity" class="form-label" title="">Quantity:</label>
+              <input type="number" id="Quantity" [(ngModel)]="Quantity" class="form-control" placeholder="" (change)="changeItemQty()" />
+            </div>
+            <div class="col-md-4">
+              <label for="SparePrice" class="form-label" title="">Unit Price:</label>
+              <input type="number" id="SparePrice" [(ngModel)]="SparePrice" class="form-control" placeholder="" readonly />
+            </div>
+            <div class="col-md-4">
+              <label for="SpareAmount" class="form-label" title="">Amount:</label>
+              <input type="number" id="SpareAmount" [(ngModel)]="SpareAmount" class="form-control" placeholder="" readonly />
+            </div>
+            <div class="col-md-4">
+              <label for="ItemStatus" class="form-label">Status</label>
+              <select id="ItemStatus" class="form-control" [(ngModel)]="ItemStatus">
+                <option *ngFor="let item of listItemStatus" value="{{item.Id}}">{{item.Name}}</option>
+              </select>
+            </div>
+            <div class="col-md-4 mt-5">
+                <button class="btn btn-sm btn-success" (click)="addSpare();"><i class="fa fa-plus"></i> Add</button>
+            </div>
+          </div>
+            <table class="table table-bordered">
+                <tr class="table-secondary">
+                    <th scope="col">#</th>
+                    <th>Item</th>
+                    <th>Brand</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>#</th>
+                </tr>
+                <tr *ngFor="let item of listJcSpare; let i = index">
+                  <td>{{i+1}}</td>
+                  <td>{{item.ItemCode}}</td>
+                  <td>{{item.Brand}}</td>
+                  <td>{{item.Price}}</td>
+                  <td>{{item.Quantity}}</td>
+                  <td>{{item.SpareAmount}}</td>
+                  <td>{{item.ItemStatus}}</td>
+                  <td><button class="btn btn-sm btn-danger" (click)="removeItem(item)">Remove</button></td>
+              </tr>
+            </table>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  <div class="row g-3">
+    <div class="col-md-6">
+      <button type="button" class="btn btn-success" (click)="addJobCard()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="newClientModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+ <div class="modal-dialog modal-xl">
+   <div class="modal-content">
+     <div class="modal-header">
+       <h5 class="modal-title text-success" id="exampleModalLabel">New Client</h5>
+       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+     </div>
+     <div class="modal-body text-success">
+        <div class="row g-3">
+            <div class="col-md-4">
+                <label class="form-label">Client Name:</label>
+                <input type="text" id="clientName" [(ngModel)]="Client.Name" class="form-control" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Membership Card Number:</label>
+              <input type="text" id="clientName" [(ngModel)]="Client.Name" class="form-control" />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Phone:</label>
+            <input type="text" id="Phone" [(ngModel)]="Client.Phone"  class="form-control" />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Email:</label>
+            <input type="text" id="Email" [(ngModel)]="Client.Email"  class="form-control" />
+          </div>
+          <div class="col-md-12">
+            <label class="form-label">Address:</label>
+              <input type="text" id="Address" [(ngModel)]="Client.Address" class="form-control " />
+          </div>
+        </div>
+     </div>
+     <div class="modal-footer">
+       <button type="button" class="btn btn-success" (click)="addClient();">Add</button>
+     </div>
+   </div>
+ </div>
+</div>
+
+<div class="modal fade" id="chooseClientModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title text-primary">Choose a Client</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-danger">
+          <select [(ngModel)]="ClientName">
+            <option *ngFor="let item of listClient" value="{{item.Name}}">{{item.Name}}</option>
+          </select>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="searchVehicleNoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title text-primary">Search By Vehicle Registration Number</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-danger">
+          
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

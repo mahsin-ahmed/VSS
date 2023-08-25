@@ -1,0 +1,34 @@
+<a href="javascript:void(0)" *ngIf="!isList" (click)="isList=true">Go to List</a>
+<a href="javascript:void(0)" *ngIf="isList" (click)="isList=false">Go to Entry</a>
+<div *ngIf="isList">
+  <h4 class="text-center">List of Client</h4>
+</div>
+<div *ngIf="!isList">
+  <h4 class="text-center">Client Entry</h4>
+  <div class="row g-3">
+    <div class="col-md-4">
+        <label class="form-label" for="clientName">Client Name:</label>
+        <input type="text" id="clientName" [(ngModel)]="Client.Name" class="form-control" />
+    </div>
+    <div class="col-md-4">
+      <label class="form-label" for="MembershipId">Membership Card Number:</label>
+      <input type="text" id="MembershipId" [(ngModel)]="Client.MembershipId" class="form-control" />
+    </div>
+    <div class="col-md-4">
+      <label class="form-label" for="Phone">Phone:</label>
+      <input type="text" id="Phone" [(ngModel)]="Client.Phone"  class="form-control" />
+    </div>
+    <div class="col-md-4">
+      <label class="form-label" for="Email">Email:</label>
+      <input type="text" id="Email" [(ngModel)]="Client.Email"  class="form-control" />
+    </div>
+    <div class="col-md-12">
+      <label class="form-label" for="Address">Address:</label>
+        <input type="text" id="Address" [(ngModel)]="Client.Address" class="form-control " />
+    </div>
+    <div class="col-md-12 mt-5">
+      <button type="button" class="btn btn-success" (click)="addClient();">Add</button>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,32 @@
+<a href="javascript:void(0)" *ngIf="!isList" (click)="isList=true">Go to List</a>
+<a href="javascript:void(0)" *ngIf="isList" (click)="isList=false">Go to Entry</a>
+  <div *ngIf="isList">
+    <h4 class="text-center">List of Employee</h4>
+  </div>
+  <div *ngIf="!isList">
+    <h4 class="text-center">Employee Entry</h4>
+    <div class="row g-3">
+      <div class="col-md-4">
+          <label class="form-label" for="FirstName">Name:</label>
+          <input type="text" id="FirstName" [(ngModel)]="Employee.FirstName" class="form-control" />
+      </div>
+      <div class="col-md-4">
+        <label class="form-label" for="Phone">Phone:</label>
+        <input type="text" id="Phone" [(ngModel)]="Employee.Phone"  class="form-control" />
+      </div>
+      <div class="col-md-4">
+        <label class="form-label" for="Email">Email:</label>
+        <input type="text" id="Email" [(ngModel)]="Employee.Email"  class="form-control" />
+      </div>
+      <div class="col-md-4">
+        <label for="DesignateId" class="form-label">Designation:</label>
+        <select id="DesignateId" class="form-control" [(ngModel)]="Employee.DesignateId">
+          <option *ngFor="let item of listDesignate" value="{{item.DesignateId}}">{{item.Name}}</option>
+        </select>
+      </div>
+      <div class="col-md-12 mt-5">
+        <button type="button" class="btn btn-success" (click)="addEmployee();">Add</button>
+      </div>
+    </div>
+  
+  </div>

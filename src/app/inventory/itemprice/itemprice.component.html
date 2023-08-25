@@ -1,0 +1,36 @@
+<p>item-price</p>
+<div class="mb-3">
+    <div class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" [(ngModel)]="isLabour">
+        <label class="form-check-label" for="flexSwitchCheckDefault">{{isLabour===true?'Job':'Spare Parts'}}</label>
+      </div>
+</div>
+<div class="mb-3" *ngIf="isLabour">
+    <label for="exampleFormControlInput1" class="form-label">Job/Labour</label>
+    <select class="form-select" aria-label="Default select example">
+        <option selected>Select a job</option>
+        <option value="1">J101</option>
+        <option value="2">J109</option>
+        <option value="3">J105</option>
+      </select>
+  </div>
+  <div class="mb-3" *ngIf="!isLabour">
+    <label for="exampleFormControlInput1" class="form-label">Spare Parts</label>
+    <select class="form-select" aria-label="Default select example">
+        <option selected>Select a spare-parts</option>
+        <option value="1">P001</option>
+        <option value="2">P059</option>
+        <option value="3">P035</option>
+      </select>
+  </div>
+  <div class="mb-3">
+    <label for="exampleFormControlInput1" class="form-label">Price</label>
+    <input type="number" class="form-control" id="exampleFormControlInput1">
+  </div>
+  <div class="mb-3">
+    <label for="exampleFormControlTextarea1" class="form-label">Description</label>
+    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+  </div>
+  <div class="mb-3">
+    <button type="button" class="btn btn-success">Submit</button>
+  </div>

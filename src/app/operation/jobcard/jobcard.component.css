@@ -1,0 +1,10 @@
+.btn-success:hover{
+    color: green;
+    border-color:green;
+    background-color:whitesmoke;
+}
+.btn-danger:hover{
+    color: red;
+    border-color:red;
+    background-color:whitesmoke;
+}
