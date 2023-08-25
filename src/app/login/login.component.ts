@@ -9,7 +9,6 @@ import { AppComponent } from '../app.component';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-  str:string='git';
   constructor(private authService: AuthService, private router: Router, private app:AppComponent) {}
   userInfo:{
     userName:string,

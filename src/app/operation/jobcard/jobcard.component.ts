@@ -1,4 +1,6 @@
 import { Component, numberAttribute } from '@angular/core';
+import { CommonService, toastPayload } from '../../services/common.service';
+import { IndividualConfig } from 'ngx-toastr';
 
 @Component({
   selector: 'app-jobcard',
@@ -7,7 +9,29 @@ import { Component, numberAttribute } from '@angular/core';
 })
 export class JobcardComponent {
   isNew:boolean = true;
-  Client :{
+  toast!: toastPayload;
+  
+  constructor(
+    private cs:CommonService
+    ) { 
+  }
+
+  //type: 'success', 'error', 'warning', 'info'
+  //message: '<span>Action in '+type+'</span>',
+  showMessage(type: string, message:string) {
+    this.toast = {
+      message:message,
+      title: type.toUpperCase(),
+      type: type,
+      ic: {
+        timeOut: 2500,
+        closeButton: true,
+      } as IndividualConfig,
+    };
+    this.cs.showToast(this.toast);
+  }
+
+  Client : {
     BpId:number,
     Name:string,
     Address:string,
@@ -21,9 +45,12 @@ export class JobcardComponent {
     UpdateBy:number,
     IsDelete:boolean,
     DeleteDate:'',
-    DeleteBy:number
-    }={
-      BpId:0,
+    DeleteBy:number,
+    ContactPerson:string,
+    ContactPersonNo:string,
+    MembershipId:string
+    } = {
+    BpId:0,
     Name:'',
     Address:'',
     Phone:'',
@@ -36,17 +63,26 @@ export class JobcardComponent {
     UpdateBy:0,
     IsDelete:false,
     DeleteDate:'' ,
-    DeleteBy:0
+    DeleteBy:0,
+    ContactPerson:'',
+    ContactPersonNo:'',
+    MembershipId:''
     };
   listClient:any = [];
   addClient() {
+    this.Client.BpId = new Date().getTime();
+    this.JobCard.ClientId = this.Client.BpId;
+    this.JobCard.ClientName = this.Client.Name;
+    this.JobCard.ClientPhone = this.Client.Phone;
+    this.JobCard.ClientEmail = this.Client.Email;
+    this.JobCard.ClientAddress = this.Client.Address;
     this.listClient.push(this.Client);
     this.resetClient();
   }
 
   resetClient() {
-      this.Client ={
-        BpId:0,
+      this.Client = {
+      BpId:0,
       Name:'',
       Address:'',
       Phone:'',
@@ -59,76 +95,132 @@ export class JobcardComponent {
       UpdateBy:0,
       IsDelete:false,
       DeleteDate:'' ,
-      DeleteBy:0
+      DeleteBy:0,
+      ContactPerson:'',
+      ContactPersonNo:'',
+      MembershipId:''
           };
-         }
+  }
 
   JobCard : {
+    // Job-Card
     JcNo:string,
-    ClientId:number,
-    Description:string,
-    VehicleNo:string,
-    Model:string,
+    JobDate:string,
+    CreateBy:number,
     Vin:string,
     Mileage:number,
-    Bay:number,
     EstiCostTotal:number,
     EstiCostJob:number,
     EstiCostSpare:number,
+    ActualCostTotal:number,
+    ActualCostJob:number,
+    ActualCostSpare:number,
     ReceiveDate:string,
     ReceiveBy:number,
-    IsDone:boolean,
-    IsPaid:boolean,
-    DocTypeId:number,
-    ArriveDate:string,
+    JobStart:string,
+    JobEnd:string,
+    Bay:number,
+    VehicleNo:string,
+    Model:string,
+    JcStatus:number, // (CLOSE/OPEN)
+    // Client
+    ClientId:number,
+    ClientName:string,
+    ClientPhone:string,
+    ClientEmail:string,
+    ClientAddress:string,
+    ContactPerson:string,
+    ContactPersonNo:string,
+    Description:string,
+    // Job-Details, Spares, JcResource
     JobDetails:any,
-    Spares:any
-   }={
+    JcSpares:any,
+    JcHr:any
+   } = {
     JcNo:this.genJcNo(),
-    ClientId:0,
-    Description:'',
-    VehicleNo:'',
-    Model:'',
+    JobDate:'',
+    CreateBy:0,
     Vin:'',
     Mileage:0,
-    Bay:0,
     EstiCostTotal:0,
     EstiCostJob:0,
     EstiCostSpare:0,
+    ActualCostTotal:0,
+    ActualCostJob:0,
+    ActualCostSpare:0,
     ReceiveDate:'',
     ReceiveBy:0,
-    IsDone:false,
-    IsPaid:false,
-    DocTypeId:0,
-    ArriveDate:'',
+    JobStart:'',
+    JobEnd:'',
+    Bay:0,
+    VehicleNo:'',
+    Model:'',
+    JcStatus:0,
+    ClientId:0,
+    ClientName:'',
+    ClientPhone:'',
+    ClientEmail:'',
+    ClientAddress:'',
+    ContactPerson:'',
+    ContactPersonNo:'',
+    Description:'',
     JobDetails:[],
-    Spares:[]
+    JcSpares:[],
+    JcHr:[]
    };
 
    resetJc(){
     this.JobCard ={
       JcNo:this.genJcNo(),
-      ClientId:0,
-      Description:'',
-      VehicleNo:'',
-      Model:'',
-      Vin:'',
-      Mileage:0,
-      Bay:0,
-      EstiCostTotal:0,
-      EstiCostJob:0,
-      EstiCostSpare:0,
-      ReceiveDate:'',
-      ReceiveBy:0,
-      IsDone:false,
-      IsPaid:false,
-      DocTypeId:0,
-      ArriveDate:'',
-      JobDetails:[],
-      Spares:[]
+    JobDate:'',
+    CreateBy:0,
+    Vin:'',
+    Mileage:0,
+    EstiCostTotal:0,
+    EstiCostJob:0,
+    EstiCostSpare:0,
+    ActualCostTotal:0,
+    ActualCostJob:0,
+    ActualCostSpare:0,
+    ReceiveDate:'',
+    ReceiveBy:0,
+    JobStart:'',
+    JobEnd:'',
+    Bay:0,
+    VehicleNo:'',
+    Model:'',
+    JcStatus:0,
+    ClientId:0,
+    ClientName:'',
+    ClientPhone:'',
+    ClientEmail:'',
+    ClientAddress:'',
+    ContactPerson:'',
+    ContactPersonNo:'',
+    Description:'',
+    JobDetails:[],
+    JcSpares:[],
+    JcHr:[]
      };
    }
-    
+
+   resetJob(){
+    this.JcJob = {
+      JcJobId:0,
+      JobGroupId:0,
+      JobGroup:'',
+      JobId:0,
+      Job:'',
+      EngineSizeId:0,
+      EngineSize:'',
+      Price:0,
+      Duration:0,
+      JobStatus:0,
+      JcResource:[]
+    };
+   }
+
+   listReceiveBy:any=[{EmployeeId:1, Name:'Mr. Ali'},{EmployeeId:1, Name:'Mr. Ripon'}];
     JcJob:{
       JcJobId:number,
       JobGroupId:number,
@@ -141,7 +233,7 @@ export class JobcardComponent {
       Duration:number,
       JobStatus:number,
       JcResource:any
-    }={
+    } = {
       JcJobId:0,
       JobGroupId:0,
       JobGroup:'',
@@ -155,13 +247,13 @@ export class JobcardComponent {
       JcResource:[]
     };
 
-    ClientName:string = '';
+    //ClientName:string = '';
     listBay:any = [1,2,3,4,5,6,7,8];
     JobGroup:number = 0;
     listJobGroup:any = [
       {GroupId:1, Name:'Engine Work & Tune Up'},
       {GroupId:2, Name:'Wheel Balancing'}
-  ];
+    ];
 
   listJob:any = [];
   listOfJob:any = [
@@ -222,6 +314,7 @@ export class JobcardComponent {
     console.log(this.Employees);
   }
 
+  listJcStatus:any=[{Id:1,Name:'CLOSE'},{Id:2,Name:'OPEN'}];
   JobStatus:number = 0;
   listJobStatus:any=[{Id:1,Name:'Close'},{Id:2,Name:'Open'}];
   listJcJob:any=[];
@@ -238,17 +331,34 @@ export class JobcardComponent {
     this.calculateEstiCost();
   }
 
-  ItemId:number = 0;
-  ItemCode:number = 0;
-  Quantity:number =0;
-  Brand:string ='';
-  SparePrice:number = 0;
+  // ItemId:number = 0;
+  // ItemCode:number = 0;
+  // Quantity:number =0;
+  // Brand:string ='';
+  // SparePrice:number = 0;
+  JcSpare:{
+    ItemId:number,
+    ItemCode:number,
+    Quantity:number,
+    Brand:string,
+    SparePrice:number,
+    SpareAmount:number,
+    ItemStatus:number
+  }={
+    ItemId:0,
+    ItemCode:0,
+    Quantity:0,
+    Brand:'',
+    SparePrice:0,
+    SpareAmount:0,
+    ItemStatus:0
+  }
   changeItem(){
-    var oItem = this.listItem.filter((x:any)=>x.Id== this.ItemId)[0];
+    var oItem = this.listItem.filter((x:any)=>x.Id== this.JcSpare.ItemId)[0];
     if(oItem!==undefined){
-      this.ItemCode=oItem.ItemCode;
-      this.Brand=oItem.Brand;
-      this.SparePrice = oItem.Price;
+      this.JcSpare.ItemCode=oItem.ItemCode;
+      this.JcSpare.Brand=oItem.Brand;
+      this.JcSpare.SparePrice = oItem.Price;
     }
     this.calculateSpareAmount();
   }
@@ -258,7 +368,7 @@ export class JobcardComponent {
   }
 
   calculateSpareAmount(){
-    this.SpareAmount = this.SparePrice * this.Quantity;
+    this.JcSpare.SpareAmount = this.JcSpare.SparePrice * this.JcSpare.Quantity;
   }
 
   listItem:any = [
@@ -266,23 +376,36 @@ export class JobcardComponent {
     {Id:2,ItemCode:'002',ItemName:'RELAY BASE - WI', Brand: 'Toyota', Price: 100}
   ];
 
-  ItemStatus:number =0;
+  //ItemStatus:number =0;
   listItemStatus:any=[{Id:1,Name:'USED'},{Id:2,Name:'REFUND'}];
 
-  SpareAmount:number=0;
+  resetSpare(){
+    this.JcSpare = {
+      ItemCode:0,
+      Brand:'',
+      ItemId:0,
+      ItemStatus:0,
+      Quantity:0,
+      SpareAmount:0,
+      SparePrice:0
+    };
+  }
+
+  //SpareAmount:number=0;
   listJcSpare:any=[];
   addSpare(){
-    this.SpareAmount = this.Quantity * this.SparePrice;
+    this.JcSpare.SpareAmount = this.JcSpare.Quantity * this.JcSpare.SparePrice;
     this.listJcSpare.push({
-      ItemId:this.ItemId,
-      ItemCode:this.ItemCode,
-      Brand:this.Brand,
-      Quantity:this.Quantity,
-      ItemStatus:this.ItemStatus,
-      Price:this.SparePrice,
-      SpareAmount:this.SpareAmount
+      ItemId:this.JcSpare.ItemId,
+      ItemCode:this.JcSpare.ItemCode,
+      Brand:this.JcSpare.Brand,
+      Quantity:this.JcSpare.Quantity,
+      ItemStatus:this.JcSpare.ItemStatus,
+      Price:this.JcSpare.SparePrice,
+      SpareAmount:this.JcSpare.SpareAmount
     });
     this.calculateEstiCost();
+    this.resetSpare();
   }
 
   calculateEstiCost(){
@@ -297,12 +420,78 @@ export class JobcardComponent {
     this.JobCard.EstiCostTotal = this.JobCard.EstiCostJob + this.JobCard.EstiCostSpare;
   }
 
-  listJobCar:any=[];
+  listJobCard:any=[
+    {
+    JcNo:'1001',
+    JobDate:'2023-05-19',
+    CreateBy:9,
+    Vin:'FV65765',
+    Mileage:4200,
+    EstiCostTotal:26000,
+    EstiCostJob:15000,
+    EstiCostSpare:11000,
+    ActualCostTotal:27000,
+    ActualCostJob:15000,
+    ActualCostSpare:12000,
+    ReceiveDate:'2023-05-19',
+    ReceiveBy:1,
+    JobStart:'2023-05-19',
+    JobEnd:'2023-05-25',
+    Bay:2,
+    VehicleNo:'DM-FA-33-6842',
+    Model:'M6574',
+    JcStatus:2,
+    ClientId:1,
+    ClientName:'Mr. Robin',
+    ClientPhone:'0176474668',
+    ClientEmail:'one@email.com',
+    ClientAddress:'Dhanmondi',
+    ContactPerson:'Mostofa',
+    ContactPersonNo:'01985541226',
+    Description:'',
+    JobDetails:[],
+    JcSpares:[],
+    JcHr:[]
+  },
+  {
+    JcNo:'1002',
+    JobDate:'2023-05-19',
+    CreateBy:9,
+    Vin:'FV546456',
+    Mileage:4200,
+    EstiCostTotal:26000,
+    EstiCostJob:15000,
+    EstiCostSpare:11000,
+    ActualCostTotal:27000,
+    ActualCostJob:15000,
+    ActualCostSpare:12000,
+    ReceiveDate:'2023-05-19',
+    ReceiveBy:1,
+    JobStart:'2023-05-19',
+    JobEnd:'2023-05-25',
+    Bay:2,
+    VehicleNo:'CM-BA-88-3698',
+    Model:'M6574',
+    JcStatus:2,
+    ClientId:2,
+    ClientName:'Mr. Goni',
+    ClientPhone:'01853544152',
+    ClientEmail:'chitt@email.com',
+    ClientAddress:'Oxizen, Chittagong',
+    ContactPerson:'Abul',
+    ContactPersonNo:'01865547141',
+    Description:'',
+    JobDetails:[],
+    JcSpares:[],
+    JcHr:[]
+  }
+];
   addJobCard(){
     this.JobCard.JcNo = this.genJcNo();
     this.JobCard.ReceiveDate = new Date().toLocaleString();
-    this.listJobCar.push(this.JobCard);
+    this.listJobCard.push(this.JobCard);
     this.isList = true;
+    this.resetJob();
   }
 
   isList:boolean=true;
@@ -318,7 +507,7 @@ export class JobcardComponent {
 
   }
   genJcNo():string{
-    return new Date().getTime().toString().split('.')[0];
+    return new Date().getTime().toString();
   }
 
   openWin() {
@@ -632,5 +821,44 @@ export class JobcardComponent {
     }
     //myWindow = window.open("", "", "width=300,height=300");
     //myWindow.opener.document.getElementById("demo").innerHTML = "HELLO!";
+  }
+
+  VehicleNo:string = '';
+  listJobCardS:any=[];
+  searchVehicle(){
+    //var inOff = 'Dhaka'.indexOf(this.VehicleNo);
+    this.listJobCardS = this.listJobCard.filter((x:any)=>x.VehicleNo.indexOf(this.VehicleNo));
+  }
+
+  selectVehicle(item:any){
+    this.JobCard.JcNo=item.JcNo;
+    this.JobCard.JobDate=item.JobDate;
+    this.JobCard.CreateBy=item.CreateBy;
+    this.JobCard.Vin=item.Vin;
+    this.JobCard.Mileage=item.Mileage;
+    this.JobCard.EstiCostTotal=item.EstiCostTotal;
+    this.JobCard.EstiCostJob=item.EstiCostJob;
+    this.JobCard.EstiCostSpare=item.EstiCostSpare;
+    this.JobCard.ActualCostTotal=item.ActualCostTotal;
+    this.JobCard.ActualCostJob=item.ActualCostJob;
+    this.JobCard.ActualCostSpare=item.ActualCostSpare;
+    this.JobCard.ReceiveDate=item.ReceiveDate;
+    this.JobCard.ReceiveBy=item.ReceiveBy;
+    this.JobCard.JobStart=item.JobStart;
+    this.JobCard.JobEnd=item.JobEnd;
+    this.JobCard.Bay=item.Bay;
+    this.JobCard.VehicleNo=item.VehicleNo;
+    this.JobCard.Model=item.Model;
+    this.JobCard.JcStatus=item.JcStatus;
+    this.JobCard.ClientId=item.ClientId;
+    this.JobCard.ClientName=item.ClientName;
+    this.JobCard.ClientPhone=item.ClientPhone;
+    this.JobCard.ClientEmail=item.ClientEmail;
+    this.JobCard.ClientAddress=item.ClientAddress;
+    this.JobCard.ContactPerson=item.ContactPerson;
+    this.JobCard.ContactPersonNo=item.ContactPersonNo;
+    if(this.JobCard.ClientId>0){
+      this.isNew = false;
+    }
   }
 }
