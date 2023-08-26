@@ -9,7 +9,18 @@ import { IndividualConfig } from 'ngx-toastr';
 })
 export class DesignationComponent {
   isList:boolean=true;
-  listDesignate:any =[];
+  listDesignate:any =[
+    {
+    DesignateId:2,
+    Name:'Floor Supervisor',
+    Short:'FS'
+  },
+  {
+    DesignateId:3,
+    Name:'Mechanic',
+    Short:'M'
+  }
+];
   designat:{
     DesignateId:number,
     Name:string,
@@ -21,24 +32,6 @@ export class DesignationComponent {
   };
   toast!: toastPayload;
   constructor(private cs:CommonService) { 
-    this.designat ={
-      DesignateId:1,
-      Name:'Service Advisor',
-      Short:'SA'
-    };
-    this.listDesignate.push(this.designat);
-    this.designat ={
-      DesignateId:2,
-      Name:'Floor Supervisor',
-      Short:'FS'
-    };
-    this.listDesignate.push(this.designat);
-    this.designat ={
-      DesignateId:3,
-      Name:'Mechanic',
-      Short:'M'
-    };
-    this.listDesignate.push(this.designat);
   }
 
   reset(){

@@ -5,9 +5,8 @@
   <h4 class="text-center">List of Job Card</h4>
   <table class="table table-bordered">
     <tr class="table-secondary">
-        <th scope="col">
-          <a href="javascript:void(0)" (click)="openWin()">View</a>
-        </th>
+        <th>#</th>
+        <th scope="col">SL No.</th>
         <th>Job Card No.</th>
         <th>Vehicle Reg.</th>
         <th>Bay</th>
@@ -16,7 +15,8 @@
         <th>Status</th>
         <th>#</th>
     </tr>
-    <tr *ngFor="let item of listJobCar; let i = index">
+    <tr *ngFor="let item of listJobCard; let i = index">
+        <td><a href="javascript:void(0)" (click)="openWin()">View</a></td>
         <td>{{i+1}}</td>
         <td>{{item.JcNo}}</td>
         <td>{{item.VehicleNo}}</td>
@@ -57,16 +57,22 @@
               <input type="text" id="Model" [(ngModel)]="JobCard.Model" class="form-control" placeholder="model number" />
             </div>
             <div class="col-md-4">
-              <label for="Mileage" class="form-label" title="">Milage(KM):</label>
-              <input type="number" id="Mileage" [(ngModel)]="JobCard.Mileage" class="form-control" placeholder="milage in KM" />
-            </div>
-            <div class="col-md-4">
               <label for="Vin" class="form-label" title="">VIN/Frame:</label>
               <input type="text" id="Vin" [(ngModel)]="JobCard.Vin" class="form-control" placeholder="vin or frame number" />
             </div>
             <div class="col-md-4">
-              <label for="ArriveDate" class="form-label" title="">Client Arrive:</label>
-              <input type="datetime-local" id="ArriveDate" [(ngModel)]="JobCard.ArriveDate" class="form-control" placeholder="arrival time" />
+              <label for="Mileage" class="form-label" title="">Milage(KM):</label>
+              <input type="number" id="Mileage" [(ngModel)]="JobCard.Mileage" class="form-control" placeholder="milage in KM" />
+            </div>
+            <div class="col-md-4">
+              <label for="ReceiveDate" class="form-label" title="">Receive Date:</label>
+              <input type="datetime-local" id="ReceiveDate" [(ngModel)]="JobCard.ReceiveDate" class="form-control" placeholder="Receive Date" />
+            </div>
+            <div class="col-md-4">
+              <label for="ReceiveBy" class="form-label">Receive By:</label>
+              <select id="ReceiveBy" class="form-control" [(ngModel)]="JobCard.ReceiveBy">
+                <option *ngFor="let item of listReceiveBy" value="{{item.EmployeeId}}">{{item.Name}}</option>
+              </select>
             </div>
             <div class="col-md-4">
               <label for="Bay" class="form-label">Bay:</label>
@@ -75,8 +81,10 @@
               </select>
             </div>
             <div class="col-md-4">
-              <label for="EstiCostTotal" class="form-label" title="">Total Estimated Cost</label>
-              <input type="text" id="EstiCostTotal" [(ngModel)]="JobCard.EstiCostTotal" class="form-control" placeholder="total estimated cost" />
+              <label for="JcStatus" class="form-label">JC Status:</label>
+              <select id="JcStatus" class="form-control" [(ngModel)]="JobCard.JcStatus">
+                <option *ngFor="let item of listJcStatus" value="{{item.Id}}">{{item.Name}}</option>
+              </select>
             </div>
             <div class="col-md-4">
               <label for="EstiCostJob" class="form-label" title="">Estimated Cost of Jobs</label>
@@ -85,6 +93,23 @@
             <div class="col-md-4">
               <label for="EstiCostSpare" class="form-label" title="">Estimated Cost of Spare</label>
               <input type="text" id="EstiCostSpare" [(ngModel)]="JobCard.EstiCostSpare" class="form-control" placeholder="Cost of spare" />
+            </div>
+            <div class="col-md-4">
+              <label for="EstiCostTotal" class="form-label" title="">Total Estimated Cost</label>
+              <input type="text" id="EstiCostTotal" [(ngModel)]="JobCard.EstiCostTotal" class="form-control" placeholder="total estimated cost" />
+            </div>
+
+            <div class="col-md-4">
+              <label for="ActualCostJob" class="form-label" title="">Actual Cost of Job</label>
+              <input type="text" id="ActualCostJob" [(ngModel)]="JobCard.ActualCostJob" class="form-control" placeholder="Actual Cost of Job" />
+            </div>
+            <div class="col-md-4">
+              <label for="ActualCostSpare" class="form-label" title="">Actual Cost of Spare</label>
+              <input type="text" id="ActualCostSpare" [(ngModel)]="JobCard.ActualCostSpare" class="form-control" placeholder="Actual Cost of Spare" />
+            </div>
+            <div class="col-md-4">
+              <label for="ActualCostTotal" class="form-label" title="">Total Actual Cost</label>
+              <input type="text" id="ActualCostTotal" [(ngModel)]="JobCard.ActualCostTotal" class="form-control" placeholder="Total Actual Cost" />
             </div>
           </div>
         </div>
@@ -100,27 +125,50 @@
       <div id="collapse1" class="accordion-collapse collapse" aria-labelledby="heading1" data-bs-parent="#accordionExample">
         <div class="accordion-body">
           <div class="row g-3">
+            
             <div class="col-md-4">
-              <label for="client_name" class="form-label">Client:</label>
-              <input type="text" id="client_name" class="form-control" placeholder="client-name" readonly value="{{ClientName}}" />
+              <label class="form-label" for="ClientName">Client Name:</label>
+              <input type="text" id="ClientName" [(ngModel)]="JobCard.ClientName" placeholder="Client Name" class="form-control" />
+            </div>
+            <!-- <div class="col-md-4">
+              <label class="form-label" for="MembershipId">Membership Card Number:</label>
+              <input type="text" id="MembershipId" [(ngModel)]="JobCard.MembershipId" placeholder="Membership Card Number" class="form-control" />
+            </div> -->
+            <div class="col-md-4">
+              <label class="form-label">Phone:</label>
+              <input type="text" id="Phone" [(ngModel)]="JobCard.ClientPhone" placeholder="Phone"  class="form-control" />
             </div>
             <div class="col-md-4">
-              <label for="client_name" class="form-label">New/Choose:</label>
+              <label class="form-label">Email:</label>
+              <input type="text" id="Email" [(ngModel)]="JobCard.ClientEmail" placeholder="Email"  class="form-control" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Contact Person:</label>
+              <input type="text" id="ContactPerson" [(ngModel)]="JobCard.ContactPerson"  placeholder="Contact Person" class="form-control" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Contact Person No:</label>
+              <input type="text" id="ContactPersonNo" [(ngModel)]="JobCard.ContactPersonNo" placeholder="Contact Person No" class="form-control" />
+            </div>
+            <div class="col-md-12">
+              <label class="form-label">Address:</label>
+                <input type="text" id="Address" [(ngModel)]="JobCard.ClientAddress" class="form-control " />
+            </div>
+            <div class="col-12">
+              <label class="form-label" for="Description">Description:</label>
+              <textarea id="Description" [(ngModel)]="JobCard.Description" class="form-control "></textarea>
+            </div>
+            <div class="col-md-4">
+              <label for="client_name" class="form-label">{{isNew==true?'New':'Existing'}}:</label>
               <div class="form-check form-switch">
                 <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" [(ngModel)]="isNew">
                 <button *ngIf="isNew" type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#newClientModal">
                   New Client
                 </button>
-                <button *ngIf="!isNew" type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#chooseClientModal">
+                <!-- <button *ngIf="!isNew" type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#chooseClientModal">
                   Choose Client
-                </button>    
+                </button> -->
               </div>
-            </div>
-            <div class="col-md-4">
-            </div>
-            <div class="col-12">
-              <label class="form-label">Description:</label>
-              <textarea id="VehicleNo" [(ngModel)]="JobCard.Description" class="form-control "></textarea>
             </div>
           </div>
         </div>
@@ -217,29 +265,29 @@
           <div class="row g-3">
             <div class="col-md-4">
               <label for="ItemId" class="form-label">Spare</label>
-              <select id="ItemId" class="form-control" [(ngModel)]="ItemId" (change)="changeItem()">
+              <select id="ItemId" class="form-control" [(ngModel)]="JcSpare.ItemId" (change)="changeItem()">
                 <option *ngFor="let item of listItem" value="{{item.ItemCode}}">{{item.ItemName}}</option>
               </select>
             </div>
             <div class="col-md-4">
               <label for="Brand" class="form-label" title="">Brand:</label>
-              <input type="text" id="Brand" [(ngModel)]="Brand" class="form-control" placeholder="Brand.." readonly />
+              <input type="text" id="Brand" [(ngModel)]="JcSpare.Brand" class="form-control" placeholder="Brand.." readonly />
             </div>
             <div class="col-md-4">
               <label for="Quantity" class="form-label" title="">Quantity:</label>
-              <input type="number" id="Quantity" [(ngModel)]="Quantity" class="form-control" placeholder="" (change)="changeItemQty()" />
+              <input type="number" id="Quantity" [(ngModel)]="JcSpare.Quantity" class="form-control" placeholder="" (change)="changeItemQty()" />
             </div>
             <div class="col-md-4">
               <label for="SparePrice" class="form-label" title="">Unit Price:</label>
-              <input type="number" id="SparePrice" [(ngModel)]="SparePrice" class="form-control" placeholder="" readonly />
+              <input type="number" id="SparePrice" [(ngModel)]="JcSpare.SparePrice" class="form-control" placeholder="" readonly />
             </div>
             <div class="col-md-4">
               <label for="SpareAmount" class="form-label" title="">Amount:</label>
-              <input type="number" id="SpareAmount" [(ngModel)]="SpareAmount" class="form-control" placeholder="" readonly />
+              <input type="number" id="SpareAmount" [(ngModel)]="JcSpare.SpareAmount" class="form-control" placeholder="" readonly />
             </div>
             <div class="col-md-4">
               <label for="ItemStatus" class="form-label">Status</label>
-              <select id="ItemStatus" class="form-control" [(ngModel)]="ItemStatus">
+              <select id="ItemStatus" class="form-control" [(ngModel)]="JcSpare.ItemStatus">
                 <option *ngFor="let item of listItemStatus" value="{{item.Id}}">{{item.Name}}</option>
               </select>
             </div>
@@ -272,7 +320,6 @@
         </div>
       </div>
     </div>
-    
   </div>
   <div class="row g-3">
     <div class="col-md-6">
@@ -293,19 +340,27 @@
         <div class="row g-3">
             <div class="col-md-4">
                 <label class="form-label">Client Name:</label>
-                <input type="text" id="clientName" [(ngModel)]="Client.Name" class="form-control" />
+                <input type="text" id="Name" [(ngModel)]="Client.Name" placeholder="Client Name" class="form-control" />
             </div>
             <div class="col-md-4">
               <label class="form-label">Membership Card Number:</label>
-              <input type="text" id="clientName" [(ngModel)]="Client.Name" class="form-control" />
+              <input type="text" id="MembershipId" [(ngModel)]="Client.MembershipId" placeholder="Membership Card Number" class="form-control" />
           </div>
           <div class="col-md-4">
             <label class="form-label">Phone:</label>
-            <input type="text" id="Phone" [(ngModel)]="Client.Phone"  class="form-control" />
+            <input type="text" id="Phone" [(ngModel)]="Client.Phone" placeholder="Phone"  class="form-control" />
           </div>
           <div class="col-md-4">
             <label class="form-label">Email:</label>
-            <input type="text" id="Email" [(ngModel)]="Client.Email"  class="form-control" />
+            <input type="text" id="Email" [(ngModel)]="Client.Email" placeholder="Email"  class="form-control" />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Contact Person:</label>
+            <input type="text" id="ContactPerson" [(ngModel)]="Client.ContactPerson"  placeholder="Contact Person" class="form-control" />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Contact Person No:</label>
+            <input type="text" id="ContactPersonNo" [(ngModel)]="Client.ContactPersonNo" placeholder="Contact Person No" class="form-control" />
           </div>
           <div class="col-md-12">
             <label class="form-label">Address:</label>
@@ -320,7 +375,7 @@
  </div>
 </div>
 
-<div class="modal fade" id="chooseClientModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!-- <div class="modal fade" id="chooseClientModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -337,17 +392,49 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
 
 <div class="modal fade" id="searchVehicleNoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-xl">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title text-primary">Search By Vehicle Registration Number</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body text-danger">
-          
+      <div class="modal-body">
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label class="form-label" for="VehicleNo">Vehicle No:</label>
+              <input type="text" id="VehicleNo" [(ngModel)]="VehicleNo"  class="form-control" />
+            </div>
+            <div class="col-md-4 mt-5">
+              <button type="button" class="btn btn-secondary" (click)="searchVehicle();">Search</button>
+            </div>
+            <div class="col-md-12">
+              <table class="table table-bordered">
+                <tr class="table-secondary">
+                    <th scope="col">#</th>
+                    <th>Job Card No.</th>
+                    <th>Vehicle Reg.</th>
+                    <th>Bay</th>
+                    <th>Client</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>#{{listJobCardS.length}}</th>
+                </tr>
+                <tr *ngFor="let item of listJobCardS; let i = index">
+                    <td>{{i+1}}</td>
+                    <td>{{item.JcNo}}</td>
+                    <td>{{item.VehicleNo}}</td>
+                    <td>{{item.Bay}}</td>
+                    <td>{{item.ClientId}}</td>
+                    <td>{{item.ReceiveDate}}</td>
+                    <td>OPEN</td>
+                    <td><button class="btn btn-sm btn-primary" (click)="selectVehicle(item);" data-bs-dismiss="modal">Select</button></td>
+                </tr>
+              </table>
+            </div>
+          </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Close</button>
