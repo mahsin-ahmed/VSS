@@ -57,12 +57,30 @@ export class ClientComponent {
   }
 
   add() {
-    this.listClient.push(this.Client);
-    this.reset();
+    this.httpClient.post(this.baseUrl + '/api/Client', this.Client).subscribe((res)=>{
+      this.listClient = res;
+      if(res == true){
+        this.isList = true;
+        this.get();
+        this.reset();
+        this.showMessage('success', 'data added.');
+      }else{
+        this.showMessage('error', 'error occurred.');
+      }
+    });
   }
 
   update(){
-    
+    this.httpClient.put(this.baseUrl + '/api/Client', this.Client).subscribe((res)=>{
+      this.listClient = res;
+      if(res == true){
+        this.isList = true;
+        this.get();
+        this.showMessage('success', 'data updated.');
+      }else{
+        this.showMessage('error', 'error occurred.');
+      }
+  });
   }
 
   reset() {
