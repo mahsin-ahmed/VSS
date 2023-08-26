@@ -2,7 +2,7 @@
 <a href="javascript:void(0)" *ngIf="isList" (click)="isList=false;reset();">Go to Entry</a>
 <div *ngIf="isList">
     <h4 class="text-center">List of Designation</h4>
-  <table class="table table-bordered">
+    <table class="table table-bordered">
     <tr class="table-secondary">
         <th scope="col">#</th>
         <th>Full Form</th>
@@ -17,7 +17,7 @@
         <td><button class="btn btn-sm btn-outline-primary" (click)="edit(item)">Edit</button></td>
         <td><button class="btn btn-sm btn-outline-danger" (click)="designat=item" data-bs-toggle="modal" data-bs-target="#confirmModal">Remove</button></td>
     </tr>
-  </table>
+    </table>
 </div>
 <div *ngIf="!isList">
     <h4 class="text-center">Entry of Designation</h4>

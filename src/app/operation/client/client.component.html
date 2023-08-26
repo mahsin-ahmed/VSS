@@ -2,6 +2,26 @@
 <a href="javascript:void(0)" *ngIf="isList" (click)="isList=false">Go to Entry</a>
 <div *ngIf="isList">
   <h4 class="text-center">List of Client</h4>
+  <table class="table table-bordered">
+    <tr class="table-secondary">
+        <th scope="col">#</th>
+        <th>Name</th>
+        <th>Phone</th>
+        <th>Address</th>
+        <th>#</th>
+        <th>#</th>
+    </tr>
+    <tr *ngFor="let item of listClient; let i = index">
+        <td>{{i+1}}</td>
+        <td>{{item.Name}}</td>
+        <td>{{item.Phone}}</td>
+        <td>{{item.Address}}</td>
+        <td><button class="btn btn-sm btn-outline-primary" (click)="edit(item)">Edit</button></td>
+        <td>
+          <button class="btn btn-sm btn-outline-danger" (click)="Client=item" data-bs-toggle="modal" data-bs-target="#confirmModal">Remove</button>
+        </td>
+    </tr>
+  </table>
 </div>
 <div *ngIf="!isList">
   <h4 class="text-center">Client Entry</h4>
@@ -27,8 +47,26 @@
         <input type="text" id="Address" [(ngModel)]="Client.Address" class="form-control " />
     </div>
     <div class="col-md-12 mt-5">
-      <button type="button" class="btn btn-success" (click)="addClient();">Add</button>
+      <button type="button" class="btn btn-success" *ngIf="Client.BpId==0" (click)="add();">Add</button>
+      <button type="button" class="btn btn-success" *ngIf="Client.BpId>0" (click)="update();">update</button>
     </div>
   </div>
+</div>
 
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+      <div class="modal-header">
+          <h5 class="modal-title text-primary">Are you sure to remove?</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-danger">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" (click)="reset();">No</button>/
+          <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal" (click)="remove(Client)">Yes</button>
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Close</button>
+      </div>
+      </div>
+  </div>
 </div>
