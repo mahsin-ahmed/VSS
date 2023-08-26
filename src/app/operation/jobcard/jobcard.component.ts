@@ -495,6 +495,7 @@ export class JobcardComponent {
   }
 
   isList:boolean=true;
+  
   removeItem(item:any){
     this.listJcSpare = this.listJcSpare.filter((x:any)=>x.ItemId != item.ItemId);
     this.calculateEstiCost()

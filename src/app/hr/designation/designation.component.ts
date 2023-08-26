@@ -9,6 +9,7 @@ import { IndividualConfig } from 'ngx-toastr';
 })
 export class DesignationComponent {
   isList:boolean=true;
+
   listDesignate:any =[
     {
     DesignateId:2,
@@ -30,6 +31,7 @@ export class DesignationComponent {
     Name:'',
     Short:''
   };
+  
   toast!: toastPayload;
   constructor(private cs:CommonService) { 
   }

@@ -1,1 +1,78 @@
-<p>enginesize works!</p>
+<a href="javascript:void(0)" *ngIf="!isList" (click)="isList=true">Go to List</a>
+<a href="javascript:void(0)" *ngIf="isList" (click)="isList=false">Go to Entry</a>
+
+<div *ngIf="isList">
+    <h4 class="text-center">List of Engine Size</h4>
+    <table class="table table-bordered">
+        <tr class="table-secondary">
+            <th scope="col">SL No.</th>
+            <th>Engine ID</th>
+            <th>Description</th>
+            <th>CC</th>
+            <th colspan="2">Action</th>
+        </tr>
+        <tr *ngFor="let item of listEngine">
+            <td>{{item.EngineSizeId}}</td>
+            <td>{{item.Code}}</td>
+            <td>{{item.Description}}</td>
+            <td>{{item.CC}}</td>
+            <td><button class="btn btn-sm btn-outline-primary" (click)="edit(item)">Edit</button></td>
+            <td><button class="btn btn-sm btn-outline-danger"  (click)="engines=item" data-bs-toggle="modal"
+                    data-bs-target="#confirmModal">Remove</button></td>
+        </tr>
+    </table>
+</div>
+<!-- This part for Engine size entry -->
+<div *ngIf="!isList">
+    <div class="col-md 12">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <h5>Engine Entry Form</h5>
+                <div class="entryForm">
+                    <div class="row">
+                        <div class="form-floating mb-2">
+                            <input type="number" [(ngModel)]="engines.EngineSizeId" class="form-control" id="EngineSizeId" placeholder="">
+                            <label for="EngineSizeId">Engine ID</label>
+                          </div>
+                          <div class="form-floating mb-2">
+                            <input type="text"  [(ngModel)]="engines.Code" class="form-control" id="Code" placeholder="">
+                            <label for="Code">Engine Code</label>
+                          </div>
+                          <div class="form-floating mb-2">
+                            <input type="text" [(ngModel)]="engines.Description" class="form-control" id="Description" placeholder="">
+                            <label for="Description">Engine Description</label>
+                          </div>
+                          <div class="form-floating mb-2">
+                            <input type="text" [(ngModel)]="engines.CC" class="form-control" id="Engine CC" placeholder="">
+                            <label for="Engine CC">Engine CC</label>
+                          </div>
+                          <div class="col-auto  mb-2">
+                            <button type="submit" class="btn btn-success mb-3" *ngIf="engines.id==0" (click)="add()">Submit</button>
+                            <button type="submit" class="btn btn-success mb-3" *ngIf="engines.id>0" (click)="update()">Update</button>
+                          </div>                          
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title text-primary">Are you sure to remove?</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-danger">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" (click)="reset();">No</button>/
+            <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal" (click)="remove(engines)">Yes</button>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Close</button>
+        </div>
+        </div>
+    </div>
+</div>
