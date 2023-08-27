@@ -58,7 +58,6 @@ export class ClientComponent {
 
   add() {
     this.httpClient.post(this.baseUrl + '/api/Client', this.Client).subscribe((res)=>{
-      this.listClient = res;
       if(res == true){
         this.isList = true;
         this.get();
@@ -72,7 +71,6 @@ export class ClientComponent {
 
   update(){
     this.httpClient.put(this.baseUrl + '/api/Client', this.Client).subscribe((res)=>{
-      this.listClient = res;
       if(res == true){
         this.isList = true;
         this.get();
@@ -125,8 +123,14 @@ export class ClientComponent {
   }
 
   remove(item:any){
-    //var listDesi = this.listDesignate.filter((x:any)=>x.DesignateId != item.DesignateId);
-    //this.listDesignate = listDesi;
+    this.httpClient.delete(this.baseUrl + '/api/Client/' + this.Client.BpId).subscribe((res)=>{
+      if(res == true){
+        this.get();
+        this.showMessage('success', 'data updated.');
+      }else{
+        this.showMessage('error', 'error occurred.');
+      }
+    });
     this.showMessage('success', 'data removed.');
   }
 
