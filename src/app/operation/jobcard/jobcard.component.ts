@@ -1,6 +1,7 @@
 import { Component, numberAttribute } from '@angular/core';
 import { CommonService, toastPayload } from '../../services/common.service';
 import { IndividualConfig } from 'ngx-toastr';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-jobcard',
@@ -12,8 +13,17 @@ export class JobcardComponent {
   toast!: toastPayload;
   
   constructor(
-    private cs:CommonService
-    ) { 
+    private cs:CommonService,private httpClient: HttpClient
+    ) {
+  }
+
+  switchView(view:string):void{
+    if(view=='form'){
+      this.isList=false;
+      this.getJcNo();
+    }else{
+      this.isList=true;
+    }
   }
 
   //type: 'success', 'error', 'warning', 'info'
@@ -29,6 +39,13 @@ export class JobcardComponent {
       } as IndividualConfig,
     };
     this.cs.showToast(this.toast);
+  }
+
+  baseUrl:string='http://localhost:56297';
+  getJcNo(){
+    this.httpClient.get(this.baseUrl + '/api/JobCard/GetJCNo').subscribe((res)=>{
+        this.JobCard.JcNo = res.toString();
+    });
   }
 
   Client : {
@@ -490,12 +507,11 @@ export class JobcardComponent {
     this.JobCard.JcNo = this.genJcNo();
     this.JobCard.ReceiveDate = new Date().toLocaleString();
     this.listJobCard.push(this.JobCard);
-    this.isList = true;
+    this.switchView('list');
     this.resetJob();
   }
 
   isList:boolean=true;
-  
   removeItem(item:any){
     this.listJcSpare = this.listJcSpare.filter((x:any)=>x.ItemId != item.ItemId);
     this.calculateEstiCost()
@@ -869,8 +885,10 @@ export class JobcardComponent {
   VehicleNo:string = '';
   listJobCardS:any=[];
   searchVehicle(){
-    //var inOff = 'Dhaka'.indexOf(this.VehicleNo);
-    this.listJobCardS = this.listJobCard.filter((x:any)=>x.VehicleNo.indexOf(this.VehicleNo));
+    //this.listJobCardS = this.listJobCard.filter((x:any)=>x.VehicleNo.indexOf(this.VehicleNo));
+    this.httpClient.get(this.baseUrl + '/api/JobCard/GetByVehicleNo?vehicleno='+this.VehicleNo).subscribe((res)=>{
+      this.listJobCardS = res;
+    });
   }
 
   selectVehicle(item:any){
