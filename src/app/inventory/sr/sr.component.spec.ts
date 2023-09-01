@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PoComponent } from './po.component';
+import { SrComponent } from './sr.component';
 
-describe('PoComponent', () => {
-  let component: PoComponent;
-  let fixture: ComponentFixture<PoComponent>;
+describe('SrComponent', () => {
+  let component: SrComponent;
+  let fixture: ComponentFixture<SrComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [PoComponent]
+      declarations: [SrComponent]
     });
-    fixture = TestBed.createComponent(PoComponent);
+    fixture = TestBed.createComponent(SrComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

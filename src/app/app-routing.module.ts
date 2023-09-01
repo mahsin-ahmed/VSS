@@ -24,12 +24,12 @@ import { ModuleComponent } from './security/module/module.component';
 import { RoleComponent } from './security/role/role.component';
 import { UserComponent } from './security/user/user.component';
 import { UserroleComponent } from './security/userrole/userrole.component';
-import { PoComponent } from './inventory/po/po.component';
 import { authGuard } from './auth/auth.guard';
 import { LoginComponent } from './login/login.component';
 import { EnginesizeComponent } from './operation/enginesize/enginesize.component';
 import { JobgroupComponent } from './operation/jobgroup/jobgroup.component';
 import { JobComponent } from './operation/job/job.component';
+import { SrComponent } from './inventory/sr/sr.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -53,7 +53,7 @@ const routes: Routes = [
   { path: 'size', component: SizeComponent },
   { path: 'unit', component: UnitComponent },
   { path: 'store', component: WarehouseComponent },
-  { path:'po', component:PoComponent },
+  { path:'sr', component:SrComponent },
 
   { path: 'job-card', component: JobcardComponent, canActivate:[authGuard] },
   { path: 'client', component: ClientComponent, canActivate:[authGuard] },

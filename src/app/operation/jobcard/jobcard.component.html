@@ -192,14 +192,14 @@
             </div>
             <div class="col-md-4">
               <label for="Job" class="form-label">Job</label>
-              <select id="Job" class="form-control" [(ngModel)]="Job" (change)="changeJob()">
+              <select id="Job" class="form-control" [(ngModel)]="Job">
                 <option *ngFor="let item of listJob" value="{{item.JobId}}">{{item.Description}}</option>
               </select>
             </div>
             <div class="col-md-4">
-              <label for="EngineId" class="form-label">Engine Size</label>
-              <select id="EngineId" class="form-control" [(ngModel)]="EngineId" (change)="changeEngine()">
-                <option *ngFor="let item of listEngine" value="{{item.EngineId}}">{{item.Code}} {{item.CC}}</option>
+              <label for="EngineSizeId" class="form-label">Engine Size</label>
+              <select id="EngineSizeId" class="form-control" [(ngModel)]="EngineSizeId" (change)="changeEngine()">
+                <option *ngFor="let item of listEngine" value="{{item.EngineSizeId}}">{{item.Code}} {{item.CC}}</option>
               </select>
             </div>
             <div class="col-md-4">
@@ -218,8 +218,8 @@
             </div>
             <div class="col-md-4">
               <label for="Employees" class="form-label">Resource</label>
-              <select id="Employees" class="form-control" [(ngModel)]="Employees" multiple (change)="changeEmployee()">
-                <option *ngFor="let item of listEmp" value="{{item.EmployeeId}}">{{item.FirstName}} ({{item.Designation}})</option>
+              <select id="Employees" class="form-control" [(ngModel)]="Mechanics" multiple>
+                <option *ngFor="let item of listMechanic" value="{{item.EmployeeId}}">{{item.FirstName}} {{item.MiddleName}} {{item.LastName}}</option>
               </select>
             </div>
             <div class="col-md-4 mt-5">
@@ -264,14 +264,15 @@
         <div class="accordion-body">
           <div class="row g-3">
             <div class="col-md-4">
-              <label for="ItemId" class="form-label">Spare</label>
-              <select id="ItemId" class="form-control" [(ngModel)]="JcSpare.ItemId" (change)="changeItem()">
-                <option *ngFor="let item of listItem" value="{{item.ItemCode}}">{{item.ItemName}}</option>
-              </select>
+              <label for="ItemCode" class="form-label">
+                Spare:
+                <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#searchItemNoModal">Search</a>
+              </label>
+              <input type="text" id="ItemCode" [(ngModel)]="JcSpare.ItemCode" class="form-control" placeholder="item-code.." readonly />
             </div>
             <div class="col-md-4">
               <label for="Brand" class="form-label" title="">Brand:</label>
-              <input type="text" id="Brand" [(ngModel)]="JcSpare.Brand" class="form-control" placeholder="Brand.." readonly />
+              <input type="text" id="Brand" [(ngModel)]="JcSpare.BrandName" class="form-control" placeholder="Brand.." readonly />
             </div>
             <div class="col-md-4">
               <label for="Quantity" class="form-label" title="">Quantity:</label>
@@ -279,7 +280,7 @@
             </div>
             <div class="col-md-4">
               <label for="SparePrice" class="form-label" title="">Unit Price:</label>
-              <input type="number" id="SparePrice" [(ngModel)]="JcSpare.SparePrice" class="form-control" placeholder="" readonly />
+              <input type="number" id="SparePrice" [(ngModel)]="JcSpare.SalePrice" class="form-control" placeholder="" readonly />
             </div>
             <div class="col-md-4">
               <label for="SpareAmount" class="form-label" title="">Amount:</label>
@@ -309,8 +310,8 @@
                 <tr *ngFor="let item of JobCard.JcSpares; let i = index">
                   <td>{{i+1}}</td>
                   <td>{{item.ItemCode}}</td>
-                  <td>{{item.Brand}}</td>
-                  <td>{{item.Price}}</td>
+                  <td>{{item.BrandName}}</td>
+                  <td>{{item.SalePrice}}</td>
                   <td>{{item.Quantity}}</td>
                   <td>{{item.SpareAmount}}</td>
                   <td>{{item.ItemStatus}}</td>
@@ -431,6 +432,55 @@
                     <td>{{item.ReceiveDate}}</td>
                     <td>OPEN</td>
                     <td><button class="btn btn-sm btn-primary" (click)="selectVehicle(item);" data-bs-dismiss="modal">Select</button></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="searchItemNoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title text-primary">Search A Spare Parts</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label class="form-label" for="value">Part No:</label>
+              <input type="text" id="value" [(ngModel)]="value"  class="form-control" />
+            </div>
+            <div class="col-md-4 mt-5">
+              <button type="button" class="btn btn-secondary" (click)="searchItem();">Search</button>
+            </div>
+            <div class="col-md-12">
+              <table class="table table-bordered">
+                <tr class="table-secondary">
+                    <th scope="col">#</th>
+                    <th>Code</th>
+                    <th>Part No Old</th>
+                    <th>Part No New</th>
+                    <th>Item</th>
+                    <th>Brand</th>
+                    <th>Sale Price</th>
+                    <th>#</th>
+                </tr>
+                <tr *ngFor="let item of listItemS; let i = index">
+                    <td>{{i+1}}</td>
+                    <td>{{item.ItemCode}}</td>
+                    <td>{{item.PartNoOld}}</td>
+                    <td>{{item.PartNoNew}}</td>
+                    <td>{{item.ItemName}}</td>
+                    <td>{{item.BrandName}}</td>
+                    <td>{{item.SalePrice}}</td>
+                    <td><button class="btn btn-sm btn-primary" (click)="selectItem(item);" data-bs-dismiss="modal">Select</button></td>
                 </tr>
               </table>
             </div>

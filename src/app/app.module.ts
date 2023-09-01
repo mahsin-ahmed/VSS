@@ -29,11 +29,11 @@ import { UnitComponent } from './inventory/unit/unit.component';
 import { UserComponent } from './security/user/user.component';
 import { UserroleComponent } from './security/userrole/userrole.component';
 import { WarehouseComponent } from './inventory/warehouse/warehouse.component';
-import { PoComponent } from './inventory/po/po.component';
 import { LoginComponent } from './login/login.component';
 import { JobComponent } from './operation/job/job.component';
 import { JobgroupComponent } from './operation/jobgroup/jobgroup.component';
 import { EnginesizeComponent } from './operation/enginesize/enginesize.component';
+import { SrComponent } from './inventory/sr/sr.component';
 
 @NgModule({
   declarations: [
@@ -60,11 +60,11 @@ import { EnginesizeComponent } from './operation/enginesize/enginesize.component
     UserComponent,
     UserroleComponent,
     WarehouseComponent,
-    PoComponent,
     LoginComponent,
     JobComponent,
     JobgroupComponent,
-    EnginesizeComponent
+    EnginesizeComponent,
+    SrComponent
   ],
   imports: [
     BrowserModule,
