@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { IndividualConfig } from 'ngx-toastr';
 import { CommonService, toastPayload } from 'src/app/services/common.service';
@@ -8,59 +9,62 @@ import { CommonService, toastPayload } from 'src/app/services/common.service';
   styleUrls: ['./enginesize.component.css']
 })
 export class EnginesizeComponent {
-  constructor(private cs:CommonService) { 
+  constructor(private cs:CommonService,private httpClient: HttpClient) { 
+    this.getEngineList();
   }
 
   // for swaping two views, list of items and entry form
   isList:boolean=true;
 
-  // Dummy data for view
-  listEngine:any=[
-    {
-    EngineSizeId:'1001',
-    Code:'A',
-    Description:'CAR-(6-8) Wagon',
-    CC:'1500-2500'
-  },
-  {    
-    EngineSizeId:'1002',
-    Code:'B',
-    Description:'CAR/4 Cylinder',
-    CC:'800-1500'
-  },
-  {    
-    EngineSizeId:'1003',
-    Code:'C',
-    Description:'Wagon/ Suv(6-8) Cylinder',
-    CC:'2500-4500'
-  }
-];
+  // Engine object declaration
+  listEngine:any=[];
 
-engines:{
-  id:number,
+Engines:{
   EngineSizeId:number,
   Code:string,
   Description:string,
   CC:string
 }={
-  id:0,
   EngineSizeId:0,
   Code:'',
   Description:'',
   CC:''
 };
+// getting data from database for display
+baseUrl:string='http://localhost:56297';
 
-add(){
-  this.engines.EngineSizeId = Math.floor((Math.random() * 10000) + 1); // generate id
-  this.listEngine.push(this.engines);
-  this.reset();
-  this.isList = true;
-  this.showMessage('success', 'data added.');
+getEngineList(){
+  this.httpClient.get(this.baseUrl + '/api/EngineSize').subscribe((res)=>{
+      this.listEngine = res;
+  });
+}
+addEngine() {
+  this.httpClient.post(this.baseUrl + '/api/EngineSize', this.Engines).subscribe((res)=>{
+    if(res == true){
+      this.isList = true;
+      this.getEngineList();
+      this.reset();
+      this.showMessage('success', 'data added.');
+    }else{
+      this.showMessage('error', 'error occurred.');
+    }
+  });
+}
+
+removeEngine(item:any){
+  this.httpClient.delete(this.baseUrl + '/api/EngineSize/' + item.EngineSizeId).subscribe((res)=>{
+    if(res == true){
+      this.getEngineList();
+      this.showMessage('success', 'data removed.');
+    }else{
+      this.showMessage('error', 'error occurred.');
+    }
+  });
+  
 }
 
 edit(item:any){
-  this.engines = {
-    id:1,
+  this.Engines = {
     EngineSizeId:item.EngineSizeId,
     Code:item.Code,
     Description:item.Description,
@@ -69,30 +73,25 @@ edit(item:any){
   this.isList = false;
 }
 
-update(){
-  var existingEngine = this.listEngine.filter((x:any)=>x.EngineSizeId == this.engines.EngineSizeId)[0];
-  existingEngine.EngineSizeId = this.engines.EngineSizeId;
-  existingEngine.Code = this.engines.Code;
-  existingEngine.Description = this.engines.Description;
-  existingEngine.CC = this.engines.CC;
-  this.reset();
-  this.isList = true;
-  this.showMessage('success', 'data updated.');
+updateEngine(){
+  this.httpClient.put(this.baseUrl + '/api/EngineSize', this.Engines).subscribe((res)=>{
+    if(res == true){
+      this.isList = true;
+      this.getEngineList();
+      this.showMessage('success', 'data updated.');
+    }else{
+      this.showMessage('error', 'error occurred.');
+    }
+});
 }
 
 reset(){
-  this.engines ={
-    id:0,
+  this.Engines ={
     EngineSizeId: 0,
     Code:'',
     Description:'',
     CC:''
   };
-}
-remove(item:any){
-  var selectedEngineRemove = this.listEngine.filter((x:any)=>x.EngineSizeId != item.EngineSizeId);
-  this.listEngine = selectedEngineRemove;
-  this.showMessage('success', 'data removed.');
 } 
 
 
@@ -109,5 +108,14 @@ toast!: toastPayload;
       } as IndividualConfig,
     };
     this.cs.showToast(this.toast);
+  }
+
+  switchView(view:string):void{
+    if(view=='form'){
+      this.isList=false;
+    }else{
+      this.isList=true;
+      this.reset();
+    }
   }
 }

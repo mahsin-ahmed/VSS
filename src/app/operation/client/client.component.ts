@@ -126,12 +126,12 @@ export class ClientComponent {
     this.httpClient.delete(this.baseUrl + '/api/Client/' + this.Client.BpId).subscribe((res)=>{
       if(res == true){
         this.get();
-        this.showMessage('success', 'data updated.');
+        this.showMessage('success', 'data removed.');
       }else{
         this.showMessage('error', 'error occurred.');
       }
     });
-    this.showMessage('success', 'data removed.');
+    
   }
 
   //type: 'success', 'error', 'warning', 'info'
