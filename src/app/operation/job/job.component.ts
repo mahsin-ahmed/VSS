@@ -1,4 +1,7 @@
+import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { IndividualConfig } from 'ngx-toastr';
+import { CommonService, toastPayload } from 'src/app/services/common.service';
 
 @Component({
   selector: 'app-job',
@@ -6,5 +9,127 @@ import { Component } from '@angular/core';
   styleUrls: ['./job.component.css']
 })
 export class JobComponent {
-  isList:boolean=true;
+  constructor(private cs: CommonService, private httpClient: HttpClient) {
+    this.getJobsList();
+  }
+  isList: boolean = true;
+  baseUrl: string = 'http://localhost:56297';
+
+  listJobs: any = [];
+
+  getJobsList() {
+    this.httpClient.get(this.baseUrl + '/api/Job').subscribe((res) => {
+      this.listJobs = res;
+    });
+  }
+
+  addJob() {
+    this.httpClient.post(this.baseUrl + '/api/Job', this.Job).subscribe((res) => {
+      if (res == true) {
+        this.isList = true;
+        this.getJobsList();
+        this.reset();
+        this.showMessage('success', 'data added.');
+      } else {
+        this.showMessage('error', 'error occurred.');
+      }
+    });
+  }
+  editJob(item: any) {
+    this.Job = {
+      JobId: item.JobId,
+      Description: item.Description,
+      JobGroupId: item.JobGroupId,
+      A: item.A,
+      B: item.B,
+      C: item.C,
+      DurationA: item.DurationA,
+      DurationB: item.DurationB,
+      DurationC: item.DurationC
+    };
+    this.isList = false;
+  }
+  updateJob() {
+    this.httpClient.put(this.baseUrl + '/api/Job', this.Job).subscribe((res) => {
+      if (res == true) {
+        this.isList = true;
+        this.getJobsList();
+        this.showMessage('success', 'data updated.');
+      } else {
+        this.showMessage('error', 'error occurred.');
+      }
+    });
+  }
+
+  Job: {
+    JobId: number,
+    Description: string,
+    JobGroupId: number,
+    A: number,
+    B: number,
+    C: number,
+    DurationA: number,
+    DurationB: number,
+    DurationC: number
+  } = {
+      JobId: 0,
+      Description: '',
+      JobGroupId: 0,
+      A: 0,
+      B: 0,
+      C: 0,
+      DurationA: 0,
+      DurationB: 0,
+      DurationC: 0
+    };
+
+
+    removeJob(item:any){
+      this.httpClient.delete(this.baseUrl + '/api/Job/' + item.JobId).subscribe((res)=>{
+        if(res == true){
+          this.getJobsList();
+          this.showMessage('success', 'data removed.');
+        }else{
+          this.showMessage('error', 'error occurred.');
+        }
+      });
+      
+    }
+
+  toast!: toastPayload;
+
+  showMessage(type: string, message: string) {
+    this.toast = {
+      message: message,
+      title: type.toUpperCase(),
+      type: type,
+      ic: {
+        timeOut: 2500,
+        closeButton: true,
+      } as IndividualConfig,
+    };
+    this.cs.showToast(this.toast);
+  }
+  switchView(view: string): void {
+    if (view == 'form') {
+      this.isList = false;
+    } else {
+      this.isList = true;
+      this.reset();
+    }
+  }
+
+  reset() {
+    this.Job = {
+      JobId: 0,
+      Description: '',
+      JobGroupId: 0,
+      A: 0,
+      B: 0,
+      C: 0,
+      DurationA: 0,
+      DurationB: 0,
+      DurationC: 0
+    };
+  }
 }

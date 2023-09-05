@@ -1,9 +1,126 @@
-<a href="javascript:void(0)" *ngIf="!isList" (click)="isList=true">Go to List</a>
-<a href="javascript:void(0)" *ngIf="isList" (click)="isList=false">Go to Entry</a>
+<a href="javascript:void(0)" *ngIf="!isList" (click)="switchView('list')">Go to List</a>
+<a href="javascript:void(0)" *ngIf="isList" (click)="switchView('form')">Go to Entry</a>
+
 <div *ngIf="isList">
-    <h4 class="text-center">List of Job</h4>
+    <h4 class="text-center">List of Jobs</h4>
+    <table class="table table-bordered">
+        <tr class="table-secondary">
+            <th>Job ID</th>
+            <th>Description</th>
+            <th>Job Group ID</th>
+            <th>A</th>
+            <th>B</th>
+            <th>C</th>
+            <th>Duration(A)</th>
+            <th>Duration(B)</th>
+            <th>Duration(C)</th>
+            <th colspan="2">Action</th>
+        </tr>
+        <tr *ngFor="let item of listJobs">
+            <td>{{item.JobId}}</td>
+            <td>{{item.Description}}</td>
+            <td>{{item.JobGroupId}}</td>
+            <td>{{item.A}}</td>
+            <td>{{item.B}}</td>
+            <td>{{item.C}}</td>
+            <td>{{item.DurationA}}</td>
+            <td>{{item.DurationB}}</td>
+            <td>{{item.DurationC}}</td>
+            <td><button class="btn btn-sm btn-outline-primary" (click)="editJob(item)">Edit</button></td>
+            <td><button class="btn btn-sm btn-outline-danger" (click)="Job=item" data-bs-toggle="modal"
+                    data-bs-target="#confirmModal">Remove</button></td>
+        </tr>
+    </table>
 </div>
+<!-- This part for Engine size entry -->
 <div *ngIf="!isList">
-    <h4 class="text-center">Entry of Job</h4>
+    <div class="col-md 12">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <h5>Job Entry Form</h5>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-floating mb-2">
+                            <input type="text" [(ngModel)]="Job.Description" class="form-control" id="Description"
+                                placeholder="">
+                            <label for="Description">Job Description</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating mb-2">
+                            <input type="text" [(ngModel)]="Job.JobGroupId" class="form-control" id="JobGroupId"
+                                placeholder="">
+                            <label for="JobGroupId">Job Group Id</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-floating mb-2">
+                            <input type="text" [(ngModel)]="Job.A" class="form-control" id="JobA" placeholder="">
+                            <label for="JobA">A</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-floating mb-2">
+                            <input type="text" [(ngModel)]="Job.B" class="form-control" id="JobB" placeholder="">
+                            <label for="JobB">B</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-floating mb-2">
+                            <input type="text" [(ngModel)]="Job.C" class="form-control" id="JobC" placeholder="">
+                            <label for="JobC">C</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-floating mb-2">
+                            <input type="text" [(ngModel)]="Job.DurationA" class="form-control" id="DurationA" placeholder="">
+                            <label for="DurationA">Duration (A)</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-floating mb-2">
+                            <input type="text" [(ngModel)]="Job.DurationB" class="form-control" id="DurationB" placeholder="">
+                            <label for="DurationB">Duration (B)</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-floating mb-2">
+                            <input type="text" [(ngModel)]="Job.DurationC" class="form-control" id="DurationC" placeholder="">
+                            <label for="DurationC">Duration (C)</label>
+                        </div>
+                    </div>                    
+                    <div class="col-auto  mb-2">
+                        <button type="button" class="btn btn-success mb-3" *ngIf="Job.JobId==0" (click)="addJob()">Add Job</button>
+                        <button type="button" class="btn btn-success mb-3" *ngIf="Job.JobId>0" (click)="updateJob()">Update Job</button>
+                        </div>
+                </div>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+    </div>
 </div>
 
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-primary">Are you sure to remove?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-danger">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"
+                    (click)="reset();">No</button>/
+                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal"
+                    (click)="removeJob(Job)">Yes</button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
