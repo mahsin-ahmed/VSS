@@ -1,8 +1,63 @@
-<a href="javascript:void(0)" *ngIf="!isList" (click)="isList=true">Go to List</a>
-<a href="javascript:void(0)" *ngIf="isList" (click)="isList=false">Go to Entry</a>
+<a href="javascript:void(0)" *ngIf="!isList" (click)="switchView('list')">Go to List</a>
+<a href="javascript:void(0)" *ngIf="isList" (click)="switchView('form')">Go to Entry</a>
 <div *ngIf="isList">
-    <h4 class="text-center">List of Job-Group</h4>
+    <h4>List of Job-Group</h4>
+    <table class="table table-bordered">
+        <tr class="table-secondary">
+            <th>Job-Group ID</th>
+            <th>Name</th>
+            <th colspan="2">Action</th>
+        </tr>
+        <tr *ngFor="let item of listJobGroup">
+            <td>{{item.GroupId}}</td>
+            <td>{{item.Name}}</td>
+            <td><button class="btn btn-sm btn-outline-primary" (click)="editJobGroup(item)">Edit</button></td>
+            <td><button class="btn btn-sm btn-outline-danger" (click)="JobGroup=item" data-bs-toggle="modal"
+                    data-bs-target="#confirmModal">Remove</button></td>
+        </tr>
+    </table>
 </div>
 <div *ngIf="!isList">
-    <h4 class="text-center">Entry of Job-Group</h4>
+    <h4>Job-Group's Entry Form</h4>
+    <div class="col-md 12">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <div class="entryForm">
+                    <div class="row">
+                        <div class="form-floating mb-2">
+                            <input type="text" [(ngModel)]="JobGroup.Name" class="form-control" id="Name"
+                                placeholder="">
+                            <label for="Name">Job Group Name</label>
+                        </div>
+                        <div class="col-auto  mb-2">
+                            <button type="button" class="btn btn-success mb-3" *ngIf="JobGroup.GroupId==0"
+                                (click)="addJobGroup()">Add Job Group</button>
+                            <button type="button" class="btn btn-success mb-3" *ngIf="JobGroup.GroupId>0"
+                                (click)="updateJobGroup()">Update</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title text-primary">Are you sure to remove?</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-danger">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" (click)="reset();">No</button>/
+            <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal" (click)="removeJobGroup(JobGroup)">Yes</button>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Close</button>
+        </div>
+        </div>
+    </div>
 </div>

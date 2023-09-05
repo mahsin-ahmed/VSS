@@ -59,8 +59,7 @@ removeEngine(item:any){
     }else{
       this.showMessage('error', 'error occurred.');
     }
-  });
-  
+  });  
 }
 
 edit(item:any){
