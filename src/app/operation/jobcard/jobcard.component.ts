@@ -201,8 +201,9 @@ export class JobcardComponent {
     Description:string,
     // Job-Details, Spares, JcResource
     JobDetails:any,
-    JcSpares:any,
-    JcHr:any
+    JcSpares:any
+    //,
+    //JcHr:any
    } = {
     MembershipId:'',
     JcNo:'',
@@ -233,8 +234,9 @@ export class JobcardComponent {
     ContactPersonNo:'',
     Description:'',
     JobDetails:[],
-    JcSpares:[],
-    JcHr:[]
+    JcSpares:[]
+    //,
+    //JcHr:[]
    };
 
   resetJc(){
@@ -268,8 +270,9 @@ export class JobcardComponent {
     ContactPersonNo:'',
     Description:'',
     JobDetails:[],
-    JcSpares:[],
-    JcHr:[]
+    JcSpares:[]
+    //,
+    //JcHr:[]
      };
   }
 
@@ -551,8 +554,9 @@ export class JobcardComponent {
     ContactPersonNo:'01985541226',
     Description:'',
     JobDetails:[],
-    JcSpares:[],
-    JcHr:[]
+    JcSpares:[]
+    //,
+    //JcHr:[]
   },
   {
     JcNo:'1002',
@@ -583,8 +587,9 @@ export class JobcardComponent {
     ContactPersonNo:'01865547141',
     Description:'',
     JobDetails:[],
-    JcSpares:[],
-    JcHr:[]
+    JcSpares:[]
+    //,
+    //JcHr:[]
   }
 ];
   addJobCard(){

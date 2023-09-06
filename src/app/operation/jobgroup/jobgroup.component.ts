@@ -15,9 +15,10 @@ export class JobgroupComponent {
   isList: boolean = true;
   // Job-group object declaration
   listJobGroup: any = [];
-  pageNumber: number = 0;
-  pageSize:number = 10;
-  pageCount:number = 10;
+  //#region paging varible
+  pageIndex: number = 0;
+  pageSize:number = 5;
+  rowCount:number = 0;
   listPageSize:any = [5,10,20];
   pageStart:number = 0;
   pageEnd:number = 0;
@@ -25,13 +26,12 @@ export class JobgroupComponent {
   pagedItems:any = [];
   pager:{
     pages:any,
-    currentPage:number,
     totalPages:number
   } = {
-    currentPage:0,
     pages:[],
     totalPages:0
   };  
+  //#endregion
   // getting data from database for display
   baseUrl: string = 'http://localhost:56297';
 
@@ -39,47 +39,25 @@ export class JobgroupComponent {
     this.get();
   }
 
-  isPage:boolean = false;
-  changePageNumber(pageNumber:number, isPage:boolean){
-    this.pager.currentPage =  pageNumber;
-    this.pageNumber = pageNumber;
-    this.isPage = isPage;
-    if (isPage) {
-      this.get();
-    } else {
-      this.pagedItems = this.listJobGroup;
-    }
+  changePageNumber(pageIndex:number){
+    this.pageIndex = pageIndex;
+    this.get();
   }
 
   get() {
-    this.httpClient.get(this.baseUrl + '/api/JobGroup?pn='+this.pageNumber+'&ps='+this.pageSize).subscribe((res) => {
+    this.httpClient.get(this.baseUrl + '/api/JobGroup?pi='+this.pageIndex+'&ps='+this.pageSize).subscribe((res) => {
       this.listJobGroup = res;
-      this.pageCount = this.listJobGroup.length > 0 ? this.listJobGroup[0].PageCount : 0;
+      //#region paging
+      this.rowCount = this.listJobGroup.length > 0 ? this.listJobGroup[0].RowCount : 0;
       this.totalRowsInList = this.listJobGroup.length;
-      this.pager.totalPages = Math.ceil(this.pageCount / this.pageSize);
+      this.pager.totalPages = Math.ceil(this.rowCount / this.pageSize);
       this.pager.pages = [];
       for(var i = 0; i<this.pager.totalPages; i++){
         this.pager.pages.push(i+1);
       }
-
-      //paging info start   
-      if (this.pageNumber == 0 || this.pageNumber == 1) {
-          this.pageStart = 1;
-          if (this.totalRowsInList < this.pageSize) {
-              this.pageEnd = this.totalRowsInList;
-          } else {
-              this.pageEnd = this.pageSize;
-          }
-      } else {
-          this.pageStart = (this.pageNumber - 1) * this.pageSize + 1;
-          this.pageEnd = (this.pageStart - 1) + this.totalRowsInList;
-      }
-      //paging info end
-      if (false)
-          this.changePageNumber(this.pageNumber, false);
-      else
-          this.pagedItems = this.listJobGroup;
-          this.pager.currentPage = this.pageNumber;
+      this.pageStart = (this.pageIndex * this.pageSize) + 1;
+      this.pageEnd = (this.pageStart - 1) + this.totalRowsInList;
+      //#endregion
     });
   }
 
@@ -97,14 +75,14 @@ export class JobgroupComponent {
   }
   updateJobGroup() {  
     this.httpClient.put(this.baseUrl + '/api/JobGroup', this.JobGroup).subscribe((res)=>{
-    if(res == true){
-      this.isList = true;
-      this.get();
-      this.showMessage('success', 'data updated.');
-    }else{
-      this.showMessage('error', 'error occurred.');
-    }
-});
+      if(res == true){
+          this.isList = true;
+          this.get();
+          this.showMessage('success', 'data updated.');
+      } else{
+          this.showMessage('error', 'error occurred.');
+        }
+    });
   }
 
   removeJobGroup(item:any){
@@ -161,6 +139,8 @@ export class JobgroupComponent {
     } else {
       this.isList = true;
       this.reset();
+      this.pageIndex = 0;
+      this.get();
     }
   }
 }
