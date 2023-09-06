@@ -27,7 +27,7 @@
             <td>{{i + 1}}</td>
             <td>{{item.GroupId}}</td>
             <td>{{item.Name}}</td>
-            <td class="text-center"><button class="btn btn-sm btn-outline-primary" (click)="editJobGroup(item)">Edit</button></td>
+            <td class="text-center"><button class="btn btn-sm btn-outline-primary" (click)="edit(item)">Edit</button></td>
             <td class="text-center"><button class="btn btn-sm btn-outline-danger" (click)="JobGroup=item" data-bs-toggle="modal" data-bs-target="#confirmModal">Remove</button></td>
         </tr>
     </table>
@@ -73,9 +73,9 @@
                         </div>
                         <div class="col-auto  mb-2">
                             <button type="button" class="btn btn-success mb-3" *ngIf="JobGroup.GroupId==0"
-                                (click)="addJobGroup()">Add Job Group</button>
+                                (click)="add()">Add Job Group</button>
                             <button type="button" class="btn btn-success mb-3" *ngIf="JobGroup.GroupId>0"
-                                (click)="updateJobGroup()">Update</button>
+                                (click)="update()">Update</button>
                         </div>
                     </div>
                 </div>
@@ -94,7 +94,7 @@
         </div>
         <div class="modal-body text-danger">
             <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" (click)="reset();">No</button>/
-            <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal" (click)="removeJobGroup(JobGroup)">Yes</button>
+            <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal" (click)="remove(JobGroup)">Yes</button>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Close</button>

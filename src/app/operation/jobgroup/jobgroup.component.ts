@@ -61,7 +61,7 @@ export class JobgroupComponent {
     });
   }
 
-  addJobGroup() {
+  add() {
     this.httpClient.post(this.baseUrl + '/api/JobGroup', this.JobGroup).subscribe((res) => {
       if (res == true) {
         this.isList = true;
@@ -73,7 +73,7 @@ export class JobgroupComponent {
       }
     });
   }
-  updateJobGroup() {  
+  update() {  
     this.httpClient.put(this.baseUrl + '/api/JobGroup', this.JobGroup).subscribe((res)=>{
       if(res == true){
           this.isList = true;
@@ -85,7 +85,7 @@ export class JobgroupComponent {
     });
   }
 
-  removeJobGroup(item:any){
+  remove(item:any){
     this.httpClient.delete(this.baseUrl + '/api/JobGroup/' + item.GroupId).subscribe((res)=>{
       if(res == true){
         this.get();
@@ -111,7 +111,7 @@ export class JobgroupComponent {
     };
   }
 
-  editJobGroup(item: any) {
+  edit(item: any) {
     this.JobGroup = {
       GroupId:item.GroupId,
       Name:item.Name

@@ -2,7 +2,21 @@
 <a href="javascript:void(0)" *ngIf="isList" (click)="switchView('form')">Go to Entry</a>
 
 <div *ngIf="isList">
-  <h4 class="text-center">List of Job Card</h4>
+  <div class="row">
+    <div class="col-lg-4">
+      Show
+            <select style="width: 50px;height: 32px;" [(ngModel)]="pageSize" (change)="changePageSize()">
+                <option *ngFor="let item of listPageSize" value={{item}}>
+                    {{item}}
+                </option>
+            </select> 
+            records
+    </div>
+    <div class="col-lg-4">
+      <h4 class="text-center">List of Job Card</h4>
+    </div>
+    <div class="col-lg-4"></div>
+  </div>
   <table class="table table-bordered">
     <tr class="table-secondary">
         <th>#</th>
@@ -10,7 +24,6 @@
         <th>Job Card No.</th>
         <th>Vehicle Reg.</th>
         <th>Bay</th>
-        <th>Client</th>
         <th>Date</th>
         <th>Status</th>
         <th>#</th>
@@ -21,12 +34,37 @@
         <td>{{item.JcNo}}</td>
         <td>{{item.VehicleNo}}</td>
         <td>{{item.Bay}}</td>
-        <td>{{item.ClientId}}</td>
         <td>{{item.ReceiveDate}}</td>
         <td>OPEN</td>
         <td><button class="btn btn-sm btn-primary" (click)="edit(item)">Edit</button></td>
     </tr>
   </table>
+  <div class="row" *ngIf="listJobGroup.length>0">
+    <div class="col-lg-12 ">
+        <div class="pull-left ">
+            <span class="well well-sm">Showing  <span class="text-success"><b>{{pageStart}}</b></span> to <span class="text-success"><b>{{pageEnd}}</b></span> of <span class="text-success"><b>{{rowCount}}</b></span> records</span>
+        </div>
+        <div class="pull-right">
+            <ul class="pagination" *ngIf="pager.pages && pager.pages.length">
+                <li>
+                    <a class="btn btn-sm btn-outline-secondary" [ngClass]="{disabled:pageIndex == 0}" href="javascript:void(0);" (click)="changePageNumber(0)"><i class="fa fa-angle-double-left" aria-hidden="true"></i>Start</a>
+                </li>
+                <li>
+                    <a class="btn btn-sm btn-outline-info" [ngClass]="{disabled:pageIndex == 0}" href="javascript:void(0);" (click)="changePageNumber(pageIndex - 1)"><i class="fa fa-angle-left" aria-hidden="true"></i>Previous</a>
+                </li>
+                <li *ngFor="let page of pager.pages">
+                    <a class="btn btn-sm btn-outline-secondary" [ngClass]="{active:pageIndex == (page - 1)}" href="javascript:void(0);" (click)="changePageNumber(page - 1)">{{page}}</a>
+                </li>
+                <li>
+                    <a class="btn btn-sm btn-outline-info" [ngClass]="{disabled:pageIndex == (pager.totalPages - 1)}" href="javascript:void(0);" (click)="changePageNumber(pageIndex + 1)"><i class="fa fa-angle-right" aria-hidden="true"></i>Next</a>
+                </li>
+                <li>
+                    <a class="btn btn-sm btn-outline-secondary" [ngClass]="{disabled:pageIndex == (pager.totalPages - 1)}" href="javascript:void(0);" (click)="changePageNumber(pager.totalPages - 1)"><i class="fa fa-angle-double-right" aria-hidden="true"></i>End</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
 </div>
 
 <div *ngIf="!isList">
@@ -119,7 +157,7 @@
     <div class="accordion-item">
       <h2 class="accordion-header" id="heading1">
         <button class="accordion-button btn btn-secondary collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1" aria-expanded="false" aria-controls="collapse1">
-            Client Info ({{isNew==true?'New':'Existing'}})
+            Client Info ({{JobCard.ClientId>0 ?'Existing':'New'}})
         </button>
       </h2>
       <div id="collapse1" class="accordion-collapse collapse" aria-labelledby="heading1" data-bs-parent="#accordionExample">
@@ -132,7 +170,7 @@
             </div>
             <div class="col-md-4">
               <label class="form-label" for="MembershipId">Membership Card Number:</label>
-              <input type="text" id="MembershipId" [(ngModel)]="JobCard.MembershipId" placeholder="Membership Card Number" class="form-control" />
+              <input type="text" id="MembershipId" [(ngModel)]="JobCard.MembershipNo" placeholder="Membership Card Number" class="form-control" />
             </div>
             <div class="col-md-4">
               <label class="form-label">Phone:</label>
@@ -158,18 +196,6 @@
               <label class="form-label" for="Description">Description:</label>
               <textarea id="Description" [(ngModel)]="JobCard.Description" class="form-control "></textarea>
             </div>
-            <!-- <div class="col-md-4">
-              <label for="client_name" class="form-label">{{isNew==true?'New':'Existing'}}:</label>
-              <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" [(ngModel)]="isNew">
-                <button *ngIf="isNew" type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#newClientModal">
-                  New Client
-                </button>
-                <button *ngIf="!isNew" type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#chooseClientModal">
-                  Choose Client
-                </button>
-              </div>
-            </div> -->
           </div>
         </div>
       </div>
@@ -235,18 +261,16 @@
                     <th>Price</th>
                     <th>Duration</th>
                     <th>Status</th>
-                    <th>Resource</th>
                     <th>#</th>
                 </tr>
                 <tr *ngFor="let item of JobCard.JobDetails; let i = index">
                     <td>{{i+1}}</td>
-                    <td>{{item.JobGroupId}}</td>
-                    <td>{{item.JobId}}</td>
-                    <td>{{item.EngineSizeId}}</td>
+                    <td>{{item.JobGroupName}}</td>
+                    <td>{{item.JobName}}</td>
+                    <td>{{item.EngineSizeName}}</td>
                     <td>{{item.Price}}</td>
                     <td>{{item.Duration}}</td>
-                    <td>{{item.JobStatus}}</td>
-                    <td>{{item.Resources}}</td>
+                    <td>{{item.JobStatusName}}</td>
                     <td><button class="btn btn-sm btn-danger" (click)="removeJob(item)">Remove</button></td>
                 </tr>
             </table>
@@ -324,76 +348,12 @@
   </div>
   <div class="row g-3">
     <div class="col-md-6">
-      <button type="button" class="btn btn-success" (click)="addJobCard()">Save</button>
+      <button type="button" class="btn btn-{{JobCard.Id > 0 ? 'primary' : 'success'}}" (click)="add()">{{JobCard.Id > 0 ? 'Update' : 'Add'}}</button>
     </div>
   </div>
 </div>
 
 <!-- Modal -->
-<!-- <div class="modal fade" id="newClientModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
- <div class="modal-dialog modal-xl">
-   <div class="modal-content">
-     <div class="modal-header">
-       <h5 class="modal-title text-success" id="exampleModalLabel">New Client</h5>
-       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-     </div>
-     <div class="modal-body text-success">
-        <div class="row g-3">
-          <div class="col-md-4">
-              <label class="form-label">Client Name:</label>
-              <input type="text" id="Name" [(ngModel)]="Client.Name" placeholder="Client Name" class="form-control" />
-          </div>
-          <div class="col-md-4">
-            <label class="form-label">Membership Card Number:</label>
-            <input type="text" id="MembershipId" [(ngModel)]="Client.MembershipId" placeholder="Membership Card Number" class="form-control" />
-          </div>
-          <div class="col-md-4">
-            <label class="form-label">Phone:</label>
-            <input type="text" id="Phone" [(ngModel)]="Client.Phone" placeholder="Phone"  class="form-control" />
-          </div>
-          <div class="col-md-4">
-            <label class="form-label">Email:</label>
-            <input type="text" id="Email" [(ngModel)]="Client.Email" placeholder="Email"  class="form-control" />
-          </div>
-          <div class="col-md-4">
-            <label class="form-label">Contact Person:</label>
-            <input type="text" id="ContactPerson" [(ngModel)]="Client.ContactPerson"  placeholder="Contact Person" class="form-control" />
-          </div>
-          <div class="col-md-4">
-            <label class="form-label">Contact Person No:</label>
-            <input type="text" id="ContactPersonNo" [(ngModel)]="Client.ContactPersonNo" placeholder="Contact Person No" class="form-control" />
-          </div>
-          <div class="col-md-12">
-            <label class="form-label">Address:</label>
-              <input type="text" id="Address" [(ngModel)]="Client.Address" class="form-control " />
-          </div>
-        </div>
-     </div>
-     <div class="modal-footer">
-       <button type="button" class="btn btn-success" (click)="addClient();">Add</button>
-     </div>
-   </div>
- </div>
-</div> -->
-
-<!-- <div class="modal fade" id="chooseClientModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title text-primary">Choose a Client</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body text-danger">
-          <select [(ngModel)]="ClientName">
-            <option *ngFor="let item of listClient" value="{{item.Name}}">{{item.Name}}</option>
-          </select>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div> -->
 
 <div class="modal fade" id="searchVehicleNoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl">
