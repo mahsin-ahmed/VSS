@@ -36,6 +36,7 @@ export class JobgroupComponent {
   baseUrl: string = 'http://localhost:56297';
 
   changePageSize(){
+    this.pageIndex = 0;
     this.get();
   }
 
