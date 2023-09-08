@@ -15,6 +15,7 @@ export class JobgroupComponent {
   isList: boolean = true;
   // Job-group object declaration
   listJobGroup: any = [];
+  
   //#region paging varible
   pageIndex: number = 0;
   pageSize:number = 5;
