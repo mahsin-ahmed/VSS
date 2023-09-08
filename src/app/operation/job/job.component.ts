@@ -10,16 +10,67 @@ import { CommonService, toastPayload } from 'src/app/services/common.service';
 })
 export class JobComponent {
   constructor(private cs: CommonService, private httpClient: HttpClient) {
-    this.getJobsList();
+    this.get();
+    this.getJobGroup();
   }
   isList: boolean = true;
   baseUrl: string = 'http://localhost:56297';
 
+  // Pagination part Start
+  //----------------------------------------------------------------------------
+  //#region paging varible
+  pageIndex: number = 0;
+  pageSize:number = 5;
+  rowCount:number = 0;
+  listPageSize:any = [5,10,20];
+  pageStart:number = 0;
+  pageEnd:number = 0;
+  totalRowsInList:number=0;
+  pagedItems:any = [];
+  pager:{
+    pages:any,
+    totalPages:number
+  } = {
+    pages:[],
+    totalPages:0
+  };  
+  //#endregion
+
+  changePageSize(){
+    this.pageIndex = 0;
+    this.get();
+  }
+  changePageNumber(pageIndex:number){
+    this.pageIndex = pageIndex;
+    this.get();
+  }
+
+  // Pagination part End
+  //----------------------------------------------------------------------
+
   listJobs: any = [];
 
-  getJobsList() {
+  /*
+  get() {
     this.httpClient.get(this.baseUrl + '/api/Job').subscribe((res) => {
       this.listJobs = res;
+    });
+  }
+  */
+  get() {
+    this.httpClient.get(this.baseUrl + '/api/Job?pi='+this.pageIndex+'&ps='+this.pageSize).subscribe((res) => {
+      this.listJobs = res;
+      //#region paging
+      this.rowCount = this.listJobs.length > 0 ? this.listJobs[0].RowCount : 0;
+      this.totalRowsInList = this.listJobs.length;
+      this.pager.totalPages = Math.ceil(this.rowCount / this.pageSize);
+      this.pager.pages = [];
+      for(var i = 0; i<this.pager.totalPages; i++){
+        this.pager.pages.push(i+1);
+      }
+      this.pageStart = (this.pageIndex * this.pageSize) + 1;
+      this.pageEnd = (this.pageStart - 1) + this.totalRowsInList;
+      //#endregion
     });
   }
 
@@ -27,7 +78,7 @@ export class JobComponent {
     this.httpClient.post(this.baseUrl + '/api/Job', this.Job).subscribe((res) => {
       if (res == true) {
         this.isList = true;
-        this.getJobsList();
+        this.get();
         this.reset();
         this.showMessage('success', 'data added.');
       } else {
@@ -53,7 +104,7 @@ export class JobComponent {
     this.httpClient.put(this.baseUrl + '/api/Job', this.Job).subscribe((res) => {
       if (res == true) {
         this.isList = true;
-        this.getJobsList();
+        this.get();
         this.showMessage('success', 'data updated.');
       } else {
         this.showMessage('error', 'error occurred.');
@@ -83,11 +134,17 @@ export class JobComponent {
       DurationC: 0
     };
 
+    listJobGroup:any = [];
+    getJobGroup(){
+      this.httpClient.get(this.baseUrl + '/api/JobCard/GetJobGroup').subscribe((res)=>{
+          this.listJobGroup = res;
+      });
+    }
 
     removeJob(item:any){
       this.httpClient.delete(this.baseUrl + '/api/Job/' + item.JobId).subscribe((res)=>{
         if(res == true){
-          this.getJobsList();
+          this.get();
           this.showMessage('success', 'data removed.');
         }else{
           this.showMessage('error', 'error occurred.');
