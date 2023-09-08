@@ -39,7 +39,7 @@
         <td><button class="btn btn-sm btn-primary" (click)="edit(item)">Edit</button></td>
     </tr>
   </table>
-  <div class="row" *ngIf="listJobGroup.length>0">
+  <div class="row" *ngIf="listJobCard.length>0">
     <div class="col-lg-12 ">
         <div class="pull-left ">
             <span class="well well-sm">Showing  <span class="text-success"><b>{{pageStart}}</b></span> to <span class="text-success"><b>{{pageEnd}}</b></span> of <span class="text-success"><b>{{rowCount}}</b></span> records</span>
@@ -109,7 +109,7 @@
             <div class="col-md-4">
               <label for="ReceiveBy" class="form-label">Receive By:</label>
               <select id="ReceiveBy" class="form-control" [(ngModel)]="JobCard.ReceiveBy">
-                <option *ngFor="let item of listReceiveBy" value="{{item.EmployeeId}}">{{item.FirstName}} {{item.MiddleName}} {{item.LastName}}</option>
+                <option *ngFor="let item of listReceiveBy" value="{{item.EmployeeId}}">{{item.FullName}}</option>
               </select>
             </div>
             <div class="col-md-4">
@@ -211,45 +211,46 @@
         <div class="accordion-body">
           <div class="row g-3">
             <div class="col-md-4">
-              <label for="JobGroup" class="form-label">Job Group</label>
-              <select id="JobGroup" class="form-control" [(ngModel)]="JobGroup" (change)="changeJG()">
+              <label for="JobGroupId" class="form-label">Job Group</label>
+              <select id="JobGroupId" class="form-control" [(ngModel)]="JcJob.JobGroupId" (change)="changeJG()">
                 <option *ngFor="let item of listJobGroup" value="{{item.GroupId}}">{{item.Name}}</option>
               </select>
             </div>
             <div class="col-md-4">
-              <label for="Job" class="form-label">Job</label>
-              <select id="Job" class="form-control" [(ngModel)]="Job">
+              <label for="JobId" class="form-label">Job</label>
+              <select id="JobId" class="form-control" [(ngModel)]="JcJob.JobId">
                 <option *ngFor="let item of listJob" value="{{item.JobId}}">{{item.Description}}</option>
               </select>
             </div>
             <div class="col-md-4">
               <label for="EngineSizeId" class="form-label">Engine Size</label>
-              <select id="EngineSizeId" class="form-control" [(ngModel)]="EngineSizeId" (change)="changeEngine()">
+              <select id="EngineSizeId" class="form-control" [(ngModel)]="JcJob.EngineSizeId" (change)="changeEngine()">
                 <option *ngFor="let item of listEngine" value="{{item.EngineSizeId}}">{{item.Code}} {{item.CC}}</option>
               </select>
             </div>
             <div class="col-md-4">
               <label for="JobPrice" class="form-label" title="">Price:</label>
-              <input type="text" id="JobPrice" [(ngModel)]="JobPrice" class="form-control" placeholder="" readonly />
+              <input type="text" id="JobPrice" [(ngModel)]="JcJob.Price" class="form-control" placeholder="" readonly />
             </div>
             <div class="col-md-4">
               <label for="Duration" class="form-label" title="">Duration (Minutes):</label>
-              <input type="text" id="Duration" [(ngModel)]="Duration" class="form-control" placeholder="" readonly />
+              <input type="text" id="Duration" [(ngModel)]="JcJob.Duration" class="form-control" placeholder="" readonly />
             </div>
             <div class="col-md-4">
               <label for="JobStatus" class="form-label">Status</label>
-              <select id="JobStatus" class="form-control" [(ngModel)]="JobStatus">
+              <select id="JobStatus" class="form-control" [(ngModel)]="JcJob.JobStatus">
                 <option *ngFor="let item of listJobStatus" value="{{item.Id}}">{{item.Name}}</option>
               </select>
             </div>
             <div class="col-md-4">
-              <label for="Employees" class="form-label">Resource</label>
-              <select id="Employees" class="form-control" [(ngModel)]="Mechanics" multiple>
-                <option *ngFor="let item of listMechanic" value="{{item.EmployeeId}}">{{item.FirstName}} {{item.MiddleName}} {{item.LastName}}</option>
+              <label for="Resources" class="form-label">Resource</label>
+              <select id="Resources" class="form-control" [(ngModel)]="JcJob.Resources" multiple>
+                <option *ngFor="let item of listMechanic" value="{{item.EmployeeId}}">{{item.FullName}}</option>
               </select>
             </div>
             <div class="col-md-4 mt-5">
-                <button class="btn btn-sm btn-success" (click)="addJob();"><i class="fa fa-plus"></i> Add</button>
+                <button class="btn btn-sm btn-success" *ngIf="JcJob.Id == 0" (click)="addJob();"><i class="fa fa-plus"></i> Add</button>
+                <button class="btn btn-sm btn-success" *ngIf="JcJob.Id > 0" (click)="updateJob();"><i class="fa fa-save"></i> Update</button>
             </div>
           </div>
             <table class="table table-bordered">
@@ -262,6 +263,7 @@
                     <th>Duration</th>
                     <th>Status</th>
                     <th>#</th>
+                    <th>#</th>
                 </tr>
                 <tr *ngFor="let item of JobCard.JobDetails; let i = index">
                     <td>{{i+1}}</td>
@@ -271,7 +273,15 @@
                     <td>{{item.Price}}</td>
                     <td>{{item.Duration}}</td>
                     <td>{{item.JobStatusName}}</td>
-                    <td><button class="btn btn-sm btn-danger" (click)="removeJob(item)">Remove</button></td>
+                    <td>
+                      <ol>
+                        <li *ngFor="let r of item.ResourceNames;">{{r.FullName}}</li>
+                      </ol>
+                    </td>
+                    <td>
+                      <button class="btn btn-sm btn-danger" (click)="editJob(item)"><i class="fa fa-pencil"></i> Edit</button>
+                      <button class="btn btn-sm btn-danger" (click)="removeJob(item)"><i class="fa fa-trash"></i> Remove</button>
+                    </td>
                 </tr>
             </table>
         </div>
@@ -299,12 +309,12 @@
               <input type="text" id="Brand" [(ngModel)]="JcSpare.BrandName" class="form-control" placeholder="Brand.." readonly />
             </div>
             <div class="col-md-4">
-              <label for="Quantity" class="form-label" title="">Quantity:</label>
-              <input type="number" id="Quantity" [(ngModel)]="JcSpare.Quantity" class="form-control" placeholder="" (change)="changeItemQty()" />
-            </div>
-            <div class="col-md-4">
               <label for="SparePrice" class="form-label" title="">Unit Price:</label>
               <input type="number" id="SparePrice" [(ngModel)]="JcSpare.SalePrice" class="form-control" placeholder="" readonly />
+            </div>
+            <div class="col-md-4">
+              <label for="Quantity" class="form-label" title="">Quantity:</label>
+              <input type="number" id="Quantity" [(ngModel)]="JcSpare.Quantity" class="form-control" placeholder="" (change)="changeItemQty()" />
             </div>
             <div class="col-md-4">
               <label for="SpareAmount" class="form-label" title="">Amount:</label>
@@ -317,13 +327,15 @@
               </select>
             </div>
             <div class="col-md-4 mt-5">
-                <button class="btn btn-sm btn-success" (click)="addSpare();"><i class="fa fa-plus"></i> Add</button>
+                <button class="btn btn-sm btn-success" *ngIf="JcSpare.Id == 0" (click)="addSpare();"><i class="fa fa-plus"></i> Add Spare</button>
+                <button class="btn btn-sm btn-success" *ngIf="JcSpare.Id > 0" (click)="updateSpare();"><i class="fa fa-save"></i> Update Spare</button>
             </div>
           </div>
             <table class="table table-bordered">
                 <tr class="table-secondary">
                     <th scope="col">#</th>
-                    <th>Item</th>
+                    <th>Item Code</th>
+                    <th>Item Name</th>
                     <th>Brand</th>
                     <th>Price</th>
                     <th>Quantity</th>
@@ -334,12 +346,16 @@
                 <tr *ngFor="let item of JobCard.JcSpares; let i = index">
                   <td>{{i+1}}</td>
                   <td>{{item.ItemCode}}</td>
+                  <td>{{item.ItemName}}</td>
                   <td>{{item.BrandName}}</td>
                   <td>{{item.SalePrice}}</td>
                   <td>{{item.Quantity}}</td>
                   <td>{{item.SpareAmount}}</td>
-                  <td>{{item.ItemStatus}}</td>
-                  <td><button class="btn btn-sm btn-danger" (click)="removeItem(item)">Remove</button></td>
+                  <td>{{item.ItemStatusName}}</td>
+                  <td>
+                    <button class="btn btn-sm btn-primary" (click)="editSpare(item)">Edit</button>
+                    <button class="btn btn-sm btn-danger" (click)="removeSpare(item)">Remove</button>
+                  </td>
               </tr>
             </table>
         </div>
@@ -348,7 +364,8 @@
   </div>
   <div class="row g-3">
     <div class="col-md-6">
-      <button type="button" class="btn btn-{{JobCard.Id > 0 ? 'primary' : 'success'}}" (click)="add()">{{JobCard.Id > 0 ? 'Update' : 'Add'}}</button>
+      <button type="button" *ngIf="JobCard.Id == 0" class="btn btn-success" (click)="add()"><i class="fa fa-plus"></i> Add</button>
+      <button type="button" *ngIf="JobCard.Id > 0" class="btn btn-primary" (click)="update()"><i class="fa fa-save"></i> Update</button>
     </div>
   </div>
 </div>

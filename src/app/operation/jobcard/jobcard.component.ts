@@ -281,15 +281,12 @@ export class JobcardComponent {
       Id:0,
       JcId:0,
       JobGroupId:0,
-      JobGroup:'',
       JobId:0,
-      Job:'',
       EngineSizeId:0,
-      EngineSize:'',
       Price:0,
       Duration:0,
       JobStatus:0,
-      Resources:[]
+      Resources:[],
     };
   }
 
@@ -297,11 +294,8 @@ export class JobcardComponent {
     Id:number,
     JcId:number,
     JobGroupId:number,
-    JobGroup:string,
     JobId:number,
-    Job:string,
     EngineSizeId:number,
-    EngineSize:string,
     Price:number,
     Duration:number,
     JobStatus:number,
@@ -310,18 +304,15 @@ export class JobcardComponent {
     Id:0,
     JcId:0,
     JobGroupId:0,
-    JobGroup:'',
     JobId:0,
-    Job:'',
     EngineSizeId:0,
-    EngineSize:'',
     Price:0,
     Duration:0,
     JobStatus:0,
     Resources:[]
   };
 
-  JobGroup:number = 0;
+  //JobGroup:number = 0;
   listJobGroup:any = [];
   getJob(){
     this.httpClient.get(this.baseUrl + '/api/JobCard/GetJob').subscribe((res)=>{
@@ -345,33 +336,33 @@ export class JobcardComponent {
   listJob:any = [];
   listAllJob:any = [];
 
-  Job:number = 0;
+  //Job:number = 0;
   changeJG(){
     this.listJob = [];
-    this.listJob=this.listAllJob.filter((x:any)=>{return x.JobGroupId == this.JobGroup;});
+    this.listJob=this.listAllJob.filter((x:any)=>{return x.JobGroupId == this.JcJob.JobGroupId;});
   }
 
-  JobPrice:number = 0;
-  Duration:number = 0;
-  EngineSizeId:number = 0;
-  Mechanics:any = [];
+  //JobPrice:number = 0;
+  //Duration:number = 0;
+  //EngineSizeId:number = 0;
+  //Mechanics:any = [];
 
   changeEngine(){
-    this.Duration = 0;
-    this.JobPrice = 0;
-    var oJob = this.listJob.filter((x:any)=>{return x.JobId == this.Job;})[0];
+    this.JcJob.Duration = 0;
+    this.JcJob.Price = 0;
+    var oJob = this.listJob.filter((x:any)=>{return x.JobId == this.JcJob.JobId;})[0];
     if(oJob !==undefined){
-      var oEngine = this.listEngine.filter((x:any)=>{return x.EngineSizeId == this.EngineSizeId;})[0];
+      var oEngine = this.listEngine.filter((x:any)=>{return x.EngineSizeId == this.JcJob.EngineSizeId;})[0];
       if(oEngine!==undefined){
         if(oEngine.EngineSizeId == 1){
-          this.Duration = oJob.DurationA;
-          this.JobPrice = oJob.A;
+          this.JcJob.Duration = oJob.DurationA;
+          this.JcJob.Price = oJob.A;
         } else if(oEngine.EngineSizeId == 2){
-          this.Duration = oJob.DurationB;
-          this.JobPrice = oJob.B;
+          this.JcJob.Duration = oJob.DurationB;
+          this.JcJob.Price = oJob.B;
         } else if(oEngine.EngineSizeId == 3){
-          this.Duration = oJob.DurationC;
-          this.JobPrice = oJob.C;
+          this.JcJob.Duration = oJob.DurationC;
+          this.JcJob.Price = oJob.C;
         }
       }
     }
@@ -385,17 +376,36 @@ export class JobcardComponent {
   listJcJob:any=[];
 
   addJob(){
+    var JobName = this.listAllJob.filter((x:any)=>x.JobId==this.JcJob.JobId)[0] ==undefined ? '' : this.listAllJob.filter((x:any)=>x.JobId==this.JcJob.JobId)[0].Description;
+    var JobGroupName = this.listJobGroup.filter((x:any)=>x.GroupId==this.JcJob.JobGroupId)[0] ==undefined ? '' : this.listJobGroup.filter((x:any)=>x.GroupId==this.JcJob.JobGroupId)[0].Name;
+    var EngineSizeName = this.listEngine.filter((x:any)=>x.EngineSizeId==this.JcJob.EngineSizeId)[0] ==undefined ? '' : this.listEngine.filter((x:any)=>x.EngineSizeId==this.JcJob.EngineSizeId)[0].Code + ' ' + this.listEngine.filter((x:any)=>x.EngineSizeId==this.JcJob.EngineSizeId)[0].CC;
+    //this.listMechanic.filter((x:any)=>x.EmployeeId)
+    var ResourceNames:any =[];
+    for (const r of this.JcJob.Resources) {
+      var oMechanic = this.listMechanic.filter((x:any)=>x.EmployeeId==r)[0];
+      if(oMechanic!=undefined){
+        ResourceNames.push({EmployeeId:oMechanic.EmployeeId, FullName:oMechanic.FullName});
+      }
+    }
     this.JobCard.JobDetails.push({
-      JobGroupId:this.JobGroup,
-      JobId:this.Job,
-      EngineSizeId:this.EngineSizeId,
-      Price:this.JobPrice,
-      Duration:this.Duration,
-      JobStatus:this.JobStatus,
-      Resources:this.Mechanics
+      Id:this.genId(),
+      JobGroupId:this.JcJob.JobGroupId,
+      JobId:this.JcJob.JobId,
+      EngineSizeId:this.JcJob.EngineSizeId,
+      Price:this.JcJob.Price,
+      Duration:this.JcJob.Duration,
+      JobStatus:this.JcJob.JobStatus,
+      Resources:this.JcJob.Resources,
+      ResourceNames:ResourceNames,
+      JobGroupName:JobGroupName,
+      JobName:JobName,
+      EngineSizeName:EngineSizeName,
+      JobStatusName:EngineSizeName
     });
     this.calculateEstiCost();
   }
+
+  updateJob(){}
 
   JcSpare:{
     Id:number,
@@ -413,7 +423,8 @@ export class JobcardComponent {
     SalePrice:number,
     Quantity:number,
     SpareAmount:number,
-    ItemStatus:number
+    ItemStatus:number,
+    ItemStatusName:string
   }={
     Id:0,
     ItemId:0,
@@ -430,7 +441,8 @@ export class JobcardComponent {
     SalePrice:0,
     Quantity:0,
     SpareAmount:0,
-    ItemStatus:0
+    ItemStatus:0,
+    ItemStatusName:''
   };
   changeItem(){
     var oItem = this.listItem.filter((x:any)=>x.Id== this.JcSpare.Id)[0];
@@ -450,10 +462,7 @@ export class JobcardComponent {
     this.JcSpare.SpareAmount = this.JcSpare.SalePrice * this.JcSpare.Quantity;
   }
 
-  listItem:any = [
-    {Id:1,ItemCode:'001',ItemName:'RELAY 12V 30A - RI', Brand: 'Nissan', Price: 200},
-    {Id:2,ItemCode:'002',ItemName:'RELAY BASE - WI', Brand: 'Toyota', Price: 100}
-  ];
+  listItem:any = [];
 
   //ItemStatus:number =0;
   listItemStatus:any=[{Id:1,Name:'USED'},{Id:2,Name:'REFUND'}];
@@ -475,17 +484,19 @@ export class JobcardComponent {
       SalePrice:0,
       Quantity:0,
       SpareAmount:0,
-      ItemStatus:0
+      ItemStatus:0,
+      ItemStatusName:''
     };
   }
 
   //SpareAmount:number=0;
   listJcSpare:any=[];
   
-  addSpare(){
+  addSpare() : void {
     this.JcSpare.SpareAmount = this.JcSpare.Quantity * this.JcSpare.SalePrice;
+    this.JobCard.JcSpares = this.JobCard.JcSpares == undefined ? [] : this.JobCard.JcSpares;
     this.JobCard.JcSpares.push({
-      Id:this.JcSpare.Id,
+      Id:this.genId(),
       ItemId:this.JcSpare.ItemId,
       ItemCode:this.JcSpare.ItemCode,
       ItemName:this.JcSpare.ItemName,
@@ -500,13 +511,40 @@ export class JobcardComponent {
       SalePrice:this.JcSpare.SalePrice,
       Quantity:this.JcSpare.Quantity,
       SpareAmount:this.JcSpare.SpareAmount,
-      ItemStatus:this.JcSpare.ItemStatus
+      ItemStatus:this.JcSpare.ItemStatus,
+      ItemStatusName:this.JcSpare.ItemStatus == 1 ? 'USED' : 'REFUND',
     });
     this.calculateEstiCost();
     this.resetSpare();
   }
 
- 
+  updateSpare() : void {
+    this.JcSpare.SpareAmount = this.JcSpare.Quantity * this.JcSpare.SalePrice;
+    this.JobCard.JcSpares = this.JobCard.JcSpares == undefined ? [] : this.JobCard.JcSpares;
+    var oJcSpare = this.JobCard.JcSpares.filter((x:any)=>x.Id == this.JcSpare.Id)[0];
+    if(oJcSpare!==undefined) {
+      oJcSpare.Id=this.JcSpare.Id;
+      oJcSpare.ItemId=this.JcSpare.ItemId;
+      //oJcSpare.oJcSpare.ItemCode=this.JcSpare.ItemCode;
+      //oJcSpare.ItemName=this.JcSpare.ItemName;
+      //oJcSpare.Barcode=this.JcSpare.Barcode;
+      oJcSpare.ItemCategoryId=this.JcSpare.ItemCategoryId;
+      oJcSpare.BrandId=this.JcSpare.BrandId;
+      //oJcSpare.Model=this.JcSpare.Model;
+      //oJcSpare.PartNoOld=this.JcSpare.PartNoOld;
+      //oJcSpare.PartNoNew=this.JcSpare.PartNoNew;
+      //oJcSpare.CategoryName=this.JcSpare.CategoryName;
+      oJcSpare.BrandName=this.JcSpare.BrandName;
+      oJcSpare.SalePrice=this.JcSpare.SalePrice;
+      oJcSpare.Quantity=this.JcSpare.Quantity;
+      oJcSpare.SpareAmount=this.JcSpare.SpareAmount;
+      oJcSpare.ItemStatus=this.JcSpare.ItemStatus;
+      oJcSpare.ItemStatusName=this.JcSpare.ItemStatus == 1 ? 'USED' : 'REFUND';
+    }
+    this.calculateEstiCost();
+    this.resetSpare();
+  }
+
   calculateEstiCost(){
     this.JobCard.EstiCostJob = 0;
     this.JobCard.EstiCostSpare = 0;
@@ -519,30 +557,21 @@ export class JobcardComponent {
     this.JobCard.EstiCostTotal = this.JobCard.EstiCostJob + this.JobCard.EstiCostSpare;
   }
 
-
   listJobCard:any=[];
-  add(){
-    this.httpClient.post(this.baseUrl + '/api/JobCard', this.JobCard).subscribe((res) => {
-      if (res == true) {
-        this.isList = true;
-        this.get();
-        this.resetJob();
-        this.reset();
-        this.showMessage('success', 'data added.');
-      } else {
-        this.showMessage('error', 'error occurred.');
-      }
-    });
-  }
-
   isList:boolean=true;
-  removeItem(item:any){
-    this.JobCard.JcSpares = this.JobCard.JcSpares.filter((x:any)=>x.Id != item.Id);
-    this.calculateEstiCost()
+  removeSpare(item:any){
+    var isConfirm = confirm('Are you sure to remove?');
+    if(isConfirm){
+      this.JobCard.JcSpares = this.JobCard.JcSpares.filter((x:any)=>x.Id != item.Id);
+      this.calculateEstiCost()
+    }
   }
   removeJob(item:any){
-    this.JobCard.JobDetails = this.JobCard.JobDetails.filter((x:any)=>x.JobId != item.JobId);
-    this.calculateEstiCost()
+    var isConfirm = confirm('Are you sure to remove?');
+    if(isConfirm){
+      this.JobCard.JobDetails = this.JobCard.JobDetails.filter((x:any)=>x.Id != item.Id);
+      this.calculateEstiCost()
+    }
   }
 
   getById(id:number):void{
@@ -579,7 +608,7 @@ export class JobcardComponent {
         ContactPersonNo:item.ContactPersonNo,
         Description:item.Description,
         JobDetails:item.JobDetails,
-        JcSpares:item.JobSpares
+        JcSpares:item.JcSpares
       };
     });
   }
@@ -589,8 +618,45 @@ export class JobcardComponent {
     this.switchView('form');
   }
 
-  genJcNo():string{
-    return new Date().getTime().toString();
+  editSpare(item:any):void {
+    this.JcSpare = {
+      Id:item.Id,
+      ItemId:item.ItemId,
+      ItemCode:item.ItemCode,
+      ItemName:item.ItemName,
+      Barcode:item.Barcode,
+      ItemCategoryId:item.ItemCategoryId,
+      BrandId:item.BrandId,
+      Model:item.Model,
+      PartNoOld:item.PartNoOld,
+      PartNoNew:item.PartNoNew,
+      CategoryName:item.CategoryName,
+      BrandName:item.BrandName,
+      SalePrice:item.SalePrice,
+      Quantity:item.Quantity,
+      SpareAmount:item.SpareAmount,
+      ItemStatus:item.ItemStatus,
+      ItemStatusName:item.ItemStatusName,
+    };
+  }
+
+  editJob(item:any):void {
+    this.JcJob = {
+      Id:item.Id,
+      JcId:item.JcId,
+      JobGroupId:item.JobGroupId,
+      JobId:item.JobId,
+      EngineSizeId:item.EngineSizeId,
+      Price:item.Price,
+      Duration:item.Duration,
+      JobStatus:item.JobStatus,
+      Resources:item.Resources,
+    };
+    this.changeJG();
+  }
+
+  genId():number{
+    return new Date().getTime();
   }
 
   openWin() {
@@ -1057,6 +1123,35 @@ export class JobcardComponent {
     this.JcSpare.SalePrice=item.SalePrice;
     this.JcSpare.SpareAmount=item.SpareAmount;
   }
+
+  add(){
+    this.httpClient.post(this.baseUrl + '/api/JobCard', this.JobCard).subscribe((res) => {
+      if (res == true) {
+        this.isList = true;
+        this.get();
+        this.resetJob();
+        this.reset();
+        this.showMessage('success', 'data added.');
+      } else {
+        this.showMessage('error', 'error occurred.');
+      }
+    });
+  }
+
+  update(){
+    this.httpClient.put(this.baseUrl + '/api/JobCard', this.JobCard).subscribe((res) => {
+      if (res == true) {
+        this.isList = true;
+        this.get();
+        this.resetJob();
+        this.reset();
+        this.showMessage('success', 'data added.');
+      } else {
+        this.showMessage('error', 'error occurred.');
+      }
+    });
+  }
+
 }
 
 export interface Company{
