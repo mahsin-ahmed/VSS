@@ -20,9 +20,9 @@ export class JobComponent {
   //----------------------------------------------------------------------------
   //#region paging varible
   pageIndex: number = 0;
-  pageSize:number = 10;
+  pageSize:number = 5;
   rowCount:number = 0;
-  listPageSize:any = [10,20];
+  listPageSize:any = [5,10,20];
   pageStart:number = 0;
   pageEnd:number = 0;
   totalRowsInList:number=0;
