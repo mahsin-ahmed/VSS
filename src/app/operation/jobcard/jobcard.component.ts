@@ -205,7 +205,8 @@ export class JobcardComponent {
     Description:string,
     // Job-Details, Spares, JcResource
     JobDetails:any,
-    JcSpares:any
+    JcSpares:any,
+    Resources:any
    } = {
     Id:0,
     MembershipNo:'',
@@ -237,46 +238,48 @@ export class JobcardComponent {
     ContactPersonNo:'',
     Description:'',
     JobDetails:[],
-    JcSpares:[]
+    JcSpares:[],
+    Resources:[]
    };
 
-  reset(){
-    this.JobCard ={
-    Id:0,
-    MembershipNo:'',
-    JcNo:'',
-    JobDate:'',
-    CreateBy:0,
-    Vin:'',
-    Mileage:0,
-    EstiCostTotal:0,
-    EstiCostJob:0,
-    EstiCostSpare:0,
-    ActualCostTotal:0,
-    ActualCostJob:0,
-    ActualCostSpare:0,
-    ReceiveDate:'',
-    ReceiveBy:0,
-    JobStart:'',
-    JobEnd:'',
-    Bay:0,
-    VehicleNo:'',
-    Model:'',
-    JcStatus:0,
-    ClientId:0,
-    ClientName:'',
-    ClientPhone:'',
-    ClientEmail:'',
-    ClientAddress:'',
-    ContactPerson:'',
-    ContactPersonNo:'',
-    Description:'',
-    JobDetails:[],
-    JcSpares:[]
-     };
+  reset() {
+      this.JobCard ={
+      Id:0,
+      MembershipNo:'',
+      JcNo:'',
+      JobDate:'',
+      CreateBy:0,
+      Vin:'',
+      Mileage:0,
+      EstiCostTotal:0,
+      EstiCostJob:0,
+      EstiCostSpare:0,
+      ActualCostTotal:0,
+      ActualCostJob:0,
+      ActualCostSpare:0,
+      ReceiveDate:'',
+      ReceiveBy:0,
+      JobStart:'',
+      JobEnd:'',
+      Bay:0,
+      VehicleNo:'',
+      Model:'',
+      JcStatus:0,
+      ClientId:0,
+      ClientName:'',
+      ClientPhone:'',
+      ClientEmail:'',
+      ClientAddress:'',
+      ContactPerson:'',
+      ContactPersonNo:'',
+      Description:'',
+      JobDetails:[],
+      JcSpares:[],
+      Resources:[]
+    };
   }
 
-  resetJob(){
+  resetJob() {
     this.JcJob = {
       Id:0,
       JcId:0,
@@ -285,8 +288,7 @@ export class JobcardComponent {
       EngineSizeId:0,
       Price:0,
       Duration:0,
-      JobStatus:0,
-      Resources:[],
+      JobStatus:0
     };
   }
 
@@ -298,8 +300,7 @@ export class JobcardComponent {
     EngineSizeId:number,
     Price:number,
     Duration:number,
-    JobStatus:number,
-    Resources:any
+    JobStatus:number
   } = {
     Id:0,
     JcId:0,
@@ -308,8 +309,7 @@ export class JobcardComponent {
     EngineSizeId:0,
     Price:0,
     Duration:0,
-    JobStatus:0,
-    Resources:[]
+    JobStatus:0
   };
 
   //JobGroup:number = 0;
@@ -379,14 +379,6 @@ export class JobcardComponent {
     var JobName = this.listAllJob.filter((x:any)=>x.JobId==this.JcJob.JobId)[0] ==undefined ? '' : this.listAllJob.filter((x:any)=>x.JobId==this.JcJob.JobId)[0].Description;
     var JobGroupName = this.listJobGroup.filter((x:any)=>x.GroupId==this.JcJob.JobGroupId)[0] ==undefined ? '' : this.listJobGroup.filter((x:any)=>x.GroupId==this.JcJob.JobGroupId)[0].Name;
     var EngineSizeName = this.listEngine.filter((x:any)=>x.EngineSizeId==this.JcJob.EngineSizeId)[0] ==undefined ? '' : this.listEngine.filter((x:any)=>x.EngineSizeId==this.JcJob.EngineSizeId)[0].Code + ' ' + this.listEngine.filter((x:any)=>x.EngineSizeId==this.JcJob.EngineSizeId)[0].CC;
-    //this.listMechanic.filter((x:any)=>x.EmployeeId)
-    var ResourceNames:any =[];
-    for (const r of this.JcJob.Resources) {
-      var oMechanic = this.listMechanic.filter((x:any)=>x.EmployeeId==r)[0];
-      if(oMechanic!=undefined){
-        ResourceNames.push({EmployeeId:oMechanic.EmployeeId, FullName:oMechanic.FullName});
-      }
-    }
     this.JobCard.JobDetails.push({
       Id:this.genId(),
       JobGroupId:this.JcJob.JobGroupId,
@@ -395,8 +387,8 @@ export class JobcardComponent {
       Price:this.JcJob.Price,
       Duration:this.JcJob.Duration,
       JobStatus:this.JcJob.JobStatus,
-      Resources:this.JcJob.Resources,
-      ResourceNames:ResourceNames,
+      //Resources:this.JcJob.Resources,
+      //Resources:Resources,
       JobGroupName:JobGroupName,
       JobName:JobName,
       EngineSizeName:EngineSizeName,
@@ -405,7 +397,33 @@ export class JobcardComponent {
     this.calculateEstiCost();
   }
 
-  updateJob(){}
+  updateJob(){
+    var JobName = this.listAllJob.filter((x:any)=>x.JobId==this.JcJob.JobId)[0] ==undefined ? '' : this.listAllJob.filter((x:any)=>x.JobId==this.JcJob.JobId)[0].Description;
+    var JobGroupName = this.listJobGroup.filter((x:any)=>x.GroupId==this.JcJob.JobGroupId)[0] ==undefined ? '' : this.listJobGroup.filter((x:any)=>x.GroupId==this.JcJob.JobGroupId)[0].Name;
+    var EngineSizeName = this.listEngine.filter((x:any)=>x.EngineSizeId==this.JcJob.EngineSizeId)[0] ==undefined ? '' : this.listEngine.filter((x:any)=>x.EngineSizeId==this.JcJob.EngineSizeId)[0].Code + ' ' + this.listEngine.filter((x:any)=>x.EngineSizeId==this.JcJob.EngineSizeId)[0].CC;
+    var Resources:any =[];
+    for(var i =0; i< this.listMechanic.length; i++){
+      if(this.listMechanic[i].IsSelect){
+        Resources.push({EmployeeId:this.listMechanic[i].EmployeeId, FullName:this.listMechanic[i].FullName, JcJobId:this.JcJob.Id, JcId:this.JcJob.JcId}); 
+      }
+    }
+    var oJcSpare = this.JobCard.JobDetails.filter((x:any)=>x.Id == this.JcJob.Id)[0];
+    if(oJcSpare!==undefined) {
+      oJcSpare.JobGroupId=this.JcJob.JobGroupId;
+      oJcSpare.JobId=this.JcJob.JobId;
+      oJcSpare.EngineSizeId=this.JcJob.EngineSizeId;
+      oJcSpare.Price=this.JcJob.Price;
+      oJcSpare.Duration=this.JcJob.Duration;
+      oJcSpare.JobStatus=this.JcJob.JobStatus;
+      //oJcSpare.Resources=this.JcJob.Resources;
+      oJcSpare.Resources=Resources;
+      oJcSpare.JobGroupName=JobGroupName;
+      oJcSpare.JobName=JobName;
+      oJcSpare.EngineSizeName=EngineSizeName;
+      oJcSpare.JobStatusName=EngineSizeName;
+    }
+    this.calculateEstiCost();
+  }
 
   JcSpare:{
     Id:number,
@@ -608,8 +626,14 @@ export class JobcardComponent {
         ContactPersonNo:item.ContactPersonNo,
         Description:item.Description,
         JobDetails:item.JobDetails,
-        JcSpares:item.JcSpares
+        JcSpares:item.JcSpares,
+        Resources:item.Resources
       };
+      this.JobCard.Resources = (this.JobCard.Resources == null || this.JobCard.Resources == undefined) ? []:this.JobCard.Resources;
+      for(var i = 0; i < this.listMechanic.length; i++){
+        var oResource = this.JobCard.Resources.filter((x:any)=> x.EmployeeId == this.listMechanic[i].EmployeeId)[0];
+        this.listMechanic[i].IsSelect = oResource!=undefined ? true : false;
+      }
     });
   }
 
@@ -649,8 +673,7 @@ export class JobcardComponent {
       EngineSizeId:item.EngineSizeId,
       Price:item.Price,
       Duration:item.Duration,
-      JobStatus:item.JobStatus,
-      Resources:item.Resources,
+      JobStatus:item.JobStatus
     };
     this.changeJG();
   }
@@ -1125,6 +1148,13 @@ export class JobcardComponent {
   }
 
   add(){
+    var Resources:any =[];
+    for(var i =0; i< this.listMechanic.length; i++){
+      if(this.listMechanic[i].IsSelect){
+        Resources.push({EmployeeId:this.listMechanic[i].EmployeeId, FullName:this.listMechanic[i].FullName, JcId:this.JobCard.Id}); 
+      }
+    }
+    this.JobCard.Resources = Resources;
     this.httpClient.post(this.baseUrl + '/api/JobCard', this.JobCard).subscribe((res) => {
       if (res == true) {
         this.isList = true;
@@ -1139,6 +1169,13 @@ export class JobcardComponent {
   }
 
   update(){
+    var Resources:any =[];
+    for(var i =0; i< this.listMechanic.length; i++){
+      if(this.listMechanic[i].IsSelect){
+        Resources.push({EmployeeId:this.listMechanic[i].EmployeeId, FullName:this.listMechanic[i].FullName, JcId:this.JobCard.Id}); 
+      }
+    }
+    this.JobCard.Resources = Resources;
     this.httpClient.put(this.baseUrl + '/api/JobCard', this.JobCard).subscribe((res) => {
       if (res == true) {
         this.isList = true;
