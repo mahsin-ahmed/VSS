@@ -1,55 +1,118 @@
-<p>item</p>
-<div class="mb-3">
-    <div class="form-check form-switch">
-        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" [(ngModel)]="isLabour">
-        <label class="form-check-label" for="flexSwitchCheckDefault">{{isLabour===true?'Job':'Spare Parts'}}</label>
-      </div>
-</div>
-<div class="mb-3">
-    <label for="exampleFormControlInput1" class="form-label">Code</label>
-    <input type="text" class="form-control" id="exampleFormControlInput1">
-</div>
-<div class="mb-3" *ngIf="isLabour">
-  <label for="exampleFormControlInput1" class="form-label">Group</label>
-  <select class="form-select" aria-label="Default select example">
-      <option selected>Select a group</option>
-      <option value="1">Engine Work & Tune Up</option>
-      <option value="2">Wheel Balancing</option>
-    </select>
-</div>
-<div class="mb-3" *ngIf="isLabour">
-  <label for="exampleFormControlInput1" class="form-label">800-1500</label>
-  <input type="text" class="form-control" id="exampleFormControlInput1">
-</div>
-<div class="mb-3" *ngIf="isLabour">
-  <label for="exampleFormControlInput1" class="form-label">1500-2500</label>
-  <input type="text" class="form-control" id="exampleFormControlInput1">
-</div>
-<div class="mb-3" *ngIf="isLabour">
-  <label for="exampleFormControlInput1" class="form-label">2500-4500</label>
-  <input type="text" class="form-control" id="exampleFormControlInput1">
-</div>
-<div class="mb-3" *ngIf="!isLabour">
-    <label for="exampleFormControlInput1" class="form-label">Brand</label>
-    <select class="form-select" aria-label="Default select example">
-        <option selected>Select a brand</option>
-        <option value="1">BMW</option>
-        <option value="2">Raudi</option>
+<a href="javascript:void(0)" *ngIf="!isList" (click)="switchView('list')">Go to List</a>
+<a href="javascript:void(0)" *ngIf="isList" (click)="switchView('form')">Go to Entry</a>
+
+<!-- start list view part  -->
+<!-- ================================================== -->
+<div *ngIf="isList">
+  <div class="row">
+    <div class="col-lg-4">
+      Show
+      <select style="width: 50px;height: 32px;" [(ngModel)]="pageSize" (change)="changePageSize()">
+        <option *ngFor="let listItem of listPageSize" value={{listItem}}>
+          {{listItem}}
+        </option>
       </select>
-  </div>
-<div class="mb-3" *ngIf="!isLabour">
-    <label for="exampleFormControlInput1" class="form-label">Part-Number</label>
-    <input type="text" class="form-control" id="exampleFormControlInput1">
-</div>
-<div class="mb-3" *ngIf="isLabour">
-    <label for="exampleFormControlInput1" class="form-label">Duration (Minute)</label>
-    <input type="number" class="form-control" id="exampleFormControlInput1">
-</div>
-<div class="mb-3">
-    <label for="exampleFormControlTextarea1" class="form-label">Description</label>
-    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+      records
+    </div>
+    <div class="col-lg-4">
+      <h4>List of Spare Parts</h4>
+    </div>
+    <div class="col-lg-4"></div>
   </div>
 
-  <div class="mb-3">
-    <button type="button" class="btn btn-success">Submit</button>
+  <div class="itemList">
+    <div class="row">
+      <div class="col-md-12">
+        <table class="table table-bordered">
+          <tr class="table-secondary">
+            <th>ItemCode</th>
+            <th>ItemName</th>
+            <th>BrandId</th>
+            <th>PartNoOld</th>
+            <th>PartNoNew</th>
+            <th>Remarks</th>
+            <th colspan="2">Action</th>
+          </tr>
+          <tr *ngFor="let listItem of listItems">
+            <td>{{listItem.ItemCode}}</td>
+            <td>{{listItem.ItemName}}</td>
+            <td>{{listItem.BrandId}}</td>
+            <td>{{listItem.PartNoOld}}</td>
+            <td>{{listItem.PartNoNew}}</td>
+            <td>{{listItem.Remarks}}</td>
+            <td><button class="btn btn-sm btn-outline-primary" (click)="editJob(listItem)">Edit</button></td>
+            <td><button class="btn btn-sm btn-outline-danger" (click)="Item=listItem" data-bs-toggle="modal"
+                data-bs-target="#confirmModal">Remove</button></td>
+          </tr>
+        </table>
+      </div>
+    </div>
   </div>
+</div>
+<!-- ================================================== -->
+<!-- End list view part -->
+
+
+<!-- Start Entry Form -->
+<!-- ========================================================= -->
+<div *ngIf="!isList">
+  <h4>Spare Parts Entry Form</h4>
+  <div class="row g-3">
+    <div class="col-md-4">
+      <label for="itemCode" class="form-label">Item Code</label>
+      <input type="text" class="form-control" id="itemCode" [(ngModel)]="Item.ItemCode">
+    </div>
+    <div class="col-md-4">
+      <label for="itemName" class="form-label">Item Name</label>
+      <input type="text" class="form-control" id="itemName" [(ngModel)]="Item.ItemName">
+    </div>
+    <div class="col-md-4">
+      <label for="BrandName" class="form-label">Brand Name</label>
+      <select class="form-control" id="BrandName" aria-label="Default select example" [(ngModel)]="Item.BrandId">
+        <option *ngFor="let listBrand of listBrand" value="{{listBrand.Id}}">{{listBrand.Name}}</option>
+      </select>
+    </div>
+    <div class="col-md-4">
+      <label for="partNoOld" class="form-label">Part-Number (Old)</label>
+      <input type="text" class="form-control" id="partNoOld" [(ngModel)]="Item.PartNoOld">
+    </div>
+    <div class="col-md-4">
+      <label for="partNoNew" class="form-label">Part-Number (New)</label>
+      <input type="text" class="form-control" id="partNoNew" [(ngModel)]="Item.PartNoNew">
+    </div>
+    <div class="col-md-12">
+      <label for="Description" class="form-label">Description</label>
+      <textarea class="form-control" id="Description" rows="3" [(ngModel)]="Item.Remarks"></textarea>
+    </div>
+    <div class="col-md-4">
+      <div class="col-auto  mb-2">
+        <button type="button" class="btn btn-success mb-3" *ngIf="Item.Id==0" (click)="addItem()">Add
+          Item</button>
+        <button type="button" class="btn btn-success mb-3" *ngIf="Item.Id" (click)="updateItem()">Update Item</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ========================================================= -->
+<!-- End Entry Form -->
+
+<!-- Start Moal Part -->
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title text-primary">Are you sure to remove?</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-danger">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" (click)="reset();">No</button>/
+        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal"
+          (click)="removeItem(Item)">Yes</button>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End Modal Part -->

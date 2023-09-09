@@ -20,9 +20,9 @@ export class JobComponent {
   //----------------------------------------------------------------------------
   //#region paging varible
   pageIndex: number = 0;
-  pageSize:number = 5;
+  pageSize:number = 10;
   rowCount:number = 0;
-  listPageSize:any = [5,10,20];
+  listPageSize:any = [10,20];
   pageStart:number = 0;
   pageEnd:number = 0;
   totalRowsInList:number=0;
@@ -86,6 +86,7 @@ export class JobComponent {
       }
     });
   }
+  
   editJob(item: any) {
     this.Job = {
       JobId: item.JobId,
@@ -135,6 +136,7 @@ export class JobComponent {
     };
 
     listJobGroup:any = [];
+    
     getJobGroup(){
       this.httpClient.get(this.baseUrl + '/api/JobCard/GetJobGroup').subscribe((res)=>{
           this.listJobGroup = res;
@@ -149,8 +151,7 @@ export class JobComponent {
         }else{
           this.showMessage('error', 'error occurred.');
         }
-      });
-      
+      });      
     }
 
   toast!: toastPayload;

@@ -11,6 +11,7 @@ import { HttpClient } from '@angular/common/http';
 export class ClientComponent {
   isNew:boolean = true;
   isList:boolean=true;
+  
   Client :{
     BpId:number,
     Name:string,
