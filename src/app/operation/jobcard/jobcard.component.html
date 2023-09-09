@@ -35,7 +35,7 @@
         <td>{{item.VehicleNo}}</td>
         <td>{{item.Bay}}</td>
         <td>{{item.ReceiveDate}}</td>
-        <td>OPEN</td>
+        <td>{{item.JcStatus==1?'CLOSE':'OPEN'}}</td>
         <td><button class="btn btn-sm btn-primary" (click)="edit(item)">Edit</button></td>
     </tr>
   </table>
@@ -72,7 +72,7 @@
   <div class="accordion" id="accordionExample">
     <div class="accordion-item">
       <h2 class="accordion-header" id="heading2">
-        <button class="accordion-button btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2" aria-expanded="true" aria-controls="collapse2">
+        <button class="accordion-button fw-bold text-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2" aria-expanded="true" aria-controls="collapse2">
           Vehicle Info
         </button>
       </h2>
@@ -156,7 +156,7 @@
   
     <div class="accordion-item">
       <h2 class="accordion-header" id="heading1">
-        <button class="accordion-button btn btn-secondary collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1" aria-expanded="false" aria-controls="collapse1">
+        <button class="accordion-button fw-bold text-primary collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1" aria-expanded="false" aria-controls="collapse1">
             Client Info ({{JobCard.ClientId>0 ?'Existing':'New'}})
         </button>
       </h2>
@@ -203,7 +203,7 @@
       
     <div class="accordion-item">
       <h2 class="accordion-header" id="heading3">
-        <button class="accordion-button btn btn-secondary collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3" aria-expanded="false" aria-controls="collapse3">
+        <button class="accordion-button fw-bold text-primary collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3" aria-expanded="false" aria-controls="collapse3">
           Job Details
         </button>
       </h2>
@@ -242,55 +242,43 @@
                 <option *ngFor="let item of listJobStatus" value="{{item.Id}}">{{item.Name}}</option>
               </select>
             </div>
-            <div class="col-md-4">
-              <label for="Resources" class="form-label">Resource</label>
-              <select id="Resources" class="form-control" [(ngModel)]="JcJob.Resources" multiple>
-                <option *ngFor="let item of listMechanic" value="{{item.EmployeeId}}">{{item.FullName}}</option>
-              </select>
-            </div>
             <div class="col-md-4 mt-5">
                 <button class="btn btn-sm btn-success" *ngIf="JcJob.Id == 0" (click)="addJob();"><i class="fa fa-plus"></i> Add</button>
                 <button class="btn btn-sm btn-success" *ngIf="JcJob.Id > 0" (click)="updateJob();"><i class="fa fa-save"></i> Update</button>
             </div>
           </div>
-            <table class="table table-bordered">
-                <tr class="table-secondary">
-                    <th scope="col">#</th>
-                    <th>Group</th>
-                    <th>Job</th>
-                    <th>Engine</th>
-                    <th>Price</th>
-                    <th>Duration</th>
-                    <th>Status</th>
-                    <th>#</th>
-                    <th>#</th>
-                </tr>
-                <tr *ngFor="let item of JobCard.JobDetails; let i = index">
-                    <td>{{i+1}}</td>
-                    <td>{{item.JobGroupName}}</td>
-                    <td>{{item.JobName}}</td>
-                    <td>{{item.EngineSizeName}}</td>
-                    <td>{{item.Price}}</td>
-                    <td>{{item.Duration}}</td>
-                    <td>{{item.JobStatusName}}</td>
-                    <td>
-                      <ol>
-                        <li *ngFor="let r of item.ResourceNames;">{{r.FullName}}</li>
-                      </ol>
-                    </td>
-                    <td>
-                      <button class="btn btn-sm btn-danger" (click)="editJob(item)"><i class="fa fa-pencil"></i> Edit</button>
-                      <button class="btn btn-sm btn-danger" (click)="removeJob(item)"><i class="fa fa-trash"></i> Remove</button>
-                    </td>
-                </tr>
-            </table>
+          <table class="table table-bordered">
+              <tr class="table-secondary">
+                  <th scope="col">#</th>
+                  <th>Group</th>
+                  <th>Job</th>
+                  <th>Engine</th>
+                  <th>Price</th>
+                  <th>Duration</th>
+                  <th>Status</th>
+                  <th>#</th>
+              </tr>
+              <tr *ngFor="let item of JobCard.JobDetails; let i = index">
+                  <td>{{i+1}}</td>
+                  <td>{{item.JobGroupName}}</td>
+                  <td>{{item.JobName}}</td>
+                  <td>{{item.EngineSizeName}}</td>
+                  <td>{{item.Price}}</td>
+                  <td>{{item.Duration}}</td>
+                  <td>{{item.JobStatusName}}</td>
+                  <td>
+                    <button class="btn btn-sm btn-danger" (click)="editJob(item)"><i class="fa fa-pencil"></i> Edit</button>
+                    <button class="btn btn-sm btn-danger" (click)="removeJob(item)"><i class="fa fa-trash"></i> Remove</button>
+                  </td>
+              </tr>
+          </table>
         </div>
       </div>
     </div>
   
     <div class="accordion-item">
       <h2 class="accordion-header" id="heading4">
-        <button class="accordion-button btn btn-secondary collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse4" aria-expanded="false" aria-controls="collapse4">
+        <button class="accordion-button fw-bold text-primary collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse4" aria-expanded="false" aria-controls="collapse4">
           Spare Parts
         </button>
       </h2>
@@ -331,38 +319,61 @@
                 <button class="btn btn-sm btn-success" *ngIf="JcSpare.Id > 0" (click)="updateSpare();"><i class="fa fa-save"></i> Update Spare</button>
             </div>
           </div>
-            <table class="table table-bordered">
-                <tr class="table-secondary">
-                    <th scope="col">#</th>
-                    <th>Item Code</th>
-                    <th>Item Name</th>
-                    <th>Brand</th>
-                    <th>Price</th>
-                    <th>Quantity</th>
-                    <th>Amount</th>
-                    <th>Status</th>
-                    <th>#</th>
-                </tr>
-                <tr *ngFor="let item of JobCard.JcSpares; let i = index">
-                  <td>{{i+1}}</td>
-                  <td>{{item.ItemCode}}</td>
-                  <td>{{item.ItemName}}</td>
-                  <td>{{item.BrandName}}</td>
-                  <td>{{item.SalePrice}}</td>
-                  <td>{{item.Quantity}}</td>
-                  <td>{{item.SpareAmount}}</td>
-                  <td>{{item.ItemStatusName}}</td>
-                  <td>
-                    <button class="btn btn-sm btn-primary" (click)="editSpare(item)">Edit</button>
-                    <button class="btn btn-sm btn-danger" (click)="removeSpare(item)">Remove</button>
-                  </td>
+          <table class="table table-bordered">
+              <tr class="table-secondary">
+                  <th scope="col">#</th>
+                  <th>Item Code</th>
+                  <th>Item Name</th>
+                  <th>Brand</th>
+                  <th>Price</th>
+                  <th>Quantity</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                  <th>#</th>
               </tr>
-            </table>
+              <tr *ngFor="let item of JobCard.JcSpares; let i = index">
+                <td>{{i+1}}</td>
+                <td>{{item.ItemCode}}</td>
+                <td>{{item.ItemName}}</td>
+                <td>{{item.BrandName}}</td>
+                <td>{{item.SalePrice}}</td>
+                <td>{{item.Quantity}}</td>
+                <td>{{item.SpareAmount}}</td>
+                <td>{{item.ItemStatusName}}</td>
+                <td>
+                  <button class="btn btn-sm btn-primary" (click)="editSpare(item)">Edit</button>
+                  <button class="btn btn-sm btn-danger" (click)="removeSpare(item)">Remove</button>
+                </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading5">
+        <button class="accordion-button fw-bold text-primary collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse5" aria-expanded="false" aria-controls="collapse5">
+          Man Power
+        </button>
+      </h2>
+      <div id="collapse5" class="accordion-collapse collapse" aria-labelledby="heading5" data-bs-parent="#accordionExample">
+        <div class="accordion-body">
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label for="Resources" class="form-label">Resource</label>
+              <div style="max-height: 120px;" class="table-responsive">
+                <ol>
+                  <li *ngFor="let item of listMechanic">
+                    <input type="checkbox" name="Resource" [(ngModel)]="item.IsSelect" /> {{item.FullName}} ( {{item.WgName}} )
+                  </li>
+                </ol>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="row g-3">
+  <div class="row g-3 mt-1">
     <div class="col-md-6">
       <button type="button" *ngIf="JobCard.Id == 0" class="btn btn-success" (click)="add()"><i class="fa fa-plus"></i> Add</button>
       <button type="button" *ngIf="JobCard.Id > 0" class="btn btn-primary" (click)="update()"><i class="fa fa-save"></i> Update</button>

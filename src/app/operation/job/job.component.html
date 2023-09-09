@@ -50,11 +50,13 @@
     </table>
     <!-- Start Pagination  -->
     <div class="row" *ngIf="listJobGroup.length>0">
-        <div class="col-lg-12 ">
+        <div class="col-lg-3">
             <div class="pull-left ">
                 <span class="well well-sm">Showing  <span class="text-success"><b>{{pageStart}}</b></span> to <span class="text-success"><b>{{pageEnd}}</b></span> of <span class="text-success"><b>{{rowCount}}</b></span> records</span>
             </div>
-            <div class="pull-right">
+        </div>
+        <div class="col-lg-9">
+            <div class="table-responsive">
                 <ul class="pagination" *ngIf="pager.pages && pager.pages.length">
                     <li>
                         <a class="btn btn-sm btn-outline-secondary" [ngClass]="{disabled:pageIndex == 0}" href="javascript:void(0);" (click)="changePageNumber(0)"><i class="fa fa-angle-double-left" aria-hidden="true"></i>Start</a>
