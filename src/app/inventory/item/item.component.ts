@@ -33,6 +33,7 @@ export class ItemComponent {
   }
 
   listBrand:any=[];
+  
   getBrand(){
     this.httpClient.get(this.baseUrl + '/api/Item/GetBrand').subscribe((res)=>{
         this.listBrand = res;
