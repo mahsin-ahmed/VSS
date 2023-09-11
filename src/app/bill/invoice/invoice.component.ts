@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { CommonService, toastPayload } from '../../services/common.service';
 
 @Component({
   selector: 'app-invoice',
@@ -7,76 +9,49 @@ import { Component } from '@angular/core';
 })
 export class InvoiceComponent {
   isList:boolean=true;
-  listJobCard:any=[
-    {
-    JcNo:'1001',
-    JobDate:'2023-05-19',
-    CreateBy:9,
-    Vin:'FV65765',
-    Mileage:4200,
-    EstiCostTotal:26000,
-    EstiCostJob:15000,
-    EstiCostSpare:11000,
-    ActualCostTotal:27000,
-    ActualCostJob:15000,
-    ActualCostSpare:12000,
-    ReceiveDate:'2023-05-19',
-    ReceiveBy:1,
-    JobStart:'2023-05-19',
-    JobEnd:'2023-05-25',
-    Bay:2,
-    VehicleNo:'DM-FA-33-6842',
-    Model:'M6574',
-    JcStatus:2,
-    ClientId:1,
-    ClientName:'Mr. Robin',
-    ClientPhone:'0176474668',
-    ClientEmail:'one@email.com',
-    ClientAddress:'Dhanmondi',
-    ContactPerson:'Mostofa',
-    ContactPersonNo:'01985541226',
-    Description:'',
-    JobDetails:[],
-    JcSpares:[],
-    JcHr:[]
-  },
-  {
-    JcNo:'1002',
-    JobDate:'2023-05-19',
-    CreateBy:9,
-    Vin:'FV546456',
-    Mileage:4200,
-    EstiCostTotal:26000,
-    EstiCostJob:15000,
-    EstiCostSpare:11000,
-    ActualCostTotal:27000,
-    ActualCostJob:15000,
-    ActualCostSpare:12000,
-    ReceiveDate:'2023-05-19',
-    ReceiveBy:1,
-    JobStart:'2023-05-19',
-    JobEnd:'2023-05-25',
-    Bay:2,
-    VehicleNo:'CM-BA-88-3698',
-    Model:'M6574',
-    JcStatus:2,
-    ClientId:2,
-    ClientName:'Mr. Goni',
-    ClientPhone:'01853544152',
-    ClientEmail:'chitt@email.com',
-    ClientAddress:'Oxizen, Chittagong',
-    ContactPerson:'Abul',
-    ContactPersonNo:'01865547141',
-    Description:'',
-    JobDetails:[],
-    JcSpares:[],
-    JcHr:[]
+  listJobCard:any=[];
+  baseUrl:string='http://localhost:56297';
+  //#region paging varible
+  pageIndex: number = 0;
+  pageSize:number = 5;
+  rowCount:number = 0;
+  listPageSize:any = [5,10,20];
+  pageStart:number = 0;
+  pageEnd:number = 0;
+  totalRowsInList:number=0;
+  pagedItems:any = [];
+  pager:{
+    pages:any,
+    totalPages:number
+  } = {
+    pages:[],
+    totalPages:0
+  };  
+  //#endregion
+  constructor(private cs:CommonService,private httpClient: HttpClient) {
+    this.get();
   }
-];
-openWin() {
-  const myWindow: Window | null = window.open("", "", "width=793,height=1123");
-  if(myWindow !=undefined){
-    var jcForPad = '<!DOCTYPE html><html lang="en"><head><title>Job-Card</title></head><body>'
+
+  get(){
+    this.httpClient.get(this.baseUrl + '/api/JobCard?pi='+this.pageIndex+'&ps='+this.pageSize+'&jcStatus=1').subscribe((res)=>{
+      this.listJobCard = res;
+      //#region paging
+      this.rowCount = this.listJobCard.length > 0 ? this.listJobCard[0].RowCount : 0;
+      this.totalRowsInList = this.listJobCard.length;
+      this.pager.totalPages = Math.ceil(this.rowCount / this.pageSize);
+      this.pager.pages = [];
+      for(var i = 0; i<this.pager.totalPages; i++){
+        this.pager.pages.push(i+1);
+      }
+      this.pageStart = (this.pageIndex * this.pageSize) + 1;
+      this.pageEnd = (this.pageStart - 1) + this.totalRowsInList;
+      //#endregion
+    });
+  }
+  openWin() {
+    const myWindow: Window | null = window.open("", "", "width=793,height=1123");
+    if(myWindow !=undefined){
+      var jcForPad = '<!DOCTYPE html><html lang="en"><head><title>Job-Card</title></head><body>'
   +'<div style="margin-left:12px;margin-right:12px;margin-bottom:12px;margin-top:96px;">' 
     +'<table style="width:100%;border-collapse: collapse;">'
       +'<tr>'
@@ -429,6 +404,181 @@ var jcForTem = '<!DOCTYPE html><html lang="en"><head><title>Job-Card</title></he
   }
 
   createBill(item:any){
-
+    this.isList = false;
+    this.getById(item.Id);
   }
+
+  VAT:number=10;
+  Discount:number=0
+  listBillItem:any =[];
+  getById(id:number):void{
+    this.httpClient.get(this.baseUrl + '/api/JobCard/'+id).subscribe((res)=>{
+      let item:any = res;
+      this.JobCard ={
+        Id:item.Id,
+        MembershipNo:item.MembershipNo,
+        JcNo:item.JcNo,
+        JobDate:item.JobDate,
+        CreateBy:item.CreateBy,
+        Vin:item.Vin,
+        Mileage:item.Mileage,
+        EstiCostTotal:item.EstiCostTotal,
+        EstiCostJob:item.EstiCostJob,
+        EstiCostSpare:item.EstiCostSpare,
+        ActualCostTotal:item.ActualCostTotal,
+        ActualCostJob:item.ActualCostJob,
+        ActualCostSpare:item.ActualCostSpare,
+        ReceiveDate:item.ReceiveDate,
+        ReceiveBy:item.ReceiveBy,
+        JobStart:item.JobStart,
+        JobEnd:item.JobEnd,
+        Bay:item.Bay,
+        VehicleNo:item.VehicleNo,
+        Model:item.Model,
+        JcStatus:item.JcStatus,
+        ClientId:item.ClientId,
+        ClientName:item.ClientName,
+        ClientPhone:item.ClientPhone,
+        ClientEmail:item.ClientEmail,
+        ClientAddress:item.ClientAddress,
+        ContactPerson:item.ContactPerson,
+        ContactPersonNo:item.ContactPersonNo,
+        Description:item.Description,
+        JobDetails:item.JobDetails,
+        JcSpares:item.JcSpares,
+        Resources:item.Resources
+      };
+      this.catculateTotals();
+    });
+  }
+
+  JobCard : {
+    // Job-Card
+    Id:number,
+    MembershipNo:string,
+    JcNo:string,
+    JobDate:string,
+    CreateBy:number,
+    Vin:string,
+    Mileage:number,
+    EstiCostTotal:number,
+    EstiCostJob:number,
+    EstiCostSpare:number,
+    ActualCostTotal:number,
+    ActualCostJob:number,
+    ActualCostSpare:number,
+    ReceiveDate:string,
+    ReceiveBy:number,
+    JobStart:string,
+    JobEnd:string,
+    Bay:number,
+    VehicleNo:string,
+    Model:string,
+    JcStatus:number, // (CLOSE/OPEN)
+    // Client
+    ClientId:number,
+    ClientName:string,
+    ClientPhone:string,
+    ClientEmail:string,
+    ClientAddress:string,
+    ContactPerson:string,
+    ContactPersonNo:string,
+    Description:string,
+    // Job-Details, Spares, JcResource
+    JobDetails:any,
+    JcSpares:any,
+    Resources:any
+   } = {
+    Id:0,
+    MembershipNo:'',
+    JcNo:'',
+    JobDate:'',
+    CreateBy:0,
+    Vin:'',
+    Mileage:0,
+    EstiCostTotal:0,
+    EstiCostJob:0,
+    EstiCostSpare:0,
+    ActualCostTotal:0,
+    ActualCostJob:0,
+    ActualCostSpare:0,
+    ReceiveDate:'',
+    ReceiveBy:0,
+    JobStart:'',
+    JobEnd:'',
+    Bay:0,
+    VehicleNo:'',
+    Model:'',
+    JcStatus:0,
+    ClientId:0,
+    ClientName:'',
+    ClientPhone:'',
+    ClientEmail:'',
+    ClientAddress:'',
+    ContactPerson:'',
+    ContactPersonNo:'',
+    Description:'',
+    JobDetails:[],
+    JcSpares:[],
+    Resources:[]
+   };
+
+   setDiscount():void{
+    for(var i =0; i< this.listBillItem.length; i++){
+      this.listBillItem[i].Discount = this.Discount;
+    }
+    this.catculateTotals();
+   }
+
+   GrandTotal:number = 0;
+   catculateTotals():void{
+    this.listBillItem = [];
+    this.GrandTotal = 0;
+    for(var i = 0; i <this.JobCard.JobDetails.length; i++){
+      var Price:number = this.JobCard.JobDetails[i].Price == undefined ? 0 :this.JobCard.JobDetails[i].Price;
+      var Discount:number = this.JobCard.JobDetails[i].Discount == undefined ? 0 :this.JobCard.JobDetails[i].Discount;
+      var TotalPrice:number = Price * 1;
+      var DiscountAmountOnTotalPrice: number = TotalPrice * (Discount/100);
+      var TotalPriceAterDiscount:number = TotalPrice - DiscountAmountOnTotalPrice;
+      var TotalVAT:number=TotalPriceAterDiscount * (this.VAT/100);
+      var TotalAmount:number=TotalPriceAterDiscount+TotalVAT;
+      this.listBillItem.push({
+        BillType:'Job',
+        ItemDescription:this.JobCard.JobDetails[i].JobName,
+        Qty:1,
+        Price:Price,
+        TotalPrice:TotalPrice,
+        Discount:Discount,
+        DATP:DiscountAmountOnTotalPrice,
+        TPAD:TotalPriceAterDiscount,
+        TotalVAT:TotalVAT,
+        TotalAmount:TotalAmount
+      });
+      this.GrandTotal += TotalAmount;
+    }
+    for(var i = 0; i <this.JobCard.JcSpares.length; i++) {
+      var SalePrice = this.JobCard.JcSpares[i].SalePrice == undefined ? 0 : this.JobCard.JcSpares[i].SalePrice;
+      var Quantity = this.JobCard.JcSpares[i].Quantity == undefined ? 0 : this.JobCard.JcSpares[i].Quantity;
+      var Discount:number = this.JobCard.JcSpares[i].Discount == undefined ? 0 : this.JobCard.JcSpares[i].Discount;
+      var TotalPrice = SalePrice * Quantity;
+      var DiscountAmountOnTotalPrice = TotalPrice * (Discount/100);
+      var TotalPriceAterDiscount:number = TotalPrice - DiscountAmountOnTotalPrice;
+      var TotalVAT:number=TotalPriceAterDiscount * (this.VAT/100);
+      var TotalAmount:number=TotalPriceAterDiscount+TotalVAT;
+      this.listBillItem.push({
+        BillType:'SP',
+        ItemDescription:this.JobCard.JcSpares[i].ItemName,
+        Qty:Quantity,
+        Price:SalePrice,
+        TotalPrice:TotalPrice,
+        Discount:Discount,
+        DATP:DiscountAmountOnTotalPrice,
+        TPAD:TotalPriceAterDiscount,
+        TotalVAT:TotalVAT,
+        TotalAmount:TotalAmount
+      });
+      this.GrandTotal += TotalAmount;
+    }
+   }
+
 }

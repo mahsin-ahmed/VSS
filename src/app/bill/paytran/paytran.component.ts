@@ -6,5 +6,13 @@ import { Component } from '@angular/core';
   styleUrls: ['./paytran.component.css']
 })
 export class PaytranComponent {
-
+  isList:boolean=true;
+  switchView(view: string): void {
+    if (view == 'form') {
+      this.isList = false;
+    } else {
+      this.isList = true;
+      //this.reset();
+    }
+  }
 }
