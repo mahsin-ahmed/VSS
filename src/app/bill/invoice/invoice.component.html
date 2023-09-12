@@ -33,8 +33,10 @@
     <h4 class="text-center">Create Bill</h4>
     <div class="row g-3">
         <div class="col-md-4">
-            <label class="form-label" for="ClientName">Client Name:</label>
-            <input type="text" id="ClientName" [(ngModel)]="oBill.ClientName" placeholder="Client Name" class="form-control" />
+            <strong>Job Card Number: </strong>{{oBill.JcNo}}
+        </div>
+        <div class="col-md-4">
+            <strong>Client Name: </strong>{{oBill.ClientName}}
         </div>
     </div>
     <h6>Bill Items</h6>
@@ -59,13 +61,13 @@
             <td style="text-align: right;">{{item.Price}}</td>
             <td style="text-align: right;">{{item.TotalPrice}}</td>
             <td style="text-align: right;"><input type="text" class="text-left" name="Discount" [(ngModel)]="item.Discount" style="text-align: right;" (change)="catculateTotals()" /></td>
-            <td style="text-align: right;">{{item.TPAD}}</td>
+            <td style="text-align: right;">{{item.TpAfterDiscount}}</td>
             <td style="text-align: right;">{{item.TotalVAT}}</td>
             <td style="text-align: right;">{{item.TotalAmount}}</td>
         </tr>
         <tr>
             <th>
-                <button (click)="add()">Add</button>
+                <button (click)="add()" class="btn btn-success">Add</button>
             </th>
             <th></th>
             <th></th>

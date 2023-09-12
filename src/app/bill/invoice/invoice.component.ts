@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CommonService, toastPayload } from '../../services/common.service';
+import { IndividualConfig } from 'ngx-toastr';
 
 @Component({
   selector: 'app-invoice',
@@ -28,6 +29,7 @@ export class InvoiceComponent {
     totalPages:0
   };  
   //#endregion
+  toast!: toastPayload;
   constructor(private cs:CommonService,private httpClient: HttpClient) {
     this.get();
   }
@@ -411,19 +413,27 @@ var jcForTem = '<!DOCTYPE html><html lang="en"><head><title>Job-Card</title></he
   VAT:number=10;
   //Discount:number=0
   oBill:{
-    InvoiceId:number,
+    Id:number,
     ClientId:number,
     CreateDate:string,
     CreateBy:number,
     IsPaid:boolean,
-    JcId:number
+    JcId:number,
+    ClientName:string,
+    JcNo:string,
+    GrandTotal:number,
+    InvoiceItems:any
   }={
-    InvoiceId:0,
+    Id:0,
     ClientId:0,
     CreateDate:'',
     CreateBy:0,
     IsPaid:false,
-    JcId:0
+    JcId:0,
+    ClientName:'',
+    JcNo:'',
+    GrandTotal:0,
+    InvoiceItems:[]
   };
   listBillItem:any =[];
   getById(id:number):void{
@@ -559,9 +569,15 @@ var jcForTem = '<!DOCTYPE html><html lang="en"><head><title>Job-Card</title></he
     }
    }
 
+   ItemTypes:any = [
+    {ItemTypeId:1,ItemTypeName:'Job'},
+    {ItemTypeId:2,ItemTypeName:'SP'}
+  ];
    addToBill():void{
     this.oBill.JcId = this.JobCard.Id;
     this.oBill.ClientId = this.JobCard.ClientId;
+    this.oBill.ClientName = this.JobCard.ClientName;
+    this.oBill.JcNo = this.JobCard.JcNo;
     this.listBillItem = [];
     this.GrandTotal = 0;
     for(var i = 0; i <this.JobCard.JobDetails.length; i++){
@@ -573,14 +589,17 @@ var jcForTem = '<!DOCTYPE html><html lang="en"><head><title>Job-Card</title></he
       var TotalVAT:number=TotalPriceAterDiscount * (this.VAT/100);
       var TotalAmount:number=TotalPriceAterDiscount+TotalVAT;
       this.listBillItem.push({
-        BillType:'Job',
+        ItemId:this.JobCard.JobDetails[i].JobId,
+        ItemType:1,
+        ItemTypeName:'Job',
         ItemDescription:this.JobCard.JobDetails[i].JobName,
         Qty:1,
-        Price:Price,
+        UnitPrice:Price,
         TotalPrice:TotalPrice,
         Discount:Discount,
-        DATP:DiscountAmountOnTotalPrice,
-        TPAD:TotalPriceAterDiscount,
+        DiscountAmount:DiscountAmountOnTotalPrice,
+        TpAfterDiscount:TotalPriceAterDiscount,
+        Vat:this.VAT,
         TotalVAT:TotalVAT,
         TotalAmount:TotalAmount
       });
@@ -596,23 +615,53 @@ var jcForTem = '<!DOCTYPE html><html lang="en"><head><title>Job-Card</title></he
       var TotalVAT:number=TotalPriceAterDiscount * (this.VAT/100);
       var TotalAmount:number=TotalPriceAterDiscount+TotalVAT;
       this.listBillItem.push({
-        BillType:'SP',
+        ItemId:this.JobCard.JcSpares[i].ItemId,
+        ItemType:2,
+        ItemTypeName:'SP',
         ItemDescription:this.JobCard.JcSpares[i].ItemName,
         Qty:Quantity,
-        Price:SalePrice,
+        UnitPrice:SalePrice,
         TotalPrice:TotalPrice,
         Discount:Discount,
-        DATP:DiscountAmountOnTotalPrice,
-        TPAD:TotalPriceAterDiscount,
+        DiscountAmount:DiscountAmountOnTotalPrice,
+        TpAfterDiscount:TotalPriceAterDiscount,
+        Vat:this.VAT,
         TotalVAT:TotalVAT,
         TotalAmount:TotalAmount
       });
       this.GrandTotal += TotalAmount;
     }
+    this.oBill.GrandTotal = this.GrandTotal;
+    this.oBill.InvoiceItems = this.listBillItem;
    }
 
    add(){
-    
-   }
+    this.httpClient.post(this.baseUrl + '/api/Invoice', this.oBill).subscribe((res) => {
+      if (res == true) {
+        this.isList = true;
+        this.get();
+        //this.resetJob();
+        //this.reset();
+        this.showMessage('success', 'data added.');
+      } else {
+        this.showMessage('error', 'error occurred.');
+      }
+    });
+  }
+
+   //type: 'success', 'error', 'warning', 'info'
+  //message: '<span>Action in '+type+'</span>',
+  showMessage(type: string, message:string) {
+    this.toast = {
+      message:message,
+      title: type.toUpperCase(),
+      type: type,
+      ic: {
+        timeOut: 2500,
+        closeButton: true,
+      } as IndividualConfig,
+    };
+    this.cs.showToast(this.toast);
+  }
 
 }
