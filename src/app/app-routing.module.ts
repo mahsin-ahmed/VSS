@@ -52,8 +52,8 @@ const routes: Routes = [
   { path: 'manufacturer', component: ManufacturerComponent },
   { path: 'size', component: SizeComponent },
   { path: 'unit', component: UnitComponent },
-  { path: 'store', component: WarehouseComponent },
-  { path:'sr', component:SrComponent },
+  { path: 'store', component: WarehouseComponent, canActivate:[authGuard] },
+  { path:'sr', component:SrComponent, canActivate:[authGuard] },
 
   { path: 'job-card', component: JobcardComponent, canActivate:[authGuard] },
   { path: 'client', component: ClientComponent, canActivate:[authGuard] },

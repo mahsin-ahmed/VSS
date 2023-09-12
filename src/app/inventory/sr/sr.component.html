@@ -1,33 +1,120 @@
-<h4 class="text-center">Store Requistion</h4>
-<div class="mb-3">
-    <label for="exampleFormControlInput1" class="form-label">Spare Parts</label>
-    <select class="form-select" aria-label="Default select example">
-        <option selected>Select a spare-parts</option>
-        <option value="1">P001</option>
-        <option value="2">P059</option>
-        <option value="3">P035</option>
+<a href="javascript:void(0)" *ngIf="!isList" (click)="switchView('list')">Go to List</a>
+<a href="javascript:void(0)" *ngIf="isList" (click)="switchView('form')">Go to Entry</a>
+
+<!-- start store requisition view part  -->
+<!-- ================================================== -->
+<div *ngIf="isList">
+  <div class="row">
+    <div class="col-lg-4">
+      Show
+      <select style="width: 50px;height: 32px;" [(ngModel)]="pageSize" (change)="changePageSize()">
+        <option *ngFor="let listItem of listPageSize" value={{listItem}}>
+          {{listItem}}
+        </option>
       </select>
+      records
+    </div>
+    <div class="col-lg-4 mb-5">
+      <h4>List of Store Requisition</h4>
+    </div>
+    <div class="col-lg-4"></div>
   </div>
-  <div class="mb-3">
-    <label for="exampleFormControlInput1" class="form-label">Supplier</label>
-    <select class="form-select" aria-label="Default select example">
-        <option selected>Select a supplier</option>
-        <option value="1">Nissan</option>
-        <option value="2">Toyota</option>
+  <div class="itemList">
+    <div class="row">
+      <div class="col-md-12">
+        <table class="table table-bordered">
+          <tr class="table-secondary">
+            <th>WhId</th>
+            <th>ItemId</th>
+            <th>SupplierId</th>
+            <th>PurPrice</th>
+            <th>SalePrice</th>
+            <th>Remarks</th>
+            <th colspan="2">Action</th>
+          </tr>
+          <tr *ngFor="let item of StoreReqs">
+            <td>{{item.WhId}}</td>
+            <td>{{item.ItemId}}</td>
+            <td>{{item.SupplierId}}</td>
+            <td>{{item.PurPrice}}</td>
+            <td>{{item.SalePrice}}</td>
+            <td>{{item.Remark}}</td>
+            <td><button class="btn btn-sm btn-outline-primary" (click)="editStoreReq(item)">Edit</button></td>
+            <td><button class="btn btn-sm btn-outline-danger" (click)="StoreReqs=item" data-bs-toggle="modal"
+                data-bs-target="#confirmModal">Remove</button></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ================================================== -->
+<!-- End store requisition view part -->
+<!-- Start Entry Form -->
+<!-- ========================================================= -->
+<div *ngIf="!isList">
+  <h4 class="mb-3">Store Requisition Entry Form</h4>
+  <div class="row g-3">
+    <div class="col-md-4">
+      <label for="WarehouseId" class="form-label">Warehouse Name</label>
+      <select class="form-control" id="WarehouseId" aria-label="Default select example" [(ngModel)]="StoreReq.WhId">
+        <option *ngFor="let listWH of listWareHouse" value="{{listWH.Id}}">{{listWH.Name}}</option>
       </select>
+    </div>
+    <div class="col-md-4">
+      <label for="itemName" class="form-label">Item Name</label>
+      <select class="form-control" id="itemName" aria-label="Default select example" [(ngModel)]="StoreReq.ItemId">
+        <option *ngFor="let listItem of listItem" value="{{listItem.Id}}">{{listItem.ItemName}}</option>
+      </select>
+    </div>
+    <div class="col-md-4">
+      <label for="SuplierName" class="form-label">Supplier Name</label>
+      <select class="form-control" id="SuplierName" aria-label="Default select example" [(ngModel)]="StoreReq.SupplierId">
+        <option *ngFor="let listSP of listSupplier" value="{{listSP.BpId}}">{{listSP.Name}}</option>
+      </select>
+    </div>
+    <div class="col-md-4">
+      <label for="PurchasePrice" class="form-label">Purchase Price</label>
+      <input type="text" class="form-control" id="PurchasePrice" [(ngModel)]="StoreReq.PurPrice">
+    </div>
+    <div class="col-md-4">
+      <label for="SalePrice" class="form-label">Sale Price</label>
+      <input type="text" class="form-control" id="SalePrice" [(ngModel)]="StoreReq.SalePrice">
+    </div>
+    <div class="col-md-12">
+      <label for="Description" class="form-label">Description</label>
+      <textarea class="form-control" id="Description" rows="3" [(ngModel)]="StoreReq.Remark"></textarea>
+    </div>
+    <div class="col-md-4">
+      <div class="col-auto  mb-2">
+        <button type="button" class="btn btn-success mb-3" *ngIf="StoreReq.Id==0" (click)="add()"> 
+      Submit Requisition</button>
+        <button type="button" class="btn btn-success mb-3" *ngIf="StoreReq.Id>0" (click)="update()">Update Item</button>
+      </div>
+    </div>
   </div>
-  <div class="mb-3">
-    <label for="exampleFormControlInput1" class="form-label">Qunatity</label>
-    <input type="number" class="form-control" id="exampleFormControlInput1">
+</div>
+<!-- ========================================================= -->
+<!-- End Entry Form -->
+
+
+<!-- Start Moal Part -->
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title text-primary">Are you sure to remove?</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-danger">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" (click)="reset();">No</button>/
+        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal"
+          (click)="remove(StoreReqs)">Yes</button>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
   </div>
-  <div class="mb-3">
-    <label for="exampleFormControlInput1" class="form-label">Purchase Price</label>
-    <input type="number" class="form-control" id="exampleFormControlInput1">
-  </div>
-  <div class="mb-3">
-    <label for="exampleFormControlInput1" class="form-label">Selling Price</label>
-    <input type="number" class="form-control" id="exampleFormControlInput1">
-  </div>
-  <div class="mb-3">
-    <button type="button" class="btn btn-success">Submit</button>
-  </div>
+</div>
+<!-- End Modal Part -->
