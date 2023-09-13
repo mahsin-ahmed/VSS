@@ -25,7 +25,10 @@
             <td>{{item.ClientId}}</td>
             <td>{{item.ReceiveDate}}</td>
             <td>{{item.JcStatus == 1 ? 'CLOSE' : 'OPEN'}}</td>
-            <td><button class="btn btn-sm btn-primary" (click)="createBill(item)">Create Bill</button></td>
+            <td>
+                <button class="btn btn-sm btn-primary" (click)="createBill(item)" *ngIf="item.JcId==0">Create Bill</button>
+                <button class="btn btn-sm btn-primary" (click)="editBill(item)" *ngIf="item.JcId>0">Edit Bill</button>
+            </td>
         </tr>
     </table>
 </div>
@@ -67,7 +70,8 @@
         </tr>
         <tr>
             <th>
-                <button (click)="add()" class="btn btn-success">Add</button>
+                <button (click)="add()" class="btn btn-success" *ngIf="oBill.JcId==0">Add</button>
+                <button (click)="update()" class="btn btn-primary" *ngIf="oBill.JcId>0">Update</button>
             </th>
             <th></th>
             <th></th>
