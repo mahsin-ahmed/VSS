@@ -30,12 +30,13 @@ export class InvoiceComponent {
   };  
   //#endregion
   toast!: toastPayload;
+
   constructor(private cs:CommonService,private httpClient: HttpClient) {
     this.get();
   }
 
   get(){
-    this.httpClient.get(this.baseUrl + '/api/Invoice?pi='+this.pageIndex+'&ps='+this.pageSize+'&jcStatus=1').subscribe((res)=>{
+    this.httpClient.get(this.baseUrl + '/api/Invoice?pi='+this.pageIndex+'&ps='+this.pageSize+'&jcStatus=1&IsPaid=1').subscribe((res)=>{
       this.listJobCard = res;
       //#region paging
       this.rowCount = this.listJobCard.length > 0 ? this.listJobCard[0].RowCount : 0;
@@ -50,6 +51,7 @@ export class InvoiceComponent {
       //#endregion
     });
   }
+
   openWin() {
     const myWindow: Window | null = window.open("", "", "width=793,height=1123");
     if(myWindow !=undefined){
@@ -446,6 +448,7 @@ var jcForTem = '<!DOCTYPE html><html lang="en"><head><title>Job-Card</title></he
       let item:any = res;
       this.JobCard ={
         Id:item.Id,
+        JcId:item.JcId,
         MembershipNo:item.MembershipNo,
         JcNo:item.JcNo,
         JobDate:item.JobDate,
@@ -494,6 +497,7 @@ var jcForTem = '<!DOCTYPE html><html lang="en"><head><title>Job-Card</title></he
   JobCard : {
     // Job-Card
     Id:number,
+    JcId:number,
     MembershipNo:string,
     JcNo:string,
     JobDate:string,
@@ -529,6 +533,7 @@ var jcForTem = '<!DOCTYPE html><html lang="en"><head><title>Job-Card</title></he
     Resources:any
    } = {
     Id:0,
+    JcId:0,
     MembershipNo:'',
     JcNo:'',
     JobDate:'',
@@ -563,24 +568,25 @@ var jcForTem = '<!DOCTYPE html><html lang="en"><head><title>Job-Card</title></he
    };
 
    GrandTotal:number = 0;
-   catculateTotals():void{
+   calculateTotals():void{
     this.GrandTotal = 0;
     for(var i = 0; i <this.listBillItem.length; i++) {
-      var Price = this.listBillItem[i].Price == undefined ? 0 : this.listBillItem[i].Price;
+      var Price = this.listBillItem[i].UnitPrice == undefined ? 0 : this.listBillItem[i].UnitPrice;
       var Qty = this.listBillItem[i].Qty == undefined ? 0 : this.listBillItem[i].Qty;
       var Discount:number = this.listBillItem[i].Discount == undefined ? 0 : this.listBillItem[i].Discount;
       var TotalPrice = Price * Qty;
       var DiscountAmountOnTotalPrice = TotalPrice * (Discount/100);
       var TotalPriceAterDiscount:number = TotalPrice - DiscountAmountOnTotalPrice;
-      var TotalVAT:number=TotalPriceAterDiscount * (this.VAT/100);
-      var TotalAmount:number=TotalPriceAterDiscount+TotalVAT;
+      var TotalVat:number=TotalPriceAterDiscount * (this.VAT/100);
+      var TotalAmount:number=TotalPriceAterDiscount+TotalVat;
       this.listBillItem[i].TotalPrice = TotalPrice;
-      this.listBillItem[i].DATP = DiscountAmountOnTotalPrice;
-      this.listBillItem[i].TPAD = TotalPriceAterDiscount;
-      this.listBillItem[i].TotalVAT = TotalVAT;
+      this.listBillItem[i].DiscountAmount = DiscountAmountOnTotalPrice;
+      this.listBillItem[i].TpAfterDiscount = TotalPriceAterDiscount;
+      this.listBillItem[i].TotalVat = TotalVat;
       this.listBillItem[i].TotalAmount = TotalAmount;
       this.GrandTotal += TotalAmount;
     }
+    this.oBill.GrandTotal = this.GrandTotal;
    }
 
    ItemTypes:any = [
@@ -588,69 +594,7 @@ var jcForTem = '<!DOCTYPE html><html lang="en"><head><title>Job-Card</title></he
     {ItemTypeId:2,ItemTypeName:'SP'}
   ];
    addToBill():void{
-    this.oBill.JcId = this.JobCard.Id;
-    this.oBill.ClientId = this.JobCard.ClientId;
-    this.oBill.ClientName = this.JobCard.ClientName;
-    this.oBill.JcNo = this.JobCard.JcNo;
-    this.listBillItem = [];
-    this.GrandTotal = 0;
-    for(var i = 0; i <this.JobCard.JobDetails.length; i++){
-      var Price:number = this.JobCard.JobDetails[i].Price == undefined ? 0 :this.JobCard.JobDetails[i].Price;
-      var Discount:number = this.JobCard.JobDetails[i].Discount == undefined ? 0 :this.JobCard.JobDetails[i].Discount;
-      var TotalPrice:number = Price * 1;
-      var DiscountAmountOnTotalPrice: number = TotalPrice * (Discount/100);
-      var TotalPriceAterDiscount:number = TotalPrice - DiscountAmountOnTotalPrice;
-      var TotalVAT:number=TotalPriceAterDiscount * (this.VAT/100);
-      var TotalAmount:number=TotalPriceAterDiscount+TotalVAT;
-      this.listBillItem.push({
-        ItemId:this.JobCard.JobDetails[i].JobId,
-        ItemType:1,
-        ItemTypeName:'Job',
-        ItemDescription:this.JobCard.JobDetails[i].JobName,
-        Qty:1,
-        UnitPrice:Price,
-        TotalPrice:TotalPrice,
-        Discount:Discount,
-        DiscountAmount:DiscountAmountOnTotalPrice,
-        TpAfterDiscount:TotalPriceAterDiscount,
-        Vat:this.VAT,
-        TotalVAT:TotalVAT,
-        TotalAmount:TotalAmount
-      });
-      this.GrandTotal += TotalAmount;
-    }
-    for(var i = 0; i <this.JobCard.JcSpares.length; i++) {
-      var SalePrice = this.JobCard.JcSpares[i].SalePrice == undefined ? 0 : this.JobCard.JcSpares[i].SalePrice;
-      var Quantity = this.JobCard.JcSpares[i].Quantity == undefined ? 0 : this.JobCard.JcSpares[i].Quantity;
-      var Discount:number = this.JobCard.JcSpares[i].Discount == undefined ? 0 : this.JobCard.JcSpares[i].Discount;
-      var TotalPrice = SalePrice * Quantity;
-      var DiscountAmountOnTotalPrice = TotalPrice * (Discount/100);
-      var TotalPriceAterDiscount:number = TotalPrice - DiscountAmountOnTotalPrice;
-      var TotalVAT:number=TotalPriceAterDiscount * (this.VAT/100);
-      var TotalAmount:number=TotalPriceAterDiscount+TotalVAT;
-      this.listBillItem.push({
-        ItemId:this.JobCard.JcSpares[i].ItemId,
-        ItemType:2,
-        ItemTypeName:'SP',
-        ItemDescription:this.JobCard.JcSpares[i].ItemName,
-        Qty:Quantity,
-        UnitPrice:SalePrice,
-        TotalPrice:TotalPrice,
-        Discount:Discount,
-        DiscountAmount:DiscountAmountOnTotalPrice,
-        TpAfterDiscount:TotalPriceAterDiscount,
-        Vat:this.VAT,
-        TotalVAT:TotalVAT,
-        TotalAmount:TotalAmount
-      });
-      this.GrandTotal += TotalAmount;
-    }
-    this.oBill.GrandTotal = this.GrandTotal;
-    this.oBill.InvoiceItems = this.listBillItem;
-   }
-
-   editToBill():void{
-    this.oBill.JcId = this.JobCard.Id;
+    this.oBill.JcId = this.JobCard.JcId;
     this.oBill.ClientId = this.JobCard.ClientId;
     this.oBill.ClientName = this.JobCard.ClientName;
     this.oBill.JcNo = this.JobCard.JcNo;
@@ -712,6 +656,7 @@ var jcForTem = '<!DOCTYPE html><html lang="en"><head><title>Job-Card</title></he
    }
 
    add(){
+    this.oBill.InvoiceItems = this.listBillItem;
     this.httpClient.post(this.baseUrl + '/api/Invoice', this.oBill).subscribe((res) => {
       if (res == true) {
         this.isList = true;
@@ -726,6 +671,7 @@ var jcForTem = '<!DOCTYPE html><html lang="en"><head><title>Job-Card</title></he
   }
 
   update(){
+    this.oBill.InvoiceItems = this.listBillItem;
     this.httpClient.put(this.baseUrl + '/api/Invoice', this.oBill).subscribe((res) => {
       if (res == true) {
         this.isList = true;
@@ -750,6 +696,40 @@ var jcForTem = '<!DOCTYPE html><html lang="en"><head><title>Job-Card</title></he
       } as IndividualConfig,
     };
     this.cs.showToast(this.toast);
+  }
+
+  PayMethod:any=[
+    {MethodId:1,Name:'Cash'}
+  ]
+
+  PayTran:{
+    TrxId:string,
+    Amount:number,
+    Remarks:string,
+    BusinessPartnerId:number
+    PayMethodId:number
+  }={
+    TrxId:'',
+    Amount:0,
+    Remarks:'',
+    BusinessPartnerId:0,
+    PayMethodId:0
+  }
+  payment():void{
+    this.PayTran.BusinessPartnerId = this.oBill.ClientId;
+    this.PayTran.Amount = this.oBill.GrandTotal;
+  }
+
+  pay():void{
+    this.httpClient.post(this.baseUrl + '/api/Pay', this.PayTran).subscribe((res) => {
+      if (res == true) {
+        this.isList = true;
+        this.get();
+        this.showMessage('success', 'data added.');
+      } else {
+        this.showMessage('error', 'error occurred.');
+      }
+    });
   }
 
 }

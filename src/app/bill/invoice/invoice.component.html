@@ -63,9 +63,9 @@
             <td style="text-align: right;">{{item.Qty}}</td>
             <td style="text-align: right;">{{item.Price}}</td>
             <td style="text-align: right;">{{item.TotalPrice}}</td>
-            <td style="text-align: right;"><input type="text" class="text-left" name="Discount" [(ngModel)]="item.Discount" style="text-align: right;" (change)="catculateTotals()" /></td>
+            <td style="text-align: right;"><input type="text" class="text-left" name="Discount" [(ngModel)]="item.Discount" style="text-align: right;" (change)="calculateTotals()" /></td>
             <td style="text-align: right;">{{item.TpAfterDiscount}}</td>
-            <td style="text-align: right;">{{item.TotalVAT}}</td>
+            <td style="text-align: right;">{{item.TotalVat}}</td>
             <td style="text-align: right;">{{item.TotalAmount}}</td>
         </tr>
         <tr>
@@ -73,7 +73,9 @@
                 <button (click)="add()" class="btn btn-success" *ngIf="oBill.JcId==0">Add</button>
                 <button (click)="update()" class="btn btn-primary" *ngIf="oBill.JcId>0">Update</button>
             </th>
-            <th></th>
+            <th>
+                <button (click)="payment()" class="btn btn-success" *ngIf="oBill.JcId>0" href="javascript:void()" data-bs-toggle="modal" data-bs-target="#paymentModal">Payment</button>
+            </th>
             <th></th>
             <th></th>
             <th></th>
@@ -81,7 +83,44 @@
             <th></th>
             <th></th>
             <th style="text-align: right;">Grand Total:</th>
-            <th style="text-align: right;">{{GrandTotal}}</th>
+            <th style="text-align: right;">{{oBill.GrandTotal}}</th>
         </tr>
     </table>
 </div>
+
+<div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            Payment :: 
+            <strong class="text-success">Job-Card No.: </strong><i>{{oBill.JcNo}}</i>&nbsp;&nbsp;
+            <strong class="text-success">Client: </strong><i>{{oBill.ClientName}}</i>
+            </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="PayMethodId" class="form-label">Pay Type:</label>
+                <select id="PayMethodId" class="form-control" [(ngModel)]="PayTran.PayMethodId">
+                  <option *ngFor="let item of PayMethod" value="{{item.MethodId}}">{{item.Name}}</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label for="Amount" class="form-label">Amount:</label>
+                <input type="text" id="Amount" [(ngModel)]="PayTran.Amount" class="form-control" style="text-align: right;" placeholder="amount" />
+              </div>
+              <div class="col-md-12">
+                <label for="Remarks" class="form-label">Remarks:</label>
+                <input type="text" id="Remarks" [(ngModel)]="PayTran.Remarks" class="form-control" placeholder="input a remarks if needed" />
+              </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-success" data-bs-dismiss="modal" (click)="pay();">Pay</button>
+            <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>

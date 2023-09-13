@@ -1,22 +1,26 @@
 <a href="javascript:void(0)" *ngIf="!isList" (click)="switchView('list')">Go to List</a>
 <a href="javascript:void(0)" *ngIf="isList" (click)="switchView('form')">Go to Entry</a>
 <div *ngIf="isList">
-    <h4 class="text-center">List of Payment Transaction</h4>
-    <table class="table table-bordered border-primary">
-        <tr>
-            <th scope="col">#</th>
-            <th>Payment Type</th>
+    <h4 class="text-center">List of Payment</h4>
+    <table class="table table-bordered">
+        <tr class="table-secondary">
+            <th scope="col">SL No.</th>
+            <th>Job Card No.</th>
+            <th>Vehicle Reg.</th>
+            <th>Bay</th>
+            <th>Client</th>
             <th>Date</th>
-            <th>Transaction ID</th>
             <th>Amount</th>
         </tr>
-        <!-- <tr>
-            <td>1</td>
-            <td>Cash</td>
-            <td>2023-08-09 24:38</td>
-            <td>TX230809</td>
-            <td>5200</td>
-        </tr> -->
+        <tr *ngFor="let item of listJobCard; let i = index">
+            <td>{{i+1}}</td>
+            <td>{{item.JcNo}}</td>
+            <td>{{item.VehicleNo}}</td>
+            <td>{{item.Bay}}</td>
+            <td>{{item.ClientName}}</td>
+            <td>{{item.ReceiveDate}}</td>
+            <td>{{item.GrandTotal}}</td>
+        </tr>
     </table>
 </div>
 <div *ngIf="!isList">
