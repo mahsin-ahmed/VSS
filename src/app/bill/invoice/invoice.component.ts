@@ -409,6 +409,7 @@ var jcForTem = '<!DOCTYPE html><html lang="en"><head><title>Job-Card</title></he
 
   createBill(item:any){
     this.isList = false;
+    this.oBill.IsInvoice = item.IsInvoice;
     this.getFromJc(item.Id);
   }
 
@@ -429,7 +430,8 @@ var jcForTem = '<!DOCTYPE html><html lang="en"><head><title>Job-Card</title></he
     ClientName:string,
     JcNo:string,
     GrandTotal:number,
-    InvoiceItems:any
+    InvoiceItems:any,
+    IsInvoice:number
   }={
     Id:0,
     ClientId:0,
@@ -440,7 +442,8 @@ var jcForTem = '<!DOCTYPE html><html lang="en"><head><title>Job-Card</title></he
     ClientName:'',
     JcNo:'',
     GrandTotal:0,
-    InvoiceItems:[]
+    InvoiceItems:[],
+    IsInvoice:0
   };
   listBillItem:any =[];
   getFromJc(id:number):void{
@@ -594,7 +597,8 @@ var jcForTem = '<!DOCTYPE html><html lang="en"><head><title>Job-Card</title></he
     {ItemTypeId:2,ItemTypeName:'SP'}
   ];
    addToBill():void{
-    this.oBill.JcId = this.JobCard.JcId;
+    //this.oBill.JcId = this.JobCard.JcId;
+    this.oBill.JcId = this.JobCard.Id;
     this.oBill.ClientId = this.JobCard.ClientId;
     this.oBill.ClientName = this.JobCard.ClientName;
     this.oBill.JcNo = this.JobCard.JcNo;
@@ -606,8 +610,8 @@ var jcForTem = '<!DOCTYPE html><html lang="en"><head><title>Job-Card</title></he
       var TotalPrice:number = Price * 1;
       var DiscountAmountOnTotalPrice: number = TotalPrice * (Discount/100);
       var TotalPriceAterDiscount:number = TotalPrice - DiscountAmountOnTotalPrice;
-      var TotalVAT:number=TotalPriceAterDiscount * (this.VAT/100);
-      var TotalAmount:number=TotalPriceAterDiscount+TotalVAT;
+      var TotalVat:number=TotalPriceAterDiscount * (this.VAT/100);
+      var TotalAmount:number=TotalPriceAterDiscount+TotalVat;
       this.listBillItem.push({
         ItemId:this.JobCard.JobDetails[i].JobId,
         ItemType:1,
@@ -620,7 +624,7 @@ var jcForTem = '<!DOCTYPE html><html lang="en"><head><title>Job-Card</title></he
         DiscountAmount:DiscountAmountOnTotalPrice,
         TpAfterDiscount:TotalPriceAterDiscount,
         Vat:this.VAT,
-        TotalVAT:TotalVAT,
+        TotalVat:TotalVat,
         TotalAmount:TotalAmount
       });
       this.GrandTotal += TotalAmount;
@@ -632,8 +636,8 @@ var jcForTem = '<!DOCTYPE html><html lang="en"><head><title>Job-Card</title></he
       var TotalPrice = SalePrice * Quantity;
       var DiscountAmountOnTotalPrice = TotalPrice * (Discount/100);
       var TotalPriceAterDiscount:number = TotalPrice - DiscountAmountOnTotalPrice;
-      var TotalVAT:number=TotalPriceAterDiscount * (this.VAT/100);
-      var TotalAmount:number=TotalPriceAterDiscount+TotalVAT;
+      var TotalVat:number=TotalPriceAterDiscount * (this.VAT/100);
+      var TotalAmount:number=TotalPriceAterDiscount+TotalVat;
       this.listBillItem.push({
         ItemId:this.JobCard.JcSpares[i].ItemId,
         ItemType:2,
@@ -646,7 +650,7 @@ var jcForTem = '<!DOCTYPE html><html lang="en"><head><title>Job-Card</title></he
         DiscountAmount:DiscountAmountOnTotalPrice,
         TpAfterDiscount:TotalPriceAterDiscount,
         Vat:this.VAT,
-        TotalVAT:TotalVAT,
+        TotalVat:TotalVat,
         TotalAmount:TotalAmount
       });
       this.GrandTotal += TotalAmount;
@@ -657,17 +661,19 @@ var jcForTem = '<!DOCTYPE html><html lang="en"><head><title>Job-Card</title></he
 
    add(){
     this.oBill.InvoiceItems = this.listBillItem;
-    this.httpClient.post(this.baseUrl + '/api/Invoice', this.oBill).subscribe((res) => {
-      if (res == true) {
-        this.isList = true;
-        this.get();
-        //this.resetJob();
-        //this.reset();
-        this.showMessage('success', 'data added.');
-      } else {
-        this.showMessage('error', 'error occurred.');
-      }
-    });
+    if(this.oBill.InvoiceItems.length >0){
+      this.httpClient.post(this.baseUrl + '/api/Invoice', this.oBill).subscribe((res) => {
+        if (res == true) {
+          this.isList = true;
+          this.get();
+          //this.resetJob();
+          //this.reset();
+          this.showMessage('success', 'data added.');
+        } else {
+          this.showMessage('error', 'error occurred.');
+        }
+      });
+    }
   }
 
   update(){

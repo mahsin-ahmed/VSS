@@ -29,6 +29,7 @@ export class JobcardComponent {
     }else{
       this.isList=true;
       this.reset();
+      this.get();
     }
   }
 
@@ -1089,7 +1090,7 @@ export class JobcardComponent {
   }
 
   selectVehicle(item:any){
-    this.JobCard.JcNo=item.JcNo;
+    //this.JobCard.JcNo=item.JcNo;
     this.JobCard.JobDate=item.JobDate;
     this.JobCard.CreateBy=item.CreateBy;
     this.JobCard.Vin=item.Vin;

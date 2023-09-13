@@ -45,7 +45,7 @@ export class PaytranComponent {
   }
 
   get(){
-    this.httpClient.get(this.baseUrl + '/api/Invoice?pi='+this.pageIndex+'&ps='+this.pageSize+'&jcStatus=1').subscribe((res)=>{
+    this.httpClient.get(this.baseUrl + '/api/Invoice?pi='+this.pageIndex+'&ps='+this.pageSize+'&jcStatus=1&isPaid=true').subscribe((res)=>{
       this.listJobCard = res;
       //#region paging
       this.rowCount = this.listJobCard.length > 0 ? this.listJobCard[0].RowCount : 0;

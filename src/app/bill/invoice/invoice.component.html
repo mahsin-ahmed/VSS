@@ -1,6 +1,6 @@
 <!-- <p>invoice</p>
 <img title="" src="/assets/invoice_sample.png" class="img-fluid" /> -->
-<a href="javascript:void(0)" *ngIf="!isList" (click)="isList=true">Go to List</a>
+<a href="javascript:void(0)" *ngIf="!isList" (click)="isList=true;get();">Go to List</a>
 <a href="javascript:void(0)" *ngIf="isList" (click)="isList=false">Go to Entry</a>
 <div *ngIf="isList">
     <h4 class="text-center">Job-Card To Bill</h4>
@@ -26,8 +26,8 @@
             <td>{{item.ReceiveDate}}</td>
             <td>{{item.JcStatus == 1 ? 'CLOSE' : 'OPEN'}}</td>
             <td>
-                <button class="btn btn-sm btn-primary" (click)="createBill(item)" *ngIf="item.JcId==0">Create Bill</button>
-                <button class="btn btn-sm btn-primary" (click)="editBill(item)" *ngIf="item.JcId>0">Edit Bill</button>
+                <button class="btn btn-sm btn-primary" (click)="createBill(item)" *ngIf="item.IsInvoice==0">Create Bill</button>
+                <button class="btn btn-sm btn-primary" (click)="editBill(item)" *ngIf="item.IsInvoice>0">Edit Bill</button>
             </td>
         </tr>
     </table>
@@ -70,11 +70,11 @@
         </tr>
         <tr>
             <th>
-                <button (click)="add()" class="btn btn-success" *ngIf="oBill.JcId==0">Add</button>
-                <button (click)="update()" class="btn btn-primary" *ngIf="oBill.JcId>0">Update</button>
+                <button (click)="add()" class="btn btn-success" *ngIf="oBill.IsInvoice==0">Add</button>
+                <button (click)="update()" class="btn btn-primary" *ngIf="oBill.IsInvoice>0">Update</button>
             </th>
             <th>
-                <button (click)="payment()" class="btn btn-success" *ngIf="oBill.JcId>0" href="javascript:void()" data-bs-toggle="modal" data-bs-target="#paymentModal">Payment</button>
+                <button (click)="payment()" class="btn btn-success" *ngIf="oBill.IsInvoice>0" href="javascript:void()" data-bs-toggle="modal" data-bs-target="#paymentModal">Payment</button>
             </th>
             <th></th>
             <th></th>
