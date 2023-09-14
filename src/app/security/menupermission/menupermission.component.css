@@ -1,0 +1,12 @@
+ul>li{
+    list-style-type: none;
+}
+
+h4{
+    text-align: center;
+}
+
+.subItem li{
+    display: inline;
+    padding:0px,5px;
+}
