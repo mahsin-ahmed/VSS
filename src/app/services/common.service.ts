@@ -18,6 +18,7 @@ export class CommonService {
       'toast-' + toast.type
     );
   }
+  
 }
 
 export interface toastPayload {

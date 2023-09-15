@@ -14,29 +14,30 @@ export class AppComponent {
   //toast!: toastPayload;
   //isLogIn:boolean = false;
   //userName:string = '';
-  userInfo:{
-    userName:string,
+  /*userInfo:{
+    UserName:string,
     isLoggedIn:boolean
   } ={
-    userName:'',
+    UserName:'',
     isLoggedIn:false
-  };
+  };*/
   constructor(public authService: AuthService, 
     private router: Router
     //,private cs:CommonService
     ) {
-    //this.isLogIn = this.authService.isLoggedIn;
-    this.userInfo = this.authService.userInfo;
+    //this.userInfo = this.authService.userInfo;
   }
+
   logout(): void {
     this.authService.logout();
     //this.isLogIn = this.authService.isLoggedIn;
-    this.userInfo = this.authService.userInfo;
-    this.router.navigate(['/']);
+    //this.userInfo = this.authService.userInfo;
+    this.router.navigate([this.authService.UserInfo.RedirectURL]);
   }
 
   login():void{
-    this.router.navigate(['/login']);
+    this.authService.logout();
+    this.router.navigate([this.authService.UserInfo.RedirectURL]);
   }
 
   listModule:any=[
@@ -53,18 +54,5 @@ export class AppComponent {
       ModuleId:1
     }
   ];
-
-  /*buttonClick(type: string) {
-    this.toast = {
-      message:'<span>Action in '+type+'</span>',
-      title: type.toUpperCase(),
-      type: type,
-      ic: {
-        timeOut: 2500,
-        closeButton: true,
-      } as IndividualConfig,
-    };
-    this.cs.showToast(this.toast);
-  }*/
 
 }

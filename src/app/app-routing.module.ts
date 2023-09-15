@@ -30,6 +30,7 @@ import { EnginesizeComponent } from './operation/enginesize/enginesize.component
 import { JobgroupComponent } from './operation/jobgroup/jobgroup.component';
 import { JobComponent } from './operation/job/job.component';
 import { SrComponent } from './inventory/sr/sr.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -67,7 +68,9 @@ const routes: Routes = [
   { path: 'module', component: ModuleComponent },
   { path: 'role', component: RoleComponent },
   { path: 'user', component: UserComponent },
-  { path: 'user-role', component: UserroleComponent }
+  { path: 'user-role', component: UserroleComponent },
+  { path: 'dashboard', component: DashboardComponent, canActivate:[authGuard] }
+
 ];
 
 @NgModule({

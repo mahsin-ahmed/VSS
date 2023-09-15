@@ -5,43 +5,61 @@ import { Observable, delay, of, tap } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
-  isLoggedIn:boolean = false;
-  userInfo:{
-    userName:string,
-    isLoggedIn:boolean
+  //isLogIn:boolean = false;
+  UserInfo:{
+    UserName:string,
+    IsLogIn:boolean
+    UserID:number,
+    Token:string,
+    Permissions:any,
+    RedirectURL:string
   } = {
-    userName:'',
-    isLoggedIn:false
+    UserName:'',
+    IsLogIn:false,
+    UserID:0,
+    Token:'',
+    Permissions:[],
+    RedirectURL:''
   };
+
   constructor() { 
-    const strUserInfo = localStorage.getItem("userInfo");
+    const strUserInfo = localStorage.getItem("UserInfo");
     if (typeof strUserInfo === 'string') {
-        this.userInfo = JSON.parse(strUserInfo); // ok
-        this.isLoggedIn = this.userInfo.isLoggedIn;
-    }else{
-      this.isLoggedIn = false;
-    }
-  }
-  // store the URL so we can redirect after logging in
-  redirectUrl: string | null = null;
-  login(username:string, password:string): Observable<boolean> {
-    if (username == 'vss' && password == 'vss@23') {
-      this.redirectUrl = '/job-card';
-      this.isLoggedIn = true;
-      this.userInfo.userName = username;
-      this.userInfo.isLoggedIn = this.isLoggedIn;
-      localStorage.setItem('userInfo', JSON.stringify(this.userInfo));
-      return of(true).pipe(delay(1000),tap(() => (this.isLoggedIn = true)));
-    } else {
-      return of(true).pipe(delay(1000),tap(() => (this.isLoggedIn = false)));
+        this.UserInfo = JSON.parse(strUserInfo);
     }
   }
 
+  // store the URL so we can redirect after logging in
+  baseURL:string='http://localhost:56297';
+  //redirectUrl: string | null = null;
+  login(userInfo:any, isLogIn:boolean):Observable<boolean> {
+    this.reset();
+    if(isLogIn){
+      this.UserInfo.IsLogIn = isLogIn;
+      this.UserInfo.UserName = userInfo.UserName;
+      this.UserInfo.Token = userInfo.Token;
+      this.UserInfo.UserID = userInfo.UserID;
+      this.UserInfo.Permissions = userInfo.Permissions;
+      this.UserInfo.RedirectURL = '/dashboard';
+      localStorage.setItem('UserInfo',JSON.stringify(this.UserInfo));
+    } else {
+      this.logout();
+    }
+    return of(true).pipe(delay(1000),tap(() => (this.UserInfo.IsLogIn)));
+  }
+
   logout(): void {
-    this.isLoggedIn = false;
-    this.userInfo.isLoggedIn = this.isLoggedIn;
-    this.userInfo.userName = '';
-    localStorage.removeItem('userInfo');
+    this.reset();
+    localStorage.removeItem('UserInfo');
     //location.reload();
   }
+
+  reset() {
+    this.UserInfo.IsLogIn = false;
+    this.UserInfo.UserName = '';
+    this.UserInfo.Token = '';
+    this.UserInfo.UserID = 0;
+    this.UserInfo.RedirectURL = '/login';
+  }
+
 }

@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CommonService, toastPayload } from '../../services/common.service';
 import { IndividualConfig } from 'ngx-toastr';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-invoice',
@@ -11,7 +12,7 @@ import { IndividualConfig } from 'ngx-toastr';
 export class InvoiceComponent {
   isList:boolean=true;
   listJobCard:any=[];
-  baseUrl:string='http://localhost:56297';
+  //baseUrl:string='http://localhost:56297';
   //#region paging varible
   pageIndex: number = 0;
   pageSize:number = 5;
@@ -31,12 +32,18 @@ export class InvoiceComponent {
   //#endregion
   toast!: toastPayload;
 
-  constructor(private cs:CommonService,private httpClient: HttpClient) {
+  constructor(private cs:CommonService,
+    private httpClient: HttpClient,
+    private authService:AuthService) {
     this.get();
   }
 
   get(){
-    this.httpClient.get(this.baseUrl + '/api/Invoice?pi='+this.pageIndex+'&ps='+this.pageSize+'&jcStatus=1&IsPaid=1').subscribe((res)=>{
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.get(this.authService.baseURL + '/api/Invoice?pi='+this.pageIndex+'&ps='+this.pageSize+'&jcStatus=1&IsPaid=1',{headers:oHttpHeaders}).subscribe((res)=>{
       this.listJobCard = res;
       //#region paging
       this.rowCount = this.listJobCard.length > 0 ? this.listJobCard[0].RowCount : 0;
@@ -447,7 +454,11 @@ var jcForTem = '<!DOCTYPE html><html lang="en"><head><title>Job-Card</title></he
   };
   listBillItem:any =[];
   getFromJc(id:number):void{
-    this.httpClient.get(this.baseUrl + '/api/JobCard/'+id).subscribe((res)=>{
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.get(this.authService.baseURL + '/api/JobCard/'+id,{headers:oHttpHeaders}).subscribe((res)=>{
       let item:any = res;
       this.JobCard ={
         Id:item.Id,
@@ -489,7 +500,11 @@ var jcForTem = '<!DOCTYPE html><html lang="en"><head><title>Job-Card</title></he
   }
 
   getFromInvoice(id:number):void{
-    this.httpClient.get(this.baseUrl + '/api/JobCard/GetByJc?jcId='+id).subscribe((res)=>{
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.get(this.authService.baseURL + '/api/JobCard/GetByJc?jcId='+id,{headers:oHttpHeaders}).subscribe((res)=>{
       let item:any = res;
       this.oBill = item;
       this.listBillItem = this.oBill.InvoiceItems;
@@ -662,7 +677,11 @@ var jcForTem = '<!DOCTYPE html><html lang="en"><head><title>Job-Card</title></he
    add(){
     this.oBill.InvoiceItems = this.listBillItem;
     if(this.oBill.InvoiceItems.length >0){
-      this.httpClient.post(this.baseUrl + '/api/Invoice', this.oBill).subscribe((res) => {
+      const oHttpHeaders = new HttpHeaders(
+        {
+            'Token':this.authService.UserInfo.Token
+        });
+      this.httpClient.post(this.authService.baseURL + '/api/Invoice', this.oBill,{headers:oHttpHeaders}).subscribe((res) => {
         if (res == true) {
           this.isList = true;
           this.get();
@@ -678,7 +697,11 @@ var jcForTem = '<!DOCTYPE html><html lang="en"><head><title>Job-Card</title></he
 
   update(){
     this.oBill.InvoiceItems = this.listBillItem;
-    this.httpClient.put(this.baseUrl + '/api/Invoice', this.oBill).subscribe((res) => {
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.put(this.authService.baseURL + '/api/Invoice', this.oBill,{headers:oHttpHeaders}).subscribe((res) => {
       if (res == true) {
         this.isList = true;
         this.get();
@@ -727,7 +750,11 @@ var jcForTem = '<!DOCTYPE html><html lang="en"><head><title>Job-Card</title></he
   }
 
   pay():void{
-    this.httpClient.post(this.baseUrl + '/api/Pay', this.PayTran).subscribe((res) => {
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.post(this.authService.baseURL + '/api/Pay', this.PayTran,{headers:oHttpHeaders}).subscribe((res) => {
       if (res == true) {
         this.isList = true;
         this.get();

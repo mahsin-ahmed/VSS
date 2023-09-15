@@ -1,7 +1,8 @@
 import { Component, numberAttribute } from '@angular/core';
 import { CommonService, toastPayload } from '../../services/common.service';
 import { IndividualConfig } from 'ngx-toastr';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-jobcard',
@@ -12,7 +13,9 @@ export class JobcardComponent {
   isNew:boolean = true;
   toast!: toastPayload;
   
-  constructor(private cs:CommonService,private httpClient: HttpClient) {
+  constructor(private cs:CommonService,
+    private httpClient: HttpClient,
+    private authService:AuthService) {
     this.get();
     this.getJobGroup();
     this.getJob();
@@ -48,21 +51,33 @@ export class JobcardComponent {
     this.cs.showToast(this.toast);
   }
 
-  baseUrl:string='http://localhost:56297';
+  //baseUrl:string='http://localhost:56297';
   getJcNo(){
-    this.httpClient.get(this.baseUrl + '/api/JobCard/GetJCNo').subscribe((res)=>{
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.get(this.authService.baseURL + '/api/JobCard/GetJCNo', {headers: oHttpHeaders}).subscribe((res)=>{
         this.JobCard.JcNo = res.toString();
     });
   }
 
   listReceiveBy:any=[];
   getVehicleReceiver(){
-    this.httpClient.get(this.baseUrl + '/api/JobCard/GetWorkGroupById?workGroupId=1').subscribe((res)=>{
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.get(this.authService.baseURL + '/api/JobCard/GetWorkGroupById?workGroupId=1',{headers: oHttpHeaders}).subscribe((res)=>{
         this.listReceiveBy = res;
     });
   }
   getMechanic(){
-    this.httpClient.get(this.baseUrl + '/api/JobCard/GetWorkGroupById?workGroupId=2').subscribe((res)=>{
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.get(this.authService.baseURL + '/api/JobCard/GetWorkGroupById?workGroupId=2',{headers:oHttpHeaders}).subscribe((res)=>{
         this.listMechanic = res;
     });
   }
@@ -91,7 +106,11 @@ export class JobcardComponent {
 
   company: Array<Company>=[];
   getCompany(){
-    this.httpClient.get<Company>(this.baseUrl + '/api/JobCard/GetCompany').subscribe((res)=>{
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.get<Company>(this.authService.baseURL + '/api/JobCard/GetCompany',{headers:oHttpHeaders}).subscribe((res)=>{
         //this.Company.Bay = res.Bay;
         this.listBay = [];
         for(var i = 0; i < res.Bay; i++){
@@ -316,20 +335,32 @@ export class JobcardComponent {
   //JobGroup:number = 0;
   listJobGroup:any = [];
   getJob(){
-    this.httpClient.get(this.baseUrl + '/api/JobCard/GetJob').subscribe((res)=>{
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.get(this.authService.baseURL + '/api/JobCard/GetJob',{headers:oHttpHeaders}).subscribe((res)=>{
         this.listAllJob = res;
     });
   }
 
   getJobGroup(){
-    this.httpClient.get(this.baseUrl + '/api/JobCard/GetJobGroup').subscribe((res)=>{
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.get(this.authService.baseURL + '/api/JobCard/GetJobGroup',{headers:oHttpHeaders}).subscribe((res)=>{
         this.listJobGroup = res;
     });
   }
 
   listEngine:any=[];
   getEngineSize(){
-    this.httpClient.get(this.baseUrl + '/api/JobCard/GetEngineSize').subscribe((res)=>{
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.get(this.authService.baseURL + '/api/JobCard/GetEngineSize',{headers:oHttpHeaders}).subscribe((res)=>{
       this.listEngine = res;
     });
   }
@@ -594,7 +625,11 @@ export class JobcardComponent {
   }
 
   getById(id:number):void{
-    this.httpClient.get(this.baseUrl + '/api/JobCard/'+id).subscribe((res)=>{
+    const oHttpHeaders = new HttpHeaders(
+    {
+        'Token':this.authService.UserInfo.Token
+    });
+    this.httpClient.get(this.authService.baseURL + '/api/JobCard/'+id,{headers:oHttpHeaders}).subscribe((res)=>{
       let item:any = res;
       this.JobCard ={
         Id:item.Id,
@@ -1041,7 +1076,11 @@ export class JobcardComponent {
   VehicleNo:string = '';
   listJobCardS:any=[];
   searchVehicle(){
-    this.httpClient.get(this.baseUrl + '/api/JobCard/GetByVehicleNo?vehicleno='+this.VehicleNo).subscribe((res)=>{
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.get(this.authService.baseURL + '/api/JobCard/GetByVehicleNo?vehicleno='+this.VehicleNo,{headers:oHttpHeaders}).subscribe((res)=>{
       this.listJobCardS = res;
     });
   }
@@ -1064,7 +1103,11 @@ export class JobcardComponent {
   };  
   //#endregion
   get(){
-    this.httpClient.get(this.baseUrl + '/api/JobCard?pi='+this.pageIndex+'&ps='+this.pageSize).subscribe((res)=>{
+    const oHttpHeaders = new HttpHeaders(
+    {
+        'Token':this.authService.UserInfo.Token
+    });
+    this.httpClient.get(this.authService.baseURL + '/api/JobCard?pi='+this.pageIndex+'&ps='+this.pageSize,{headers: oHttpHeaders}).subscribe((res)=>{
       this.listJobCard = res;
       //#region paging
       this.rowCount = this.listJobCard.length > 0 ? this.listJobCard[0].RowCount : 0;
@@ -1125,7 +1168,11 @@ export class JobcardComponent {
   listItemS:any = [];
   value:string ='';
   searchItem(){
-    this.httpClient.get(this.baseUrl + '/api/JobCard/GetItemByParts?value='+this.value).subscribe((res)=>{
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.get(this.authService.baseURL + '/api/JobCard/GetItemByParts?value='+this.value,{headers:oHttpHeaders}).subscribe((res)=>{
       this.listItemS = res;
     });
   }
@@ -1156,7 +1203,11 @@ export class JobcardComponent {
       }
     }
     this.JobCard.Resources = Resources;
-    this.httpClient.post(this.baseUrl + '/api/JobCard', this.JobCard).subscribe((res) => {
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.post(this.authService.baseURL + '/api/JobCard', this.JobCard,{headers:oHttpHeaders}).subscribe((res) => {
       if (res == true) {
         this.isList = true;
         this.get();
@@ -1177,7 +1228,11 @@ export class JobcardComponent {
       }
     }
     this.JobCard.Resources = Resources;
-    this.httpClient.put(this.baseUrl + '/api/JobCard', this.JobCard).subscribe((res) => {
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.put(this.authService.baseURL + '/api/JobCard', this.JobCard,{headers:oHttpHeaders}).subscribe((res) => {
       if (res == true) {
         this.isList = true;
         this.get();

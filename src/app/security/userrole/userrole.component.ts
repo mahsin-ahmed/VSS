@@ -32,9 +32,10 @@ export class UserroleComponent {
     });
   }
 
+  user:any={};
   setRole(item:any):void{
     this.getUserRole(item.UserID);
-    this.listUser = item;
+    this.user = item;
     this.isList = false;
   }
 

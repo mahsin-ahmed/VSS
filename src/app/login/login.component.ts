@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
 import { AppComponent } from '../app.component';
+import { CommonService, toastPayload } from '../services/common.service';
+import { IndividualConfig } from 'ngx-toastr';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -9,44 +12,26 @@ import { AppComponent } from '../app.component';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-  constructor(private authService: AuthService, private router: Router, private app:AppComponent) {}
-  userInfo:{
-    userName:string,
-    isLoggedIn:boolean
-  } ={
-    userName:'',
-    isLoggedIn:false
-  };
-  /*login(): void {
-    this.authService.login().subscribe(() => {
-      if (this.authService.isLoggedIn) {
-        const redirectUrl = this.authService.redirectUrl ? this.authService.redirectUrl : '/job-card';
-        this.router.navigate([redirectUrl]);
-      }
-    });
-  }*/
-
+  constructor(private authService: AuthService, 
+  private router: Router, 
+  private cs:CommonService,
+  private httpClient: HttpClient,
+  private app:AppComponent) {}
+  User:{UserName:string,UserPass:string}={UserName:'',UserPass:''};
   login(): void {
-    this.authService.login(this.User.Username,this.User.Password).subscribe(() => {
-      if (this.authService.isLoggedIn) {
-        //this.app.isLogIn = this.authService.isLoggedIn;
-        this.app.userInfo = this.authService.userInfo;
-        const redirectUrl = this.authService.redirectUrl ? this.authService.redirectUrl : '/job-card';
-        this.router.navigate([redirectUrl]);
-      } else {
-        //this.app.isLogIn = this.authService.isLoggedIn;
-        this.app.userInfo = this.authService.userInfo;
-        this.router.navigate(['/']);
+    this.httpClient.post(this.authService.baseURL + '/api/Login', this.User).subscribe((res) => {
+      var isLogIn:boolean = false;
+      if(res != null){
+        isLogIn = true;
       }
+      this.authService.login(res, isLogIn).subscribe(() => {
+        if (this.authService.UserInfo.IsLogIn) {
+          this.router.navigate([this.authService.UserInfo.RedirectURL]);
+        } else {
+          this.router.navigate([this.authService.UserInfo.RedirectURL]);
+        }
+      });
     });
   }
 
-  User: {
-    Username:string,
-    Password:string
-  } = {
-    Username:'',
-    Password:''
-  };
-  
 }

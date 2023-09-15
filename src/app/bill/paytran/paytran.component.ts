@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient,HttpHeaders } from '@angular/common/http';
 import { CommonService, toastPayload } from '../../services/common.service';
 import { IndividualConfig } from 'ngx-toastr';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-paytran',
@@ -11,7 +12,7 @@ import { IndividualConfig } from 'ngx-toastr';
 export class PaytranComponent {
   isList:boolean=true;
   listJobCard:any=[];
-  baseUrl:string='http://localhost:56297';
+  //baseUrl:string='http://localhost:56297';
   //#region paging varible
   pageIndex: number = 0;
   pageSize:number = 5;
@@ -31,7 +32,9 @@ export class PaytranComponent {
   //#endregion
   toast!: toastPayload;
 
-  constructor(private cs:CommonService,private httpClient: HttpClient) {
+  constructor(private cs:CommonService,
+    private httpClient: HttpClient,
+    private authService:AuthService) {
     this.get();
   }
 
@@ -45,7 +48,11 @@ export class PaytranComponent {
   }
 
   get(){
-    this.httpClient.get(this.baseUrl + '/api/Invoice?pi='+this.pageIndex+'&ps='+this.pageSize+'&jcStatus=1&isPaid=true').subscribe((res)=>{
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.get(this.authService.baseURL + '/api/Invoice?pi='+this.pageIndex+'&ps='+this.pageSize+'&jcStatus=1&isPaid=true',{headers:oHttpHeaders}).subscribe((res)=>{
       this.listJobCard = res;
       //#region paging
       this.rowCount = this.listJobCard.length > 0 ? this.listJobCard[0].RowCount : 0;

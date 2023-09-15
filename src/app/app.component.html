@@ -30,10 +30,10 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a *ngIf="userInfo.isLoggedIn" class="nav-link" aria-current="page" routerLink="/job-card"><i class="fa fa-home"></i> Home</a>
+          <a *ngIf="authService.UserInfo.IsLogIn" class="nav-link" aria-current="page" routerLink="/dashboard"><i class="fa fa-home"></i> Home</a>
         </li>
         <li class="nav-item dropdown">
-          <a *ngIf="userInfo.isLoggedIn" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <a *ngIf="authService.UserInfo.IsLogIn" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="fa fa-wrench" aria-hidden="true"></i> Operation
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -43,39 +43,35 @@
             <li><a class="dropdown-item" routerLink="/job"><i class="fa fa-file-text" aria-hidden="true"></i> Job</a></li>
             <li><a class="dropdown-item" routerLink="/job-group"><i class="fa fa-files-o" aria-hidden="true"></i> Job-Group</a></li>
             <li><a class="dropdown-item" routerLink="/engine-size"><i class="fa fa-cogs" aria-hidden="true"></i> Engine-Size</a></li>
+            <!-- <li *ngFor="let item of authService.UserInfo.Permissions">
+              <a class="dropdown-item" routerLink="{{item.MenuPath}}"><i class="{{item.MenuIcon}}" aria-hidden="true"></i> {{item.MenuName}}</a>
+            </li> -->
           </ul>
         </li>
         <li class="nav-item dropdown">
-          <a *ngIf="userInfo.isLoggedIn" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <a *ngIf="authService.UserInfo.IsLogIn" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="fa fa-shopping-bag" aria-hidden="true"></i> Billing
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
             <li><a class="dropdown-item" routerLink="/invoice"><i class="fa fa-credit-card-alt" aria-hidden="true"></i> Bills</a></li>
             <li><a class="dropdown-item" routerLink="/payment"><i class="fa fa-credit-card" aria-hidden="true"></i> Payments</a></li>
-            <!-- <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" routerLink="/payment"><i class="fa fa-money" aria-hidden="true"></i> Transactions</a></li> -->
           </ul>
         </li>
         <li class="nav-item dropdown">
-          <a *ngIf="userInfo.isLoggedIn" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <a *ngIf="authService.UserInfo.IsLogIn" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="fa fa-archive" aria-hidden="true"></i> Stores
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
             <li><a class="dropdown-item" routerLink="/sr">Store Requisition</a></li>
-            <!-- <li><a class="dropdown-item" routerLink="/item-price">Selling Price</a></li> -->
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" routerLink="/brand">Brand</a></li>
             <li><a class="dropdown-item" routerLink="/item">Spare Parts</a></li>
             <li><a class="dropdown-item" routerLink="/item-category">Spare Category</a></li>
-            <!-- <li><a class="dropdown-item" routerLink="/manufacturer">Manufacturer</a></li>
-            <li><a class="dropdown-item" routerLink="/size">Size</a></li>
-            <li><a class="dropdown-item" routerLink="/unit">Unit</a></li>
-            <li><a class="dropdown-item" routerLink="/color">Color</a></li> -->
             <li><a class="dropdown-item" routerLink="/store">Warehouse</a></li>
           </ul>
         </li>
         <li class="nav-item dropdown">
-          <a *ngIf="userInfo.isLoggedIn" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <a *ngIf="authService.UserInfo.IsLogIn" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="fa fa-users" aria-hidden="true"></i> HR
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -85,7 +81,7 @@
           </ul>
         </li>
         <li class="nav-item dropdown">
-          <a *ngIf="userInfo.isLoggedIn" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <a *ngIf="authService.UserInfo.IsLogIn" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="fa fa-cog" aria-hidden="true"></i> System
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -101,17 +97,12 @@
         </li>
       </ul>
       <form class="d-flex">
-        <a class="btn btn-sm btn-outline-danger" href="javascript:void(0)" *ngIf="userInfo.isLoggedIn">Welcome! {{userInfo.userName}}</a>
-        <button class="btn btn-sm btn-outline-danger" type="button" (click)="logout()" *ngIf="userInfo.isLoggedIn">Logout</button>
-        <button class="btn btn-sm btn-outline-success" type="button" (click)="login()" *ngIf="!userInfo.isLoggedIn">Login</button>
+        <a class="btn btn-sm btn-outline-danger" href="javascript:void(0)" *ngIf="authService.UserInfo.IsLogIn">Welcome! {{authService.UserInfo.UserName}}</a>
+        <button class="btn btn-sm btn-outline-danger" type="button" (click)="logout()" *ngIf="authService.UserInfo.IsLogIn">Logout</button>
+        <button class="btn btn-sm btn-outline-success" type="button" (click)="login()" *ngIf="!authService.UserInfo.IsLogIn">Login</button>
       </form>
     </div>
   </div>
 </nav>
   <router-outlet></router-outlet>
 </div>
-
-<!-- <button (click)="buttonClick('success')">Success Toast</button>
-<button (click)="buttonClick('error')">Error Toast</button>
-<button (click)="buttonClick('warning')">Warning Toast</button>
-<button (click)="buttonClick('info')">Info Toast</button> -->
