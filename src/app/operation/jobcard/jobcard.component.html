@@ -5,17 +5,23 @@
   <div class="row">
     <div class="col-lg-4">
       Show
-            <select style="width: 50px;height: 32px;" [(ngModel)]="pageSize" (change)="changePageSize()">
-                <option *ngFor="let item of listPageSize" value={{item}}>
-                    {{item}}
-                </option>
-            </select> 
-            records
+      <select style="width: 50px;height: 32px;" [(ngModel)]="pageSize" (change)="changePageSize()">
+          <option *ngFor="let item of listPageSize" value={{item}}>
+              {{item}}
+          </option>
+      </select> 
+      records
     </div>
     <div class="col-lg-4">
       <h4 class="text-center">List of Job Card</h4>
     </div>
-    <div class="col-lg-4"></div>
+    <div class="col-lg-4">
+      <label for="jcStatus" class="form-label">JC Status:</label>
+        <select id="jcStatus" [(ngModel)]="jcStatus" (change)="get();">
+          <option value="0">Select All</option>
+          <option *ngFor="let item of listJcStatus" value="{{item.Id}}">{{item.Name}}</option>
+        </select>
+    </div>
   </div>
   <table class="table table-bordered">
     <tr class="table-secondary">
@@ -25,17 +31,21 @@
         <th>Vehicle Reg.</th>
         <th>Bay</th>
         <th>Date</th>
+        <th>Estimated Cost</th>
+        <th>Payment</th>
         <th>Status</th>
         <th>#</th>
     </tr>
     <tr *ngFor="let item of listJobCard; let i = index">
-        <td><a href="javascript:void(0)" (click)="openWin()">View</a></td>
+        <td><a href="javascript:void(0)" (click)="openWin(item)">View</a></td>
         <td>{{i+1}}</td>
         <td>{{item.JcNo}}</td>
         <td>{{item.VehicleNo}}</td>
         <td>{{item.Bay}}</td>
-        <td>{{item.ReceiveDate}}</td>
-        <td>{{item.JcStatus==1?'CLOSE':'OPEN'}}</td>
+        <td>{{item.ReceiveDate | date:'dd-MMM-yy HH:mm a'}}</td>
+        <td>{{item.EstiCostTotal}}</td>
+        <td>{{item.IsPaid == true ? 'Paid' : 'Due'}}</td>
+        <td>{{item.JcStatus==1?'Close':'Open'}}</td>
         <td><button class="btn btn-sm btn-primary" (click)="edit(item)">Edit</button></td>
     </tr>
   </table>
@@ -100,7 +110,7 @@
             </div>
             <div class="col-md-4">
               <label for="Mileage" class="form-label" title="">Milage(KM):</label>
-              <input type="number" id="Mileage" [(ngModel)]="JobCard.Mileage" class="form-control" placeholder="milage in KM" />
+              <input type="number" id="Mileage" [(ngModel)]="JobCard.Mileage" class="form-control" placeholder="milage in KM"  style="text-align: right;" />
             </div>
             <div class="col-md-4">
               <label for="ReceiveDate" class="form-label" title="">Receive Date:</label>
@@ -126,29 +136,28 @@
             </div>
             <div class="col-md-4">
               <label for="EstiCostJob" class="form-label" title="">Estimated Cost of Jobs</label>
-              <input type="text" id="EstiCostJob" [(ngModel)]="JobCard.EstiCostJob" class="form-control" placeholder="Cost of jobs" />
+              <input type="text" id="EstiCostJob" [(ngModel)]="JobCard.EstiCostJob" class="form-control" placeholder="Cost of jobs" readonly style="text-align: right;" />
             </div>
             <div class="col-md-4">
               <label for="EstiCostSpare" class="form-label" title="">Estimated Cost of Spare</label>
-              <input type="text" id="EstiCostSpare" [(ngModel)]="JobCard.EstiCostSpare" class="form-control" placeholder="Cost of spare" />
+              <input type="text" id="EstiCostSpare" [(ngModel)]="JobCard.EstiCostSpare" class="form-control" placeholder="Cost of spare" readonly style="text-align: right;" />
             </div>
             <div class="col-md-4">
               <label for="EstiCostTotal" class="form-label" title="">Total Estimated Cost</label>
-              <input type="text" id="EstiCostTotal" [(ngModel)]="JobCard.EstiCostTotal" class="form-control" placeholder="total estimated cost" />
+              <input type="text" id="EstiCostTotal" [(ngModel)]="JobCard.EstiCostTotal" class="form-control" placeholder="total estimated cost" readonly style="text-align: right;" />
             </div>
-
-            <div class="col-md-4">
+            <!-- <div class="col-md-4">
               <label for="ActualCostJob" class="form-label" title="">Actual Cost of Job</label>
-              <input type="text" id="ActualCostJob" [(ngModel)]="JobCard.ActualCostJob" class="form-control" placeholder="Actual Cost of Job" />
+              <input type="text" id="ActualCostJob" [(ngModel)]="JobCard.ActualCostJob" class="form-control" placeholder="Actual Cost of Job" readonly />
             </div>
             <div class="col-md-4">
               <label for="ActualCostSpare" class="form-label" title="">Actual Cost of Spare</label>
-              <input type="text" id="ActualCostSpare" [(ngModel)]="JobCard.ActualCostSpare" class="form-control" placeholder="Actual Cost of Spare" />
+              <input type="text" id="ActualCostSpare" [(ngModel)]="JobCard.ActualCostSpare" class="form-control" placeholder="Actual Cost of Spare" readonly />
             </div>
             <div class="col-md-4">
               <label for="ActualCostTotal" class="form-label" title="">Total Actual Cost</label>
-              <input type="text" id="ActualCostTotal" [(ngModel)]="JobCard.ActualCostTotal" class="form-control" placeholder="Total Actual Cost" />
-            </div>
+              <input type="text" id="ActualCostTotal" [(ngModel)]="JobCard.ActualCostTotal" class="form-control" placeholder="Total Actual Cost" readonly />
+            </div> -->
           </div>
         </div>
       </div>
@@ -230,11 +239,11 @@
             </div>
             <div class="col-md-4">
               <label for="JobPrice" class="form-label" title="">Price:</label>
-              <input type="text" id="JobPrice" [(ngModel)]="JcJob.Price" class="form-control" placeholder="" readonly />
+              <input type="text" id="JobPrice" [(ngModel)]="JcJob.Price" class="form-control" placeholder="" readonly style="text-align: right;" />
             </div>
             <div class="col-md-4">
               <label for="Duration" class="form-label" title="">Duration (Minutes):</label>
-              <input type="text" id="Duration" [(ngModel)]="JcJob.Duration" class="form-control" placeholder="" readonly />
+              <input type="text" id="Duration" [(ngModel)]="JcJob.Duration" class="form-control" placeholder="" readonly  style="text-align: right;" />
             </div>
             <div class="col-md-4">
               <label for="JobStatus" class="form-label">Status</label>
@@ -298,15 +307,15 @@
             </div>
             <div class="col-md-4">
               <label for="SparePrice" class="form-label" title="">Unit Price:</label>
-              <input type="number" id="SparePrice" [(ngModel)]="JcSpare.SalePrice" class="form-control" placeholder="" readonly />
+              <input type="number" id="SparePrice" [(ngModel)]="JcSpare.SalePrice" class="form-control" placeholder="" readonly style="text-align: right;" />
             </div>
             <div class="col-md-4">
               <label for="Quantity" class="form-label" title="">Quantity:</label>
-              <input type="number" id="Quantity" [(ngModel)]="JcSpare.Quantity" class="form-control" placeholder="" (change)="changeItemQty()" />
+              <input type="number" id="Quantity" [(ngModel)]="JcSpare.Quantity" class="form-control" placeholder="" (change)="changeItemQty()" style="text-align: right;" />
             </div>
             <div class="col-md-4">
               <label for="SpareAmount" class="form-label" title="">Amount:</label>
-              <input type="number" id="SpareAmount" [(ngModel)]="JcSpare.SpareAmount" class="form-control" placeholder="" readonly />
+              <input type="number" id="SpareAmount" [(ngModel)]="JcSpare.SpareAmount" class="form-control" placeholder="" readonly style="text-align: right;" />
             </div>
             <div class="col-md-4">
               <label for="ItemStatus" class="form-label">Status</label>

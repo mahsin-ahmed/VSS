@@ -213,7 +213,7 @@ export class JobcardComponent {
     Bay:number,
     VehicleNo:string,
     Model:string,
-    JcStatus:number, // (CLOSE/OPEN)
+    JcStatus:number, // (Close/Open)
     // Client
     ClientId:number,
     ClientName:string,
@@ -402,7 +402,7 @@ export class JobcardComponent {
 
   listMechanic:any = [];
 
-  listJcStatus:any=[{Id:1,Name:'CLOSE'},{Id:2,Name:'OPEN'}];
+  listJcStatus:any=[{Id:1,Name:'Close'},{Id:2,Name:'Open'}];
   JobStatus:number = 0;
   listJobStatus:any=[{Id:1,Name:'Close'},{Id:2,Name:'Open'}];
   listJcJob:any=[];
@@ -427,6 +427,7 @@ export class JobcardComponent {
       JobStatusName:EngineSizeName
     });
     this.calculateEstiCost();
+    this.resetJob();
   }
 
   updateJob(){
@@ -439,20 +440,20 @@ export class JobcardComponent {
         Resources.push({EmployeeId:this.listMechanic[i].EmployeeId, FullName:this.listMechanic[i].FullName, JcJobId:this.JcJob.Id, JcId:this.JcJob.JcId}); 
       }
     }
-    var oJcSpare = this.JobCard.JobDetails.filter((x:any)=>x.Id == this.JcJob.Id)[0];
-    if(oJcSpare!==undefined) {
-      oJcSpare.JobGroupId=this.JcJob.JobGroupId;
-      oJcSpare.JobId=this.JcJob.JobId;
-      oJcSpare.EngineSizeId=this.JcJob.EngineSizeId;
-      oJcSpare.Price=this.JcJob.Price;
-      oJcSpare.Duration=this.JcJob.Duration;
-      oJcSpare.JobStatus=this.JcJob.JobStatus;
+    var oJcJob = this.JobCard.JobDetails.filter((x:any)=>x.Id == this.JcJob.Id)[0];
+    if(oJcJob!==undefined) {
+      oJcJob.JobGroupId=this.JcJob.JobGroupId;
+      oJcJob.JobId=this.JcJob.JobId;
+      oJcJob.EngineSizeId=this.JcJob.EngineSizeId;
+      oJcJob.Price=this.JcJob.Price;
+      oJcJob.Duration=this.JcJob.Duration;
+      oJcJob.JobStatus=this.JcJob.JobStatus;
       //oJcSpare.Resources=this.JcJob.Resources;
-      oJcSpare.Resources=Resources;
-      oJcSpare.JobGroupName=JobGroupName;
-      oJcSpare.JobName=JobName;
-      oJcSpare.EngineSizeName=EngineSizeName;
-      oJcSpare.JobStatusName=EngineSizeName;
+      oJcJob.Resources=Resources;
+      oJcJob.JobGroupName=JobGroupName;
+      oJcJob.JobName=JobName;
+      oJcJob.EngineSizeName=EngineSizeName;
+      oJcJob.JobStatusName=oJcJob.JobStatus == 1 ? 'Close' : oJcJob.JobStatus == 2 ? 'Open' : '';
     }
     this.calculateEstiCost();
   }
@@ -515,7 +516,7 @@ export class JobcardComponent {
   listItem:any = [];
 
   //ItemStatus:number =0;
-  listItemStatus:any=[{Id:1,Name:'USED'},{Id:2,Name:'REFUND'}];
+  listItemStatus:any=[{Id:1,Name:'User'},{Id:2,Name:'Refund'}];
 
   resetSpare(){
     this.JcSpare = {
@@ -562,7 +563,7 @@ export class JobcardComponent {
       Quantity:this.JcSpare.Quantity,
       SpareAmount:this.JcSpare.SpareAmount,
       ItemStatus:this.JcSpare.ItemStatus,
-      ItemStatusName:this.JcSpare.ItemStatus == 1 ? 'USED' : 'REFUND',
+      ItemStatusName:this.JcSpare.ItemStatus == 1 ? 'Used' : 'Refund',
     });
     this.calculateEstiCost();
     this.resetSpare();
@@ -589,7 +590,7 @@ export class JobcardComponent {
       oJcSpare.Quantity=this.JcSpare.Quantity;
       oJcSpare.SpareAmount=this.JcSpare.SpareAmount;
       oJcSpare.ItemStatus=this.JcSpare.ItemStatus;
-      oJcSpare.ItemStatusName=this.JcSpare.ItemStatus == 1 ? 'USED' : 'REFUND';
+      oJcSpare.ItemStatusName=this.JcSpare.ItemStatus == 1 ? 'Used' : 'Refund';
     }
     this.calculateEstiCost();
     this.resetSpare();
@@ -718,7 +719,7 @@ export class JobcardComponent {
     return new Date().getTime();
   }
 
-  openWin() {
+  openWin(item:any) {
     const myWindow: Window | null = window.open("", "", "width=793,height=1123");
     if(myWindow !=undefined){
       var jcForPad = '<!DOCTYPE html><html lang="en"><head><title>Job-Card</title></head><body>'
@@ -1102,12 +1103,13 @@ export class JobcardComponent {
     totalPages:0
   };  
   //#endregion
+  jcStatus:number = 2;
   get(){
     const oHttpHeaders = new HttpHeaders(
     {
         'Token':this.authService.UserInfo.Token
     });
-    this.httpClient.get(this.authService.baseURL + '/api/JobCard?pi='+this.pageIndex+'&ps='+this.pageSize,{headers: oHttpHeaders}).subscribe((res)=>{
+    this.httpClient.get(this.authService.baseURL + '/api/JobCard?pi='+this.pageIndex+'&ps='+this.pageSize+'&jcStatus='+this.jcStatus,{headers: oHttpHeaders}).subscribe((res)=>{
       this.listJobCard = res;
       //#region paging
       this.rowCount = this.listJobCard.length > 0 ? this.listJobCard[0].RowCount : 0;

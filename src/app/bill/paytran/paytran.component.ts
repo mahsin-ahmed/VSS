@@ -68,4 +68,53 @@ export class PaytranComponent {
     });
   }
 
+  detailBill(item:any){
+    this.isList = false;
+    this.getFromInvoice(item.Id);
+  }
+
+  getFromInvoice(id:number):void{
+    const oHttpHeaders = new HttpHeaders(
+    {
+        'Token':this.authService.UserInfo.Token
+    });
+    this.httpClient.get(this.authService.baseURL + '/api/Invoice/GetByJc?jcId='+id,{headers:oHttpHeaders}).subscribe((res)=>{
+      let item:any = res;
+      this.oBill = item;
+      this.listBillItem = this.oBill.InvoiceItems;
+    });
+  }
+
+  VAT:number=10;
+  oBill:{
+    Id:number,
+    ClientId:number,
+    CreateDate:string,
+    CreateBy:number,
+    IsPaid:boolean,
+    JcId:number,
+    ClientName:string,
+    JcNo:string,
+    GrandTotal:number,
+    InvoiceItems:any,
+    IsInvoice:number,
+    BalanceAmount:number,
+    PaySettles:any
+  }={
+    Id:0,
+    ClientId:0,
+    CreateDate:'',
+    CreateBy:0,
+    IsPaid:false,
+    JcId:0,
+    ClientName:'',
+    JcNo:'',
+    GrandTotal:0,
+    InvoiceItems:[],
+    IsInvoice:0,
+    BalanceAmount:0,
+    PaySettles:[]
+  };
+  listBillItem:any =[];
+
 }

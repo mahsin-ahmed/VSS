@@ -1,18 +1,21 @@
 <!-- <p>invoice</p>
 <img title="" src="/assets/invoice_sample.png" class="img-fluid" /> -->
 <a href="javascript:void(0)" *ngIf="!isList" (click)="isList=true;get();">Go to List</a>
-<a href="javascript:void(0)" *ngIf="isList" (click)="isList=false">Go to Entry</a>
+<!-- <a href="javascript:void(0)" *ngIf="isList" (click)="isList=false">Go to Entry</a> -->
 <div *ngIf="isList">
     <h4 class="text-center">Job-Card To Bill</h4>
     <table class="table table-bordered">
         <tr class="table-secondary">
-            <th>#</th>
-            <th scope="col">SL No.</th>
+            <th>Action</th>
+            <th scope="col">SL</th>
             <th>Job Card No.</th>
             <th>Vehicle Reg.</th>
             <th>Bay</th>
             <th>Client</th>
             <th>Date</th>
+            <th>Estimated Cost</th>
+            <th>Actual Cost</th>
+            <th>Payment</th>
             <th>Status</th>
             <th>#</th>
         </tr>
@@ -22,9 +25,12 @@
             <td>{{item.JcNo}}</td>
             <td>{{item.VehicleNo}}</td>
             <td>{{item.Bay}}</td>
-            <td>{{item.ClientId}}</td>
-            <td>{{item.ReceiveDate}}</td>
-            <td>{{item.JcStatus == 1 ? 'CLOSE' : 'OPEN'}}</td>
+            <td>{{item.ClientName}}</td>
+            <td>{{item.ReceiveDate | date:'dd-MMM-yy HH:mm a'}}</td>
+            <td>{{item.EstiCostTotal}}</td>
+            <td>{{item.GrandTotal}}</td>
+            <td>{{item.IsPaid == true ? 'Paid' : 'Due'}}</td>
+            <td>{{item.JcStatus == 1 ? 'Close' : 'Open'}}</td>
             <td>
                 <button class="btn btn-sm btn-primary" (click)="createBill(item)" *ngIf="item.IsInvoice==0">Create Bill</button>
                 <button class="btn btn-sm btn-primary" (click)="editBill(item)" *ngIf="item.IsInvoice>0">Edit Bill</button>
@@ -33,7 +39,7 @@
     </table>
 </div>
 <div *ngIf="!isList">
-    <h4 class="text-center">Create Bill</h4>
+    <h4 class="text-center">{{oBill.IsInvoice>0?'Update':'Create'}} Bill</h4>
     <div class="row g-3">
         <div class="col-md-4">
             <strong>Job Card Number: </strong>{{oBill.JcNo}}
@@ -42,28 +48,29 @@
             <strong>Client Name: </strong>{{oBill.ClientName}}
         </div>
     </div>
-    <h6>Bill Items</h6>
+    <div class="row g-3">
+      <div class="col-md-4"><h6>Bill Items</h6></div>
+      <div class="col-md-4"><h6><strong>Balance:</strong>{{oBill.BalanceAmount}}</h6></div>
+    </div>
     <table class="table table-bordered table-responsive">
         <tr>
             <th>#</th>
             <th>Item Type</th>
-            <th>Item Description</th>
             <th style="text-align: right;">Qty</th>
             <th style="text-align: right;">Price</th>
             <th style="text-align: right;">Total Price</th>
-            <th style="text-align: right;">Discount(%)</th>
+            <th style="text-align: right;">Discount(<input type="text" [(ngModel)]="Discount" (change)="changeDiscount()" style="text-align: right;width: 50px;height: 30px;" />%)</th>
             <th style="text-align: right;">Total Price After Discount</th>
             <th style="text-align: right;">Total VAT ({{VAT}}%)</th>
             <th style="text-align: right;">Total Amount</th>
         </tr>
         <tr *ngFor="let item of listBillItem; let i = index">
             <td>{{i+1}}</td>
-            <td>{{item.BillType}}</td>
-            <td>{{item.ItemDescription}}</td>
+            <td>{{item.ItemType == 1 ? 'Job' : item.ItemType == 2 ? 'SP' : 'N/A'}}</td>
             <td style="text-align: right;">{{item.Qty}}</td>
-            <td style="text-align: right;">{{item.Price}}</td>
+            <td style="text-align: right;">{{item.UnitPrice}}</td>
             <td style="text-align: right;">{{item.TotalPrice}}</td>
-            <td style="text-align: right;"><input type="text" class="text-left" name="Discount" [(ngModel)]="item.Discount" style="text-align: right;" (change)="calculateTotals()" /></td>
+            <td style="text-align: right;"><input type="text" name="Discount" [(ngModel)]="item.Discount" style="text-align: right;width: 50px;height: 30px;" (change)="calculateTotals()" /></td>
             <td style="text-align: right;">{{item.TpAfterDiscount}}</td>
             <td style="text-align: right;">{{item.TotalVat}}</td>
             <td style="text-align: right;">{{item.TotalAmount}}</td>
@@ -76,7 +83,6 @@
             <th>
                 <button (click)="payment()" class="btn btn-success" *ngIf="oBill.IsInvoice>0" href="javascript:void()" data-bs-toggle="modal" data-bs-target="#paymentModal">Payment</button>
             </th>
-            <th></th>
             <th></th>
             <th></th>
             <th></th>
