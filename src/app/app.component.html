@@ -32,6 +32,16 @@
         <li class="nav-item">
           <a *ngIf="authService.UserInfo.IsLogIn" class="nav-link" aria-current="page" routerLink="/dashboard"><i class="fa fa-home"></i> Home</a>
         </li>
+        <li class="nav-item dropdown" *ngFor="let item of authService.UserInfo.ModuleMenus">
+          <a *ngIf="item.ModuleName" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="{{item.ModuleIcon}}" aria-hidden="true"></i> {{item.ModuleName}}
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li *ngFor="let m of item.Menus">
+              <a class="dropdown-item" routerLink="{{m.MenuPath}}"><i class="{{m.MenuIcon}}" aria-hidden="true"></i> {{m.MenuName}}</a>
+            </li>
+          </ul>
+        </li>
         <!-- <li class="nav-item dropdown">
           <a *ngIf="authService.UserInfo.IsLogIn" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="fa fa-wrench" aria-hidden="true"></i> Operation
@@ -45,16 +55,6 @@
             <li><a class="dropdown-item" routerLink="/engine-size"><i class="fa fa-cogs" aria-hidden="true"></i> Engine-Size</a></li>
           </ul>
         </li> -->
-        <li class="nav-item dropdown" *ngFor="let item of authService.UserInfo.ModuleMenus">
-          <a *ngIf="item.ModuleName" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="{{item.ModuleIcon}}" aria-hidden="true"></i> {{item.ModuleName}}
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li *ngFor="let m of item.Menus">
-              <a class="dropdown-item" routerLink="{{m.MenuPath}}"><i class="{{m.MenuIcon}}" aria-hidden="true"></i> {{m.MenuName}}</a>
-            </li>
-          </ul>
-        </li>
         <!-- <li class="nav-item dropdown">
           <a *ngIf="authService.UserInfo.IsLogIn" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="fa fa-shopping-bag" aria-hidden="true"></i> Billing

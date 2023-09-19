@@ -48,8 +48,9 @@ export class ClientComponent {
     };
   listClient:any = [];
   toast!: toastPayload;
-  constructor(private cs:CommonService,private httpClient: HttpClient,
-    private authService:AuthService) { 
+  constructor(private cs:CommonService,
+    private httpClient: HttpClient,
+    public authService:AuthService) { 
     this.get();
   }
   //baseUrl:string='http://localhost:56297';
@@ -68,6 +69,7 @@ export class ClientComponent {
       {
           'Token':this.authService.UserInfo.Token
       });
+    this.Client.CreateBy = this.authService.UserInfo.UserID;
     this.httpClient.post(this.authService.baseURL + '/api/Client', this.Client,{headers: oHttpHeaders}).subscribe((res)=>{
       if(res == true){
         this.isList = true;
@@ -85,6 +87,7 @@ export class ClientComponent {
       {
           'Token':this.authService.UserInfo.Token
       });
+    this.Client.UpdateBy = this.authService.UserInfo.UserID;
     this.httpClient.put(this.authService.baseURL + '/api/Client', this.Client,{headers: oHttpHeaders}).subscribe((res)=>{
       if(res == true){
         this.isList = true;

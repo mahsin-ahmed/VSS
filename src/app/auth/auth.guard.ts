@@ -15,6 +15,7 @@ export const authGuard: CanActivateFn = (route, state) => {
     }
     var oMenu = authService.UserInfo.Permissions.filter((x:any)=>x.MenuPath==state.url)[0];
     if(oMenu != undefined){
+      authService.UserInfo.Menu = oMenu;
       return true; //return true;
     }
     //#endregion

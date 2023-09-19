@@ -1,5 +1,5 @@
 <a href="javascript:void(0)" *ngIf="!isList;" (click)="isList=true;reset()">Go to List</a>
-<a href="javascript:void(0)" *ngIf="isList" (click)="isList=false;get()">Go to Entry</a>
+<a href="javascript:void(0)" *ngIf="isList && authService.UserInfo.Menu.CanCreate" (click)="isList=false;reset();get()">Go to Entry</a>
 <div *ngIf="isList">
   <h4 class="text-center">List of Client</h4>
   <table class="table table-bordered">
@@ -16,9 +16,9 @@
         <td>{{item.Name}}</td>
         <td>{{item.Phone}}</td>
         <td>{{item.Address}}</td>
-        <td><button class="btn btn-sm btn-outline-primary" (click)="edit(item)">Edit</button></td>
+        <td><button class="btn btn-sm btn-outline-primary" (click)="edit(item)" *ngIf="authService.UserInfo.Menu.CanEdit" >Edit</button></td>
         <td>
-          <button class="btn btn-sm btn-outline-danger" (click)="Client=item" data-bs-toggle="modal" data-bs-target="#confirmModal">Remove</button>
+          <button class="btn btn-sm btn-outline-danger" (click)="Client=item" data-bs-toggle="modal" data-bs-target="#confirmModal"  *ngIf="authService.UserInfo.Menu.CanDelete" (click)="add();">Remove</button>
         </td>
     </tr>
   </table>
@@ -47,8 +47,8 @@
         <input type="text" id="Address" [(ngModel)]="Client.Address" class="form-control " />
     </div>
     <div class="col-md-12 mt-5">
-      <button type="button" class="btn btn-success" *ngIf="Client.BpId==0" (click)="add();">Add</button>
-      <button type="button" class="btn btn-success" *ngIf="Client.BpId>0" (click)="update();">update</button>
+      <button type="button" class="btn btn-success" *ngIf="Client.BpId==0 && authService.UserInfo.Menu.CanCreate" (click)="add();">Add</button>
+      <button type="button" class="btn btn-success" *ngIf="Client.BpId>0 && authService.UserInfo.Menu.CanEdit" (click)="update();">update</button>
     </div>
   </div>
 </div>

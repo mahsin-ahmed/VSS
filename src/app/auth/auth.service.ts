@@ -13,7 +13,28 @@ export class AuthService {
     Token:string,
     Permissions:any,
     RedirectURL:string,
-    ModuleMenus:any
+    ModuleMenus:any,
+    Menu:{
+      CanCreate: boolean,
+      CanDelete: boolean,
+      CanEdit:  boolean,
+      CanView: boolean,
+      IsActive: boolean,
+      IsSubParent: boolean,
+      MenuCode: string,
+      MenuIcon: string,
+      MenuId: number,
+      MenuName: string,
+      MenuPath: string,
+      MenuSequence: number,
+      ModuleIcon: string,
+      ModuleId: number,
+      ModuleName: string,
+      ParentId: number,
+      RoleId : number,
+      RoleName : string,
+      SubPareMenuNamentId: number
+    }
   } = {
     UserName:'',
     IsLogIn:false,
@@ -21,8 +42,54 @@ export class AuthService {
     Token:'',
     Permissions:[],
     RedirectURL:'',
-    ModuleMenus:[]
+    ModuleMenus:[],
+    Menu:{
+      CanCreate: false,
+      CanDelete: false,
+      CanEdit:  false,
+      CanView: false,
+      IsActive: false,
+      IsSubParent: false,
+      MenuCode: "",
+      MenuIcon: "",
+      MenuId: 0,
+      MenuName: "",
+      MenuPath: "",
+      MenuSequence: 4,
+      ModuleIcon: "",
+      ModuleId: 2,
+      ModuleName: "",
+      ParentId: 0,
+      RoleId : 0,
+      RoleName : "",
+      SubPareMenuNamentId: 0
+    }
   };
+
+  resetMenu(){
+    this.UserInfo.Menu = {
+      CanCreate: false,
+      CanDelete: false,
+      CanEdit:  false,
+      CanView: false,
+      IsActive: false,
+      IsSubParent: false,
+      MenuCode: "",
+      MenuIcon: "",
+      MenuId: 0,
+      MenuName: "",
+      MenuPath: "",
+      MenuSequence: 0,
+      ModuleIcon: "",
+      ModuleId: 0,
+      ModuleName: "",
+      ParentId: 0,
+      RoleId : 0,
+      RoleName : "",
+      SubPareMenuNamentId: 0
+    }
+    return this.UserInfo.Menu;
+  }
 
   constructor() { 
     const strUserInfo = localStorage.getItem("UserInfo");
@@ -74,6 +141,9 @@ export class AuthService {
     this.UserInfo.Token = '';
     this.UserInfo.UserID = 0;
     this.UserInfo.RedirectURL = '/login';
+    this.UserInfo.Menu = this.resetMenu();
+    this.UserInfo.ModuleMenus = [],
+    this.UserInfo.Permissions = []
   }
 
 }
