@@ -1,7 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient,HttpHeaders } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { IndividualConfig } from 'ngx-toastr';
 import { CommonService, toastPayload } from 'src/app/services/common.service';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-job',
@@ -9,12 +10,14 @@ import { CommonService, toastPayload } from 'src/app/services/common.service';
   styleUrls: ['./job.component.css']
 })
 export class JobComponent {
-  constructor(private cs: CommonService, private httpClient: HttpClient) {
+  constructor(private cs: CommonService, 
+    private httpClient: HttpClient,
+    private authService:AuthService) {
     this.get();
     this.getJobGroup();
   }
   isList: boolean = true;
-  baseUrl: string = 'http://localhost:56297';
+  //baseUrl: string = 'http://localhost:56297';
 
   // Pagination part Start
   //----------------------------------------------------------------------------
@@ -49,16 +52,12 @@ export class JobComponent {
   //----------------------------------------------------------------------
 
   listJobs: any = [];
-
-  /*
   get() {
-    this.httpClient.get(this.baseUrl + '/api/Job').subscribe((res) => {
-      this.listJobs = res;
-    });
-  }
-  */
-  get() {
-    this.httpClient.get(this.baseUrl + '/api/Job?pi='+this.pageIndex+'&ps='+this.pageSize).subscribe((res) => {
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.get(this.authService.baseURL + '/api/Job?pi='+this.pageIndex+'&ps='+this.pageSize,{headers: oHttpHeaders}).subscribe((res) => {
       this.listJobs = res;
       //#region paging
       this.rowCount = this.listJobs.length > 0 ? this.listJobs[0].RowCount : 0;
@@ -75,7 +74,11 @@ export class JobComponent {
   }
 
   addJob() {
-    this.httpClient.post(this.baseUrl + '/api/Job', this.Job).subscribe((res) => {
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.post(this.authService.baseURL + '/api/Job', this.Job,{headers: oHttpHeaders}).subscribe((res) => {
       if (res == true) {
         this.isList = true;
         this.get();
@@ -102,7 +105,11 @@ export class JobComponent {
     this.isList = false;
   }
   updateJob() {
-    this.httpClient.put(this.baseUrl + '/api/Job', this.Job).subscribe((res) => {
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.put(this.authService.baseURL + '/api/Job', this.Job,{headers: oHttpHeaders}).subscribe((res) => {
       if (res == true) {
         this.isList = true;
         this.get();
@@ -138,13 +145,21 @@ export class JobComponent {
     listJobGroup:any = [];
     
     getJobGroup(){
-      this.httpClient.get(this.baseUrl + '/api/JobCard/GetJobGroup').subscribe((res)=>{
+      const oHttpHeaders = new HttpHeaders(
+        {
+            'Token':this.authService.UserInfo.Token
+        });
+      this.httpClient.get(this.authService.baseURL + '/api/JobCard/GetJobGroup',{headers: oHttpHeaders}).subscribe((res)=>{
           this.listJobGroup = res;
       });
     }
 
     removeJob(item:any){
-      this.httpClient.delete(this.baseUrl + '/api/Job/' + item.JobId).subscribe((res)=>{
+      const oHttpHeaders = new HttpHeaders(
+        {
+            'Token':this.authService.UserInfo.Token
+        });
+      this.httpClient.delete(this.authService.baseURL + '/api/Job/' + item.JobId,{headers: oHttpHeaders}).subscribe((res)=>{
         if(res == true){
           this.get();
           this.showMessage('success', 'data removed.');

@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient,HttpHeaders } from '@angular/common/http';
 import { CommonService,toastPayload } from 'src/app/services/common.service';
 import { IndividualConfig } from 'ngx-toastr';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-item',
@@ -9,7 +10,9 @@ import { IndividualConfig } from 'ngx-toastr';
   styleUrls: ['./item.component.css']
 })
 export class ItemComponent {
-  constructor(private cs: CommonService, private httpClient: HttpClient) {
+  constructor(private cs: CommonService, 
+    private httpClient: HttpClient,
+    private authService:AuthService) {
     this.get();
     this.getBrand();
   }
@@ -35,16 +38,23 @@ export class ItemComponent {
   listBrand:any=[];
   
   getBrand(){
-    this.httpClient.get(this.baseUrl + '/api/Item/GetBrand').subscribe((res)=>{
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.get(this.authService.baseURL + '/api/Item/GetBrand',{headers: oHttpHeaders}).subscribe((res)=>{
         this.listBrand = res;
     });
   }
 
   listItems:any =[];
 
-  get()
-  { 
-    this.httpClient.get(this.baseUrl + '/api/Item?pi='+this.pageIndex+'&ps='+this.pageSize).subscribe((res) => {
+  get(){
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      }); 
+    this.httpClient.get(this.authService.baseURL + '/api/Item?pi='+this.pageIndex+'&ps='+this.pageSize,{headers: oHttpHeaders}).subscribe((res) => {
       this.listItems = res;
       //#region paging
       this.rowCount = this.listItems.length > 0 ? this.listItems[0].RowCount : 0;
@@ -62,7 +72,11 @@ export class ItemComponent {
   };
 
   addItem() {
-    this.httpClient.post(this.baseUrl + '/api/Item', this.Item).subscribe((res) => {
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.post(this.authService.baseURL + '/api/Item', this.Item,{headers: oHttpHeaders}).subscribe((res) => {
       if (res == true) {
         this.isList = true;
         this.get();
@@ -75,7 +89,11 @@ export class ItemComponent {
   }
   
   updateItem() {
-    this.httpClient.put(this.baseUrl + '/api/Item', this.Item).subscribe((res) => {
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.put(this.authService.baseURL + '/api/Item', this.Item,{headers: oHttpHeaders}).subscribe((res) => {
       if (res == true) {
         this.isList = true;
         this.get();
@@ -86,7 +104,11 @@ export class ItemComponent {
     });
   }
   removeItem(item:any){
-    this.httpClient.delete(this.baseUrl + '/api/Item/' + item.Id).subscribe((res)=>{
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.delete(this.authService.baseURL + '/api/Item/' + item.Id,{headers: oHttpHeaders}).subscribe((res)=>{
       if(res == true){
         this.get();
         this.showMessage('success', 'data removed.');
@@ -147,7 +169,7 @@ export class ItemComponent {
   // Start Common part
  
   isList: boolean = true;
-  baseUrl: string = 'http://localhost:56297';
+  //baseUrl: string = 'http://localhost:56297';
 
   switchView(view: string): void {
     if (view == 'form') {

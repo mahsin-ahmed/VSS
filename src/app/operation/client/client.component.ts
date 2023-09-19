@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonService, toastPayload } from '../../services/common.service';
 import { IndividualConfig } from 'ngx-toastr';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-client',
@@ -47,18 +48,27 @@ export class ClientComponent {
     };
   listClient:any = [];
   toast!: toastPayload;
-  constructor(private cs:CommonService,private httpClient: HttpClient) { 
+  constructor(private cs:CommonService,private httpClient: HttpClient,
+    private authService:AuthService) { 
     this.get();
   }
-  baseUrl:string='http://localhost:56297';
+  //baseUrl:string='http://localhost:56297';
   get(){
-    this.httpClient.get(this.baseUrl + '/api/Client').subscribe((res)=>{
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.get(this.authService.baseURL + '/api/Client',{headers: oHttpHeaders}).subscribe((res)=>{
         this.listClient = res;
     });
   }
 
   add() {
-    this.httpClient.post(this.baseUrl + '/api/Client', this.Client).subscribe((res)=>{
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.post(this.authService.baseURL + '/api/Client', this.Client,{headers: oHttpHeaders}).subscribe((res)=>{
       if(res == true){
         this.isList = true;
         this.get();
@@ -71,7 +81,11 @@ export class ClientComponent {
   }
 
   update(){
-    this.httpClient.put(this.baseUrl + '/api/Client', this.Client).subscribe((res)=>{
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.put(this.authService.baseURL + '/api/Client', this.Client,{headers: oHttpHeaders}).subscribe((res)=>{
       if(res == true){
         this.isList = true;
         this.get();
@@ -79,7 +93,7 @@ export class ClientComponent {
       }else{
         this.showMessage('error', 'error occurred.');
       }
-  });
+    });
   }
 
   reset() {
@@ -124,7 +138,11 @@ export class ClientComponent {
   }
 
   remove(item:any){
-    this.httpClient.delete(this.baseUrl + '/api/Client/' + this.Client.BpId).subscribe((res)=>{
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.delete(this.authService.baseURL + '/api/Client/' + this.Client.BpId,{headers: oHttpHeaders}).subscribe((res)=>{
       if(res == true){
         this.get();
         this.showMessage('success', 'data removed.');

@@ -62,13 +62,13 @@ const routes: Routes = [
   { path: 'job-group', component: JobgroupComponent, canActivate:[authGuard] },
   { path: 'engine-size', component: EnginesizeComponent, canActivate:[authGuard] },
 
-  { path: 'company', component: CompanyComponent },
-  { path: 'menu', component: MenuComponent },
-  { path: 'menu-permission', component: MenupermissionComponent },
-  { path: 'module', component: ModuleComponent },
-  { path: 'role', component: RoleComponent },
-  { path: 'user', component: UserComponent },
-  { path: 'user-role', component: UserroleComponent },
+  { path: 'company', component: CompanyComponent, canActivate:[authGuard] },
+  { path: 'menu', component: MenuComponent, canActivate:[authGuard] },
+  { path: 'menu-permission', component: MenupermissionComponent, canActivate:[authGuard] },
+  { path: 'module', component: ModuleComponent, canActivate:[authGuard] },
+  { path: 'role', component: RoleComponent, canActivate:[authGuard] },
+  { path: 'user', component: UserComponent, canActivate:[authGuard] },
+  { path: 'user-role', component: UserroleComponent, canActivate:[authGuard] },
   { path: 'dashboard', component: DashboardComponent, canActivate:[authGuard] }
 
 ];

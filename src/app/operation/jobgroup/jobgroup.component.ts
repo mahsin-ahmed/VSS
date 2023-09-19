@@ -1,7 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient,HttpHeaders } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { IndividualConfig } from 'ngx-toastr';
 import { CommonService, toastPayload } from 'src/app/services/common.service';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-jobgroup',
@@ -9,7 +10,9 @@ import { CommonService, toastPayload } from 'src/app/services/common.service';
   styleUrls: ['./jobgroup.component.css']
 })
 export class JobgroupComponent {
-  constructor(private cs: CommonService, private httpClient: HttpClient) {
+  constructor(private cs: CommonService, 
+    private httpClient: HttpClient,
+    private authService:AuthService) {
     this.get();
   }
   isList: boolean = true;
@@ -34,7 +37,7 @@ export class JobgroupComponent {
   };  
   //#endregion
   // getting data from database for display
-  baseUrl: string = 'http://localhost:56297';
+  //baseUrl: string = 'http://localhost:56297';
 
   changePageSize(){
     this.pageIndex = 0;
@@ -47,7 +50,11 @@ export class JobgroupComponent {
   }
 
   get() {
-    this.httpClient.get(this.baseUrl + '/api/JobGroup?pi='+this.pageIndex+'&ps='+this.pageSize).subscribe((res) => {
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.get(this.authService.baseURL + '/api/JobGroup?pi='+this.pageIndex+'&ps='+this.pageSize,{headers: oHttpHeaders}).subscribe((res) => {
       this.listJobGroup = res;
       //#region paging
       this.rowCount = this.listJobGroup.length > 0 ? this.listJobGroup[0].RowCount : 0;
@@ -64,7 +71,11 @@ export class JobgroupComponent {
   }
 
   add() {
-    this.httpClient.post(this.baseUrl + '/api/JobGroup', this.JobGroup).subscribe((res) => {
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.post(this.authService.baseURL + '/api/JobGroup', this.JobGroup,{headers: oHttpHeaders}).subscribe((res) => {
       if (res == true) {
         this.isList = true;
         this.get();
@@ -75,8 +86,12 @@ export class JobgroupComponent {
       }
     });
   }
-  update() {  
-    this.httpClient.put(this.baseUrl + '/api/JobGroup', this.JobGroup).subscribe((res)=>{
+  update() { 
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      }); 
+    this.httpClient.put(this.authService.baseURL + '/api/JobGroup', this.JobGroup,{headers: oHttpHeaders}).subscribe((res)=>{
       if(res == true){
           this.isList = true;
           this.get();
@@ -88,7 +103,11 @@ export class JobgroupComponent {
   }
 
   remove(item:any){
-    this.httpClient.delete(this.baseUrl + '/api/JobGroup/' + item.GroupId).subscribe((res)=>{
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.delete(this.authService.baseURL + '/api/JobGroup/' + item.GroupId,{headers: oHttpHeaders}).subscribe((res)=>{
       if(res == true){
         this.get();
         this.showMessage('success', 'data removed.');

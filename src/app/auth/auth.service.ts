@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, numberAttribute } from '@angular/core';
 import { Observable, delay, of, tap } from 'rxjs';
 
 @Injectable({
@@ -12,14 +12,16 @@ export class AuthService {
     UserID:number,
     Token:string,
     Permissions:any,
-    RedirectURL:string
+    RedirectURL:string,
+    ModuleMenus:any
   } = {
     UserName:'',
     IsLogIn:false,
     UserID:0,
     Token:'',
     Permissions:[],
-    RedirectURL:''
+    RedirectURL:'',
+    ModuleMenus:[]
   };
 
   constructor() { 
@@ -41,6 +43,18 @@ export class AuthService {
       this.UserInfo.UserID = userInfo.UserID;
       this.UserInfo.Permissions = userInfo.Permissions;
       this.UserInfo.RedirectURL = '/dashboard';
+      var modules = this.UserInfo.Permissions.map((x:any) => x.ModuleId).filter((value:any, index:any, self:any) => self.indexOf(value) === index);
+      var listModule:any =[];
+      for(var i = 0; i < modules.length; i++){
+        var oModule : {ModuleId:number, ModuleName:string, ModuleIcon:string, Menus:any} = {ModuleId:0, ModuleName:'', ModuleIcon:'', Menus:[]};
+        oModule.ModuleId = modules[i];
+        var oPermission = this.UserInfo.Permissions.filter((x:any)=>x.ModuleId==oModule.ModuleId)[0];
+        oModule.ModuleName = oPermission!=undefined?oPermission.ModuleName:'';
+        oModule.ModuleIcon = oPermission!=undefined?oPermission.ModuleIcon:'';
+        oModule.Menus = this.UserInfo.Permissions.filter((x:any)=>x.ModuleId==oModule.ModuleId);
+        listModule.push(oModule);
+      }
+      this.UserInfo.ModuleMenus = listModule;
       localStorage.setItem('UserInfo',JSON.stringify(this.UserInfo));
     } else {
       this.logout();

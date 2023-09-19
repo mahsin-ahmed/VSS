@@ -1,4 +1,4 @@
-import { CanActivateFn } from '@angular/router';
+import { CanActivateFn, RouterState } from '@angular/router';
 import { Router } from '@angular/router';
 import { AuthService } from './auth.service';
 import { inject } from '@angular/core';
@@ -6,10 +6,20 @@ import { inject } from '@angular/core';
 export const authGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
   const router = inject(Router);
-  //return true;
+  //#region authentication
+  
   if (authService.UserInfo.IsLogIn) {
-    return true;
+    //#region authorization
+    if(state.url=='' || state.url=='/dashboard') {
+      return true;
+    }
+    var oMenu = authService.UserInfo.Permissions.filter((x:any)=>x.MenuPath==state.url)[0];
+    if(oMenu != undefined){
+      return true; //return true;
+    }
+    //#endregion
   }
-  // Redirect to the login page
-  return router.parseUrl('/login');
+  return router.parseUrl('/login'); // Redirect to the login page
+  //#endregion
+  
 };

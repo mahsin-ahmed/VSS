@@ -32,7 +32,7 @@
         <li class="nav-item">
           <a *ngIf="authService.UserInfo.IsLogIn" class="nav-link" aria-current="page" routerLink="/dashboard"><i class="fa fa-home"></i> Home</a>
         </li>
-        <li class="nav-item dropdown">
+        <!-- <li class="nav-item dropdown">
           <a *ngIf="authService.UserInfo.IsLogIn" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="fa fa-wrench" aria-hidden="true"></i> Operation
           </a>
@@ -43,12 +43,19 @@
             <li><a class="dropdown-item" routerLink="/job"><i class="fa fa-file-text" aria-hidden="true"></i> Job</a></li>
             <li><a class="dropdown-item" routerLink="/job-group"><i class="fa fa-files-o" aria-hidden="true"></i> Job-Group</a></li>
             <li><a class="dropdown-item" routerLink="/engine-size"><i class="fa fa-cogs" aria-hidden="true"></i> Engine-Size</a></li>
-            <!-- <li *ngFor="let item of authService.UserInfo.Permissions">
-              <a class="dropdown-item" routerLink="{{item.MenuPath}}"><i class="{{item.MenuIcon}}" aria-hidden="true"></i> {{item.MenuName}}</a>
-            </li> -->
+          </ul>
+        </li> -->
+        <li class="nav-item dropdown" *ngFor="let item of authService.UserInfo.ModuleMenus">
+          <a *ngIf="item.ModuleName" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="{{item.ModuleIcon}}" aria-hidden="true"></i> {{item.ModuleName}}
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li *ngFor="let m of item.Menus">
+              <a class="dropdown-item" routerLink="{{m.MenuPath}}"><i class="{{m.MenuIcon}}" aria-hidden="true"></i> {{m.MenuName}}</a>
+            </li>
           </ul>
         </li>
-        <li class="nav-item dropdown">
+        <!-- <li class="nav-item dropdown">
           <a *ngIf="authService.UserInfo.IsLogIn" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="fa fa-shopping-bag" aria-hidden="true"></i> Billing
           </a>
@@ -56,8 +63,8 @@
             <li><a class="dropdown-item" routerLink="/invoice"><i class="fa fa-credit-card-alt" aria-hidden="true"></i> Create Bills</a></li>
             <li><a class="dropdown-item" routerLink="/payment"><i class="fa fa-credit-card" aria-hidden="true"></i> Payments</a></li>
           </ul>
-        </li>
-        <li class="nav-item dropdown">
+        </li> -->
+        <!-- <li class="nav-item dropdown">
           <a *ngIf="authService.UserInfo.IsLogIn" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="fa fa-archive" aria-hidden="true"></i> Stores
           </a>
@@ -69,8 +76,8 @@
             <li><a class="dropdown-item" routerLink="/item-category">Spare Category</a></li>
             <li><a class="dropdown-item" routerLink="/store">Warehouse</a></li>
           </ul>
-        </li>
-        <li class="nav-item dropdown">
+        </li> -->
+        <!-- <li class="nav-item dropdown">
           <a *ngIf="authService.UserInfo.IsLogIn" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="fa fa-users" aria-hidden="true"></i> HR
           </a>
@@ -79,8 +86,8 @@
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" routerLink="/designation">Designation</a></li>
           </ul>
-        </li>
-        <li class="nav-item dropdown">
+        </li> -->
+        <!-- <li class="nav-item dropdown">
           <a *ngIf="authService.UserInfo.IsLogIn" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="fa fa-cog" aria-hidden="true"></i> System
           </a>
@@ -94,7 +101,7 @@
             <li><a class="dropdown-item" routerLink="/menu">Menu</a></li>
             <li><a class="dropdown-item" routerLink="/module">Module</a></li>
           </ul>
-        </li>
+        </li> -->
       </ul>
       <form class="d-flex">
         <a class="btn btn-sm btn-outline-danger" href="javascript:void(0)" *ngIf="authService.UserInfo.IsLogIn">Welcome! {{authService.UserInfo.UserName}}</a>

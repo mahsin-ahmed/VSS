@@ -1,7 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { IndividualConfig } from 'ngx-toastr';
 import { CommonService, toastPayload } from 'src/app/services/common.service';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-userrole',
@@ -10,24 +11,34 @@ import { CommonService, toastPayload } from 'src/app/services/common.service';
 })
 export class UserroleComponent {
 
-  constructor(private cs: CommonService, private httpClient: HttpClient) {
+  constructor(private cs: CommonService, 
+    private httpClient: HttpClient,
+    private authService:AuthService) {
     this.get();
   }
 
   isList: boolean = true;
-  baseUrl: string = 'http://localhost:56297';
+  //baseUrl: string = 'http://localhost:56297';
   UserRole:any=[];
   listUser:any=[];
   listUserRole:any=[];
 
   get() {
-    this.httpClient.get(this.baseUrl + '/api/User').subscribe((res) => {
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.get(this.authService.baseURL + '/api/User',{headers: oHttpHeaders}).subscribe((res) => {
       this.listUser = res;
     });
-  };
+  }
 
   getUserRole(userId:number){
-    this.httpClient.get(this.baseUrl + '/api/UserRole/GetUserRole?userId='+userId).subscribe((res) => {
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.get(this.authService.baseURL + '/api/UserRole/GetUserRole?userId='+userId,{headers: oHttpHeaders}).subscribe((res) => {
       this.listUserRole = res;
     });
   }
@@ -40,7 +51,11 @@ export class UserroleComponent {
   }
 
   add(){
-    this.httpClient.post(this.baseUrl + '/api/UserRole', this.listUserRole).subscribe((res) => {
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.post(this.authService.baseURL + '/api/UserRole', this.listUserRole,{headers: oHttpHeaders}).subscribe((res) => {
       if (res == true) {
         this.isList = true;
         this.get();

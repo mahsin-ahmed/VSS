@@ -1258,5 +1258,10 @@ export interface Company{
   DecimalPlace:number,
   Bay:number,
   Vat:number,
-  IsActive:boolean
+  Address:string,
+  Phone:string,
+  Email:string,
+  Website:string,
+  IsActive:boolean,
+  Logos:[]
 }

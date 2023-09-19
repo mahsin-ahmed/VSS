@@ -1,7 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient,HttpHeaders } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { IndividualConfig } from 'ngx-toastr';
 import { CommonService, toastPayload } from 'src/app/services/common.service';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-menupermission',
@@ -9,11 +10,13 @@ import { CommonService, toastPayload } from 'src/app/services/common.service';
   styleUrls: ['./menupermission.component.css']
 })
 export class MenupermissionComponent { 
-  constructor(private cs: CommonService, private httpClient: HttpClient) {
+  constructor(private cs: CommonService, 
+    private httpClient: HttpClient,
+    private authService:AuthService) {
   this.get();
 }
   isList: boolean = true;
-  baseUrl: string = 'http://localhost:56297';
+  //baseUrl: string = 'http://localhost:56297';
   UserRole:any=[];
   listRole:any=[];
   listMenuPermission:any=[
@@ -22,7 +25,11 @@ export class MenupermissionComponent {
   ];
 
   get() {
-    this.httpClient.get(this.baseUrl + '/api/Role').subscribe((res) => {
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.get(this.authService.baseURL + '/api/Role',{headers: oHttpHeaders}).subscribe((res) => {
       this.listRole = res;
     });
   };
@@ -34,15 +41,22 @@ export class MenupermissionComponent {
   }
 
   getMenuPermission(RoleId:number){
-    this.httpClient.get(this.baseUrl + '/api/MenuPermission/GetMenuPermission?RoleId='+RoleId).subscribe((res) => {
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.get(this.authService.baseURL + '/api/MenuPermission/GetMenuPermission?RoleId='+RoleId,{headers: oHttpHeaders}).subscribe((res) => {
       this.listMenuPermission = res;
     });
   }
 
 
   add(){
-    //console.log(this.listMenuPermission);
-    this.httpClient.post(this.baseUrl + '/api/MenuPermission', this.listMenuPermission).subscribe((res) => {
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.post(this.authService.baseURL + '/api/MenuPermission', this.listMenuPermission,{headers: oHttpHeaders}).subscribe((res) => {
       if (res == true) {
         this.isList = true;
         this.get();

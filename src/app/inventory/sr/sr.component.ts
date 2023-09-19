@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { IndividualConfig } from 'ngx-toastr';
 import { CommonService, toastPayload } from 'src/app/services/common.service';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-sr',
@@ -9,7 +10,9 @@ import { CommonService, toastPayload } from 'src/app/services/common.service';
   styleUrls: ['./sr.component.css']
 })
 export class SrComponent {
-  constructor(private cs: CommonService, private httpClient: HttpClient) {
+  constructor(private cs: CommonService, 
+    private httpClient: HttpClient,
+    private authService:AuthService) {
     this.get();
     this.getWareHouse();
     this.getItemName();  
@@ -17,7 +20,7 @@ export class SrComponent {
   }
   
   isList: boolean = true;
-  baseUrl: string = 'http://localhost:56297';
+  //baseUrl: string = 'http://localhost:56297';
 
   listWareHouse: any = [];
   listItem: any = [];
@@ -25,29 +28,49 @@ export class SrComponent {
   StoreReqs: any = [];
 
   get() {
-    this.httpClient.get(this.baseUrl + '/api/SR').subscribe((res) => {
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });  
+    this.httpClient.get(this.authService.baseURL + '/api/SR',{headers: oHttpHeaders}).subscribe((res) => {
       this.StoreReqs = res;
     });
   };
 
   getWareHouse(){
-    this.httpClient.get(this.baseUrl + '/api/WareHouse/getWareHouse').subscribe((res)=>{
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.get(this.authService.baseURL + '/api/WareHouse/getWareHouse',{headers: oHttpHeaders}).subscribe((res)=>{
         this.listWareHouse = res;
     });
   }
   getItemName(){
-    this.httpClient.get(this.baseUrl + '/api/Item/getItemName').subscribe((res)=>{
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.get(this.authService.baseURL + '/api/Item/getItemName',{headers: oHttpHeaders}).subscribe((res)=>{
         this.listItem = res;
     });
   }
 
   getSuplierName(){
-    this.httpClient.get(this.baseUrl + '/api/Client/getSuplierName').subscribe((res)=>{
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.get(this.authService.baseURL + '/api/Client/getSuplierName',{headers: oHttpHeaders}).subscribe((res)=>{
         this.listSupplier = res;
     });
   }
   add() {
-    this.httpClient.post(this.baseUrl + '/api/sr', this.StoreReq).subscribe((res)=>{
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.post(this.authService.baseURL + '/api/sr', this.StoreReq,{headers: oHttpHeaders}).subscribe((res)=>{
       if(res == true){
         this.isList = true;
         this.get();
@@ -59,7 +82,11 @@ export class SrComponent {
     });
    }
   update() {
-    this.httpClient.put(this.baseUrl + '/api/sr', this.StoreReq).subscribe((res)=>{
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.put(this.authService.baseURL + '/api/sr', this.StoreReq,{headers: oHttpHeaders}).subscribe((res)=>{
       if(res == true){
         this.isList = true;
         this.get();
@@ -70,7 +97,11 @@ export class SrComponent {
   });
    }
   remove(StoreReqs: any) {
-    this.httpClient.delete(this.baseUrl + '/api/sr/' + StoreReqs.Id).subscribe((res)=>{
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.delete(this.authService.baseURL + '/api/sr/' + StoreReqs.Id,{headers: oHttpHeaders}).subscribe((res)=>{
       if(res == true){
         this.get();
         this.showMessage('success', 'data removed.');

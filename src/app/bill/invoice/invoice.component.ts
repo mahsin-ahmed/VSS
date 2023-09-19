@@ -38,7 +38,18 @@ export class InvoiceComponent {
     this.get();
   }
 
-  get(){
+  company: Array<Company>=[];
+  getCompany(){
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.get<Company>(this.authService.baseURL + '/api/JobCard/GetCompany',{headers:oHttpHeaders}).subscribe((res)=>{
+        this.VAT = res.Vat;
+    });
+  }
+
+  get() {
     const oHttpHeaders = new HttpHeaders(
       {
           'Token':this.authService.UserInfo.Token
@@ -774,4 +785,21 @@ var jcForTem = '<!DOCTYPE html><html lang="en"><head><title>Job-Card</title></he
     });
   }
 
+}
+
+export interface Company{
+  CompanyId:number,
+  CompanyCode:string,
+  CompanyName:string,
+  Description:string,
+  DateFormat:string,
+  DecimalPlace:number,
+  Bay:number,
+  Vat:number,
+  Address:string,
+  Phone:string,
+  Email:string,
+  Website:string,
+  IsActive:boolean,
+  Logos:[]
 }
