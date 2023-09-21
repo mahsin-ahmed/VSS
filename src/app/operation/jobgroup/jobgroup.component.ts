@@ -165,3 +165,20 @@ export class JobgroupComponent {
     }
   }
 }
+
+export interface Company {
+  CompanyId:number,
+  CompanyCode:string,
+  CompanyName:string,
+  Description:string,
+  DateFormat:string,
+  DecimalPlace:number,
+  Bay:number,
+  Vat:number,
+  Address:string,
+  Phone:string,
+  Email:string,
+  Website:string,
+  IsActive:boolean,
+  Logos:[]
+}
