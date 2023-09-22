@@ -214,6 +214,7 @@ export class JobcardComponent {
     JcNo:string,
     JobDate:string,
     CreateBy:number,
+    CreateByName:string,
     Vin:string,
     Mileage:number,
     EstiCostTotal:number,
@@ -230,6 +231,7 @@ export class JobcardComponent {
     VehicleNo:string,
     Model:string,
     JcStatus:number, // (Close/Open)
+    UpdateDate:string,
     // Client
     ClientId:number,
     ClientName:string,
@@ -249,6 +251,7 @@ export class JobcardComponent {
     JcNo:'',
     JobDate:'',
     CreateBy:0,
+    CreateByName:'',
     Vin:'',
     Mileage:0,
     EstiCostTotal:0,
@@ -273,6 +276,7 @@ export class JobcardComponent {
     ContactPerson:'',
     ContactPersonNo:'',
     Description:'',
+    UpdateDate:'',
     JobDetails:[],
     JcSpares:[],
     Resources:[]
@@ -285,6 +289,7 @@ export class JobcardComponent {
       JcNo:'',
       JobDate:'',
       CreateBy:0,
+      CreateByName:'',
       Vin:'',
       Mileage:0,
       EstiCostTotal:0,
@@ -309,6 +314,7 @@ export class JobcardComponent {
       ContactPerson:'',
       ContactPersonNo:'',
       Description:'',
+      UpdateDate:'',
       JobDetails:[],
       JcSpares:[],
       Resources:[]
@@ -648,12 +654,13 @@ export class JobcardComponent {
     });
     this.httpClient.get(this.authService.baseURL + '/api/JobCard/'+id,{headers:oHttpHeaders}).subscribe((res)=>{
       let item:any = res;
-      this.JobCard ={
+      this.JobCard = {
         Id:item.Id,
         MembershipNo:item.MembershipNo,
         JcNo:item.JcNo,
         JobDate:item.JobDate,
         CreateBy:item.CreateBy,
+        CreateByName:item.CreateByName,
         Vin:item.Vin,
         Mileage:item.Mileage,
         EstiCostTotal:item.EstiCostTotal,
@@ -678,6 +685,7 @@ export class JobcardComponent {
         ContactPerson:item.ContactPerson,
         ContactPersonNo:item.ContactPersonNo,
         Description:item.Description,
+        UpdateDate:item.UpdateDate,
         JobDetails:item.JobDetails,
         JcSpares:item.JcSpares,
         Resources:item.Resources
@@ -703,6 +711,7 @@ export class JobcardComponent {
         JcNo:item.JcNo,
         JobDate:item.JobDate,
         CreateBy:item.CreateBy,
+        CreateByName:item.CreateByName,
         Vin:item.Vin,
         Mileage:item.Mileage,
         EstiCostTotal:item.EstiCostTotal,
@@ -727,6 +736,7 @@ export class JobcardComponent {
         ContactPerson:item.ContactPerson,
         ContactPersonNo:item.ContactPersonNo,
         Description:item.Description,
+        UpdateDate:item.UpdateDate,
         JobDetails:item.JobDetails,
         JcSpares:item.JcSpares,
         Resources:item.Resources
@@ -735,6 +745,30 @@ export class JobcardComponent {
       for(var i = 0; i < this.listMechanic.length; i++){
         var oResource = this.JobCard.Resources.filter((x:any)=> x.EmployeeId == this.listMechanic[i].EmployeeId)[0];
         this.listMechanic[i].IsSelect = oResource!=undefined ? true : false;
+      }
+      var jcStatus = this.JobCard.JcStatus == 1 ? 'Close' : this.JobCard.JcStatus == 2 ? 'Open' :'';
+      var htmlJob ='';
+      for(var i = 0; i < this.JobCard.JobDetails.length; i++){
+        var sl = i + 1;
+        htmlJob+='<tr style="border:1px solid gray">'
+        +'<td style="border:1px solid gray">'+sl+'</td>'
+        +'<td style="border:1px solid gray">'+this.JobCard.JobDetails[i].JobName+'</td>'
+        +'<td style="border:1px solid gray"></td>'
+        +'<td style="border:1px solid gray"></td>'
+        +'</tr>';
+      }
+      var htmlSpare = '';
+      for(var i = 0; i < this.JobCard.JcSpares.length; i++){
+        var sl = i + 1;
+        htmlSpare+='<tr style="border:1px solid gray">'
+              +'<td style="border:1px solid gray">'+sl+'</td>'
+              +'<td style="border:1px solid gray">'+this.JobCard.JcSpares[0].ItemName+'</td>'
+              +'<td style="border:1px solid gray">'+this.JobCard.JcSpares[0].BrandName+'</td>'
+              +'<td style="border:1px solid gray">'+this.JobCard.JcSpares[0].SalePrice+'</td>'
+              +'<td style="border:1px solid gray">'+this.JobCard.JcSpares[0].Quantity+'</td>'
+              +'<td style="border:1px solid gray">'+this.JobCard.JcSpares[0].SpareAmount+'</td>'
+              +'<td style="border:1px solid gray">'+this.JobCard.JcSpares[0].ItemStatusName+'</td>'
+            +'</tr>';
       }
       const myWindow: Window | null = window.open("", "", "width=793,height=1123");
       if(myWindow !=undefined){
@@ -748,38 +782,33 @@ export class JobcardComponent {
                 +'<strong>'+this.company.CompanyName+'</strong>'
                 +'</div>'  
                 +'<div style="text-align:center">'
-                +'541-42, Ferajitola, Solmaith, Vatara, Dhaka-1212<br/>(Nearby Evercare hospital, Bashundhara R/A)'
+                +this.company.Address
+                +'<br/>('+this.company.Description+')'
                 +'</div>'  
-                +'<div style="text-align:center">'
-                +'Phone: 01755660906'
-                +'</div>'
-                +'<div style="text-align:center">'
-                +'Email: vehiclesolutionbd@gmail.com'
-                +'</div>'
-                +'<div style="text-align:center">'
-                +'Website: www.vehiclesolution.net'
-                +'</div>'  
+                +'<div style="text-align:center">Phone: '+this.company.Phone+'</div>'
+                +'<div style="text-align:center">Email: '+this.company.Email+'</div>'
+                +'<div style="text-align:center">Website: '+this.company.Website+'</div>'  
               +'</td>'
               +'<td style="width:25%"></td>'
             +'</tr>'
           +'</table>'
           +'<table style="width:100%;border-collapse: collapse;">'
             +'<tr>'
-              +'<th style="border:1px solid gray">JC No: 1553</th>'
-              +'<th style="border:1px solid gray">Job Date: 23/08/22</th>'
-              +'<th style="border:1px solid gray">Created: Mr. Ali</th>'
-              +'<th style="border:1px solid gray">JC Last Status:</th>'
+              +'<th style="border:1px solid gray">JC No: '+this.JobCard.JcNo+'</th>'
+              +'<th style="border:1px solid gray">Job Date: '+this.JobCard.ReceiveDate+'</th>'
+              +'<th style="border:1px solid gray">Created: '+this.JobCard.CreateByName+'</th>'
+              +'<th style="border:1px solid gray">JC Last Status: '+jcStatus+'</th>'
             +'</tr>'
           +'</table>'
           +'<table style="width:100%;border-collapse: collapse">'
             +'<tr>'
               +'<td style="border:1px solid gray">'
                 +'<table style="width:100%;height:100%;border-collapse: collapse">'
-                  +'<tr style="border:1px solid gray">'+'<td>Owner Name: Somorita Hospital</td>'+'</tr>'
-                  +'<tr style="border:1px solid gray">'+'<td>Contact Person: Mr. Sumon Mia</td>'+'</tr>'
-                  +'<tr style="border:1px solid gray">'+'<td>Cont Person No.: </td>'+'</tr>'
-                  +'<tr style="border:1px solid gray">'+'<td>Membership ID: </td>'+'</tr>'
-                  +'<tr style="border:1px solid gray">'+'<td>Address: </td>'+'</tr>'
+                  +'<tr style="border:1px solid gray">'+'<td>Owner Name: '+this.JobCard.ClientName+'</td>'+'</tr>'
+                  +'<tr style="border:1px solid gray">'+'<td>Contact Person: '+this.JobCard.ContactPerson+'</td>'+'</tr>'
+                  +'<tr style="border:1px solid gray">'+'<td>Cont Person No.: '+this.JobCard.ContactPersonNo+'</td>'+'</tr>'
+                  +'<tr style="border:1px solid gray">'+'<td>Membership ID: '+this.JobCard.MembershipNo+'</td>'+'</tr>'
+                  +'<tr style="border:1px solid gray">'+'<td>Address: '+this.JobCard.ClientAddress+'</td>'+'</tr>'
                   +'<tr style="border:1px solid gray">'
                     +'<td>'
                       +'<table style="width:100%;border-collapse: collapse">'
@@ -790,17 +819,17 @@ export class JobcardComponent {
                           +'</tr>'
                           +'<tr>'
                             +'<td style="border:1px solid gray" align="left">Receive Time:</td>'
-                            +'<td style="border:1px solid gray" align="left"></td>'
+                            +'<td style="border:1px solid gray" align="left">'+this.JobCard.ReceiveDate+'</td>'
                             +'<td style="border:1px solid gray" align="left"></td>'
                           +'</tr>'
                           +'<tr>'
                             +'<td style="border:1px solid gray" align="left">JC Started:</td>'
-                            +'<td style="border:1px solid gray" align="left"></td>'
+                            +'<td style="border:1px solid gray" align="left">'+this.JobCard.ReceiveDate+'</td>'
                             +'<td style="border:1px solid gray" align="left"></td>'
                           +'</tr>'
                           +'<tr>'
                             +'<td style="border:1px solid gray" align="left">JC Completed:</td>'
-                            +'<td style="border:1px solid gray" align="left"></td>'
+                            +'<td style="border:1px solid gray" align="left">'+this.JobCard.UpdateDate+'</td>'
                             +'<td style="border:1px solid gray" align="left"></td>'
                           +'</tr>'
                       +'</table>'
@@ -810,26 +839,26 @@ export class JobcardComponent {
               +'</td>'
               +'<td style="border:1px solid gray">'
                 +'<table style="width:100%;border-collapse: collapse">'
-                  +'<tr style="border:1px solid gray">'+'<td>Vehicle Reg.: DM-GA-22-1632</td>'+'</tr>'
-                  +'<tr style="border:1px solid gray">'+'<td>Model: LPK23/25/00</td>'+'</tr>'
-                  +'<tr style="border:1px solid gray">'+'<td>VIN/Frame: </td>'+'</tr>'
-                  +'<tr style="border:1px solid gray">'+'<td>Mileage: </td>'+'</tr>'
-                  +'<tr style="border:1px solid gray">'+'<td>Mechanic Name: </td>'+'</tr>'
+                  +'<tr style="border:1px solid gray">'+'<td>Vehicle Reg.: '+this.JobCard.VehicleNo+'</td>'+'</tr>'
+                  +'<tr style="border:1px solid gray">'+'<td>Model: '+this.JobCard.Model+'</td>'+'</tr>'
+                  +'<tr style="border:1px solid gray">'+'<td>VIN/Frame: '+this.JobCard.Vin+'</td>'+'</tr>'
+                  +'<tr style="border:1px solid gray">'+'<td>Mileage: '+this.JobCard.Mileage+'</td>'+'</tr>'
                   +'<tr style="border:1px solid gray">'+'<td>Estimated Time: </td>'+'</tr>'
+                  +'<tr style="border:1px solid gray">'+'<td>Supervisor:</td>'+'</tr>'
                   +'<tr>'
                     +'<td>'
                       +'<table style="width:100%;border-collapse: collapse;">'
                           +'<tr style="border:1px solid gray">'
                             +'<th align="left">Cost</th>'
-                            +'<th align="right">Labour</th>'
+                            +'<th align="right">Job</th>'
                             +'<th align="right">Spare Parts</th>'
                             +'<th align="right">Total</th>'
                           +'</tr>'
                           +'<tr style="border:1px solid gray">'
                             +'<td align="left">Estimated</td>'
-                            +'<td align="right">12000</td>'
-                            +'<td align="right">45000</td>'
-                            +'<td align="right">57000</td>'
+                            +'<td align="right">'+this.JobCard.EstiCostJob+'</td>'
+                            +'<td align="right">'+this.JobCard.EstiCostSpare+'</td>'
+                            +'<td align="right">'+this.JobCard.EstiCostTotal+'</td>'
                           +'</tr>'
                           +'<tr style="border:1px solid gray">'
                             +'<td align="left">Actual</td>'
@@ -851,29 +880,8 @@ export class JobcardComponent {
               +'<th style="border:1px solid gray">Job Description</th>'
               +'<th style="border:1px solid gray">Working Instruction</th>'
               +'<th style="border:1px solid gray">Action Taken</th>'
-              +'<th align="right" style="border:1px solid gray">Bill</th>'
             +'</tr>'
-            +'<tr style="border:1px solid gray">'
-              +'<td style="border:1px solid gray">1</td>'
-              +'<td style="border:1px solid gray"></td>'
-              +'<td style="border:1px solid gray"></td>'
-              +'<td style="border:1px solid gray"></td>'
-              +'<td style="border:1px solid gray"></td>'
-            +'</tr>'
-            +'<tr style="border:1px solid gray">'
-              +'<td style="border:1px solid gray">2</td>'
-              +'<td style="border:1px solid gray"></td>'
-              +'<td style="border:1px solid gray"></td>'
-              +'<td style="border:1px solid gray"></td>'
-              +'<td style="border:1px solid gray"></td>'
-            +'</tr>'
-            +'<tr style="border:1px solid gray">'
-              +'<td style="border:1px solid gray">3</td>'
-              +'<td style="border:1px solid gray"></td>'
-              +'<td style="border:1px solid gray"></td>'
-              +'<td style="border:1px solid gray"></td>'
-              +'<td style="border:1px solid gray"></td>'
-            +'</tr>'
+            +htmlJob
           +'</table>'
           +'<div style="min-height:12px"></div>'
         +'<table style="width:100%;border-collapse: collapse;">'
@@ -886,21 +894,13 @@ export class JobcardComponent {
             +'<th align="right" style="border:1px solid gray">Amount</th>'
             +'<th align="right" style="border:1px solid gray">Status</th>'
           +'</tr>'
-          +'<tr style="border:1px solid gray">'
-            +'<td style="border:1px solid gray">1</td>'
-            +'<td style="border:1px solid gray">Relay-420</td>'
-            +'<td style="border:1px solid gray">Suzuki</td>'
-            +'<td style="border:1px solid gray">350</td>'
-            +'<td style="border:1px solid gray">2</td>'
-            +'<td style="border:1px solid gray">700</td>'
-            +'<td style="border:1px solid gray">USED</td>'
-          +'</tr>'
+          +htmlSpare
         +'</table>'
           +'<div style="min-height:12px"></div>'
           +'<div style="min-height:60px;border:1px solid gray">Remarks:</div>'
           +'<div style="min-height:12px"></div>'
           +'<div style="border:1px solid gray">'
-          +'A service contract is an agreement between a contractor and a client that relays the terms and conditions of their working relationship. The completed document should detail the agreement period (whether it finishes on a specified date or after the job is completed) and the compensation the service provider will receive in exchange for their work. I have received all jobs and old spare parts.'
+          +'A service contract is an agreement between a contractor and a client that relays the terms and conditions of their working relationship.'
           +'</div>'
           +'<table style="width:100%">'
             +'<tr>'
@@ -1101,6 +1101,7 @@ export class JobcardComponent {
       {
           'Token':this.authService.UserInfo.Token
       });
+    this.JobCard.CreateBy = this.authService.UserInfo.UserID;
     this.httpClient.post(this.authService.baseURL + '/api/JobCard', this.JobCard,{headers:oHttpHeaders}).subscribe((res) => {
       if (res == true) {
         this.isList = true;
@@ -1123,9 +1124,10 @@ export class JobcardComponent {
     }
     this.JobCard.Resources = Resources;
     const oHttpHeaders = new HttpHeaders(
-      {
-          'Token':this.authService.UserInfo.Token
-      });
+    {
+        'Token':this.authService.UserInfo.Token
+    });
+    this.JobCard.CreateBy = this.authService.UserInfo.UserID;
     this.httpClient.put(this.authService.baseURL + '/api/JobCard', this.JobCard,{headers:oHttpHeaders}).subscribe((res) => {
       if (res == true) {
         this.isList = true;
@@ -1138,8 +1140,7 @@ export class JobcardComponent {
       }
     });
   }
-
-}
+  }
 
 export interface Company{
   CompanyId:number,
