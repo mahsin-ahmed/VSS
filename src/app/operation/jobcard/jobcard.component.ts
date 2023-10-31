@@ -82,29 +82,7 @@ export class JobcardComponent {
     });
   }
 
-  Company:{
-    CompanyId:number
-    ,CompanyCode:string
-    ,CompanyName:string
-    ,Description:string
-    ,DateFormat:string
-    ,DecimalPlace:number
-    ,Bay:number
-    ,Vat:number
-    ,IsActive:boolean
-      } ={
-      CompanyId:0
-      ,CompanyCode:''
-      ,CompanyName:''
-      ,Description:''
-      ,DateFormat:''
-      ,DecimalPlace:0
-      ,Bay:0
-      ,Vat:0
-      ,IsActive:false
-      };
-
-  //company: Array<Company>=[];
+  listBay:any = [];
   company:Company = {CompanyId:0,
     CompanyCode:'',
     CompanyName:'',
@@ -120,22 +98,22 @@ export class JobcardComponent {
     IsActive:false,
     Logos:[]
   };
+  Job_Card_Logo:string='';
   getCompany(){
     const oHttpHeaders = new HttpHeaders(
       {
           'Token':this.authService.UserInfo.Token
       });
     this.httpClient.get<Company>(this.authService.baseURL + '/api/JobCard/GetCompany',{headers:oHttpHeaders}).subscribe((res)=>{
-        //this.Company.Bay = res.Bay;
         this.company = res;
+        var oLogo:any = this.company.Logos.filter((x:any)=>x.Name=='Job-Card Logo')[0];
+        this.Job_Card_Logo = oLogo == undefined ? '':oLogo.LogoUrl;
         this.listBay = [];
         for(var i = 0; i < res.Bay; i++){
           this.listBay.push(i+1);
         }
     });
   }
-
-  listBay:any = [];
 
   Client : {
     BpId:number,
@@ -776,7 +754,7 @@ export class JobcardComponent {
         +'<div style="margin-left:12px;margin-right:12px;margin-bottom:12px;margin-top:12px;">' 
           +'<table style="width:100%;border-collapse: collapse;">'
             +'<tr>'
-              +'<td style="width:25%"><img style="width:180px" title="company_logo" style="width:102px" src="https://xeonstorage.blob.core.windows.net/dynamic-site-data/vslogo.png" /></td>'
+              +'<td style="width:25%"><img style="width:180px" title="company_logo" style="width:102px" src="'+this.Job_Card_Logo+'" /></td>'
               +'<td style="width:50%">'
                 +'<div style="text-align:center;font-size:larger">'
                 +'<strong>'+this.company.CompanyName+'</strong>'
@@ -792,6 +770,7 @@ export class JobcardComponent {
               +'<td style="width:25%"></td>'
             +'</tr>'
           +'</table>'
+          +'<h3 style="text-align:center">Job Card</h3>'
           +'<table style="width:100%;border-collapse: collapse;">'
             +'<tr>'
               +'<th style="border:1px solid gray">JC No: '+this.JobCard.JcNo+'</th>'
@@ -1140,7 +1119,7 @@ export class JobcardComponent {
       }
     });
   }
-  }
+}
 
 export interface Company{
   CompanyId:number,

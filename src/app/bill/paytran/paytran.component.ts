@@ -36,6 +36,7 @@ export class PaytranComponent {
     private httpClient: HttpClient,
     private authService:AuthService) {
     this.get();
+    this.getCompany();
   }
 
   switchView(view: string): void {
@@ -85,15 +86,138 @@ export class PaytranComponent {
     });
   }
 
+  getFromInvoicePrint(id:number):void{
+    const oHttpHeaders = new HttpHeaders(
+    {
+        'Token':this.authService.UserInfo.Token
+    });
+    this.httpClient.get(this.authService.baseURL + '/api/Invoice/GetByJc?jcId='+id,{headers:oHttpHeaders}).subscribe((res)=>{
+      let item:any = res;
+      this.oBill = item;
+      this.listBillItem = this.oBill.InvoiceItems;
+      ////
+      var htmlInvoice ='';
+      for(var i = 0; i < this.listBillItem.length; i++){
+        var sl = i + 1;
+        var itemType = this.listBillItem[i].ItemType == 1 ? 'Job':this.listBillItem[i].ItemType == 2?'SP':'N/A';
+        htmlInvoice+='<tr style="border:1px solid gray">'
+        +'<td style="border:1px solid gray;">'+sl+'</td>'
+        +'<td style="border:1px solid gray;">'+itemType+'</td>'
+        +'<td style="border:1px solid gray;text-align: right;">'+this.listBillItem[i].Qty+'</td>'
+        +'<td style="border:1px solid gray;text-align: right;">'+this.listBillItem[i].UnitPrice+'</td>'
+        +'<td style="border:1px solid gray;text-align: right;">'+this.listBillItem[i].TotalPrice+'</td>'
+        +'<td style="border:1px solid gray;text-align: right;">'+this.listBillItem[i].Discount+'</td>'
+        +'<td style="border:1px solid gray;text-align: right;">'+this.listBillItem[i].TpAfterDiscount+'</td>'
+        +'<td style="border:1px solid gray;text-align: right;">'+this.listBillItem[i].TotalVat+'</td>'
+        +'<td style="border:1px solid gray;text-align: right;">'+this.listBillItem[i].TotalAmount+'</td>'
+        +'</tr>'
+      }
+      var htmlPayment = '';
+      for(var i = 0; i < this.oBill.PaySettles.length; i++){
+        var sl = i + 1;
+        htmlPayment+='<tr style="border:1px solid gray">'
+            +'<td style="border:1px solid gray">'+sl+'</td>'
+            +'<td style="border:1px solid gray">'+this.oBill.PaySettles[i].PayMethodName+'</td>'
+            +'<td style="border:1px solid gray">'+this.oBill.PaySettles[i].PayDate+'</td>'
+            +'<td style="border:1px solid gray;text-align: right;">'+this.oBill.PaySettles[i].Amount+'</td>'
+            +'</tr>'
+      }
+      const myWindow: Window | null = window.open("", "", "width=793,height=1123");
+      if(myWindow !=undefined) {
+        var htmlPrint = '<!DOCTYPE html><html lang="en"><head><title>Bill-Copy</title></head><body>'
+        +'<div style="margin-left:12px;margin-right:12px;margin-bottom:12px;margin-top:12px;">' 
+          +'<table style="width:100%;border-collapse: collapse;">'
+            +'<tr>'
+              +'<td style="width:25%"><img style="width:180px" title="company_logo" style="width:102px" src="'+this.Bill_Logo+'" /></td>'
+              +'<td style="width:50%">'
+                +'<div style="text-align:center;font-size:larger">'
+                +'<strong>'+this.company.CompanyName+'</strong>'
+                +'</div>'
+                +'<div style="text-align:center">'
+                +this.company.Address
+                +'<br/>('+this.company.Description+')'
+                +'</div>'  
+                +'<div style="text-align:center">Phone: '+this.company.Phone+'</div>'
+                +'<div style="text-align:center">Email: '+this.company.Email+'</div>'
+                +'<div style="text-align:center">Website: '+this.company.Website+'</div>'  
+              +'</td>'
+              +'<td style="width:25%"></td>'
+            +'</tr>'
+          +'</table>'
+          +'<div>'
+          +'<h3 style="text-align:center">Bill Copy</h3>'
+          +'<table style="width:100%;border-collapse: collapse;">'
+            +'<tr>'
+              +'<td>'
+                +'<strong>Client Name: </strong>'+this.oBill.ClientName
+              +'</td>'
+              +'<td>'
+                +'<strong>Job Card Number: </strong>'+this.oBill.JcNo
+              +'</td>'
+              +'</td>'
+            +'</tr>'
+            +'<tr>'
+              +'<td>'
+                +'<strong>Address: </strong>'+this.oBill.ClientAddress
+              +'</td>'
+              +'<td>'
+                +'<strong>Balance: </strong>'+this.oBill.BalanceAmount
+              +'</td>'
+            +'</tr>'
+          +'</table>'
+          +'<h4>Bill Items</h4>'
+          +'<table style="width:100%;border-collapse: collapse;">'
+          +'<tr style="border:1px solid gray">'
+            +'<th style="border:1px solid gray">#</th>'
+            +'<th style="border:1px solid gray">Item Type</th>'
+            +'<th style="border:1px solid gray;text-align: right;">Qty</th>'
+            +'<th style="border:1px solid gray;text-align: right;">Price</th>'
+            +'<th style="border:1px solid gray;text-align: right;">Total Price</th>'
+            +'<th style="border:1px solid gray;text-align: right;">Discount(%)</th>'
+            +'<th style="border:1px solid gray;text-align: right;">Total Price After Discount</th>'
+            +'<th style="border:1px solid gray;text-align: right;">Total VAT ('+this.VAT+'%)</th>'
+            +'<th style="border:1px solid gray;text-align: right;">Total Amount</th>'
+          +'</tr>'
+          +htmlInvoice
+          +'<tr>'
+            +'<th></th>'
+            +'<th></th>'
+            +'<th></th>'
+            +'<th></th>'
+            +'<th></th>'
+            +'<th></th>'
+            +'<th></th>'
+            +'<th style="text-align: right;">Grand Total:</th>'
+            +'<th style="text-align: right;">'+this.oBill.GrandTotal+'</th>'
+          +'</tr>'
+          +'</table>'
+          +'<h4>Payment Information</h4>'
+          +'<table style="width:100%;border-collapse: collapse;">'
+            +'<tr style="border:1px solid gray">'
+              +'<th style="border:1px solid gray">#</th>'
+              +'<th style="border:1px solid gray">Pay Method</th>'
+              +'<th style="border:1px solid gray">Pay Date</th>'
+              +'<th style="border:1px solid gray;text-align: right;">Amount</th>'
+            +'</tr>'
+            +htmlPayment
+            +'</table>'
+            +'</div>';
+        myWindow.document.write(htmlPrint);
+      }
+    });
+  }
+
   VAT:number=10;
   oBill:{
     Id:number,
     ClientId:number,
+    ClientName:string,
+    ClientMobile:string,
+    ClientAddress:string,
     CreateDate:string,
     CreateBy:number,
     IsPaid:boolean,
     JcId:number,
-    ClientName:string,
     JcNo:string,
     GrandTotal:number,
     InvoiceItems:any,
@@ -103,11 +227,13 @@ export class PaytranComponent {
   }={
     Id:0,
     ClientId:0,
+    ClientName:'',
+    ClientMobile:'',
+    ClientAddress:'',
     CreateDate:'',
     CreateBy:0,
     IsPaid:false,
     JcId:0,
-    ClientName:'',
     JcNo:'',
     GrandTotal:0,
     InvoiceItems:[],
@@ -117,4 +243,60 @@ export class PaytranComponent {
   };
   listBillItem:any =[];
 
+  openWin(item:any) {
+    this.getFromInvoicePrint(item.Id);
+  }
+
+
+
+  listBay:any = [];
+  company:Company = {CompanyId:0,
+    CompanyCode:'',
+    CompanyName:'',
+    Description:'',
+    DateFormat:'',
+    DecimalPlace:0,
+    Bay:0,
+    Vat:0,
+    Address:'',
+    Phone:'',
+    Email:'',
+    Website:'',
+    IsActive:false,
+    Logos:[]
+  };
+  Bill_Logo:string='';
+  getCompany(){
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.get<Company>(this.authService.baseURL + '/api/JobCard/GetCompany',{headers:oHttpHeaders}).subscribe((res)=>{
+        this.company = res;
+        var oLogo:any = this.company.Logos.filter((x:any)=>x.Name=='Bill Logo')[0];
+        this.Bill_Logo = oLogo == undefined ? '':oLogo.LogoUrl;
+        this.listBay = [];
+        for(var i = 0; i < res.Bay; i++){
+          this.listBay.push(i+1);
+        }
+    });
+  }
+
+}
+
+export interface Company{
+  CompanyId:number,
+  CompanyCode:string,
+  CompanyName:string,
+  Description:string,
+  DateFormat:string,
+  DecimalPlace:number,
+  Bay:number,
+  Vat:number,
+  Address:string,
+  Phone:string,
+  Email:string,
+  Website:string,
+  IsActive:boolean,
+  Logos:[]
 }

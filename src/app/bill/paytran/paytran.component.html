@@ -4,6 +4,7 @@
     <h4 class="text-center">List of Payment</h4>
     <table class="table table-bordered">
         <tr class="table-secondary">
+            <th>#</th>
             <th scope="col">SL</th>
             <th>Job Card No.</th>
             <th>Vehicle Reg.</th>
@@ -16,6 +17,7 @@
             <th>#</th>
         </tr>
         <tr *ngFor="let item of listJobCard; let i = index">
+            <td><a href="javascript:void(0)" (click)="openWin(item)">View</a></td>
             <td>{{i+1}}</td>
             <td>{{item.JcNo}}</td>
             <td>{{item.VehicleNo}}</td>
