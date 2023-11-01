@@ -31,6 +31,7 @@ import { JobgroupComponent } from './operation/jobgroup/jobgroup.component';
 import { JobComponent } from './operation/job/job.component';
 import { SrComponent } from './inventory/sr/sr.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { ClientvehicleComponent } from './operation/clientvehicle/clientvehicle.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -57,6 +58,7 @@ const routes: Routes = [
   { path:'sr', component:SrComponent, canActivate:[authGuard] },
 
   { path: 'job-card', component: JobcardComponent, canActivate:[authGuard] },
+  { path: 'client-vehicle', component: ClientvehicleComponent, canActivate:[authGuard] },
   { path: 'client', component: ClientComponent, canActivate:[authGuard] },
   { path: 'job', component: JobComponent, canActivate:[authGuard] },
   { path: 'job-group', component: JobgroupComponent, canActivate:[authGuard] },

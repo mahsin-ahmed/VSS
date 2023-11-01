@@ -35,6 +35,7 @@ import { JobgroupComponent } from './operation/jobgroup/jobgroup.component';
 import { EnginesizeComponent } from './operation/enginesize/enginesize.component';
 import { SrComponent } from './inventory/sr/sr.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { ClientvehicleComponent } from './operation/clientvehicle/clientvehicle.component';
 
 @NgModule({
   declarations: [
@@ -66,7 +67,8 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     JobgroupComponent,
     EnginesizeComponent,
     SrComponent,
-    DashboardComponent
+    DashboardComponent,
+    ClientvehicleComponent
   ],
   imports: [
     BrowserModule,

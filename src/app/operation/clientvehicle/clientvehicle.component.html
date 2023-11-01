@@ -1,0 +1,89 @@
+<a href="javascript:void(0)" *ngIf="!isList" (click)="switchView('list')">Go to List</a>
+<a href="javascript:void(0)" *ngIf="isList" (click)="switchView('form')">Go to Entry</a>
+
+<div *ngIf="isList">
+    <div class="row">
+        <div class="col-lg-4">
+            Show
+            <select style="width: 50px;height: 32px;" [(ngModel)]="pageSize" (change)="changePageSize()">
+                <option *ngFor="let item of listPageSize" value={{item}}>
+                    {{item}}
+                </option>
+            </select> 
+            records
+        </div>
+        <div class="col-lg-4">
+            <h4>List of Client's Vehicle</h4>
+        </div>
+        <div class="col-lg-4"></div>
+    </div>
+    <table class="table table-bordered">
+        <tr class="table-secondary">
+            <th>SL</th>
+            <th>Car Reg. No.</th>
+            <th>Model</th>
+            <th>VIN</th>
+            <th colspan="2" class="text-center">Action</th>
+        </tr>
+        <tr *ngFor="let item of listClientVehicle; let i = index">
+            <td>{{i + 1}}</td>
+            <td>{{item.VehicleNo}}</td>
+            <td>{{item.Model}}</td>
+            <td>{{item.Vin}}</td>
+            <td class="text-center"><button class="btn btn-sm btn-outline-primary" (click)="edit(item)">Edit</button></td>
+            <td class="text-center"><button class="btn btn-sm btn-outline-danger" (click)="JobGroup=item" data-bs-toggle="modal" data-bs-target="#confirmModal">Remove</button></td>
+        </tr>
+    </table>
+    <div class="row" *ngIf="listClientVehicle.length>0">
+        <div class="col-lg-12 ">
+            <div class="pull-left ">
+                <span class="well well-sm">Showing  <span class="text-success"><b>{{pageStart}}</b></span> to <span class="text-success"><b>{{pageEnd}}</b></span> of <span class="text-success"><b>{{rowCount}}</b></span> records</span>
+            </div>
+            <div class="pull-right">
+                <ul class="pagination" *ngIf="pager.pages && pager.pages.length">
+                    <li>
+                        <a class="btn btn-sm btn-outline-secondary" [ngClass]="{disabled:pageIndex == 0}" href="javascript:void(0);" (click)="changePageNumber(0)"><i class="fa fa-angle-double-left" aria-hidden="true"></i>Start</a>
+                    </li>
+                    <li>
+                        <a class="btn btn-sm btn-outline-info" [ngClass]="{disabled:pageIndex == 0}" href="javascript:void(0);" (click)="changePageNumber(pageIndex - 1)"><i class="fa fa-angle-left" aria-hidden="true"></i>Previous</a>
+                    </li>
+                    <li *ngFor="let page of pager.pages">
+                        <a class="btn btn-sm btn-outline-secondary" [ngClass]="{active:pageIndex == (page - 1)}" href="javascript:void(0);" (click)="changePageNumber(page - 1)">{{page}}</a>
+                    </li>
+                    <li>
+                        <a class="btn btn-sm btn-outline-info" [ngClass]="{disabled:pageIndex == (pager.totalPages - 1)}" href="javascript:void(0);" (click)="changePageNumber(pageIndex + 1)"><i class="fa fa-angle-right" aria-hidden="true"></i>Next</a>
+                    </li>
+                    <li>
+                        <a class="btn btn-sm btn-outline-secondary" [ngClass]="{disabled:pageIndex == (pager.totalPages - 1)}" href="javascript:void(0);" (click)="changePageNumber(pager.totalPages - 1)"><i class="fa fa-angle-double-right" aria-hidden="true"></i>End</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="!isList">
+    <h4>Job-Group's Entry Form</h4>
+    <div class="col-md 12">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <div class="entryForm">
+                    <div class="row">
+                        <div class="form-floating mb-2">
+                            <input type="text" [(ngModel)]="JobGroup.Name" class="form-control" id="Name"
+                                placeholder="">
+                            <label for="Name">Job Group Name</label>
+                        </div>
+                        <div class="col-auto  mb-2">
+                            <button type="button" class="btn btn-success mb-3" *ngIf="JobGroup.GroupId==0"
+                                (click)="add()">Add Client Vehicle</button>
+                            <button type="button" class="btn btn-success mb-3" *ngIf="JobGroup.GroupId>0"
+                                (click)="update()">Update</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+    </div>
+</div>
