@@ -17,6 +17,8 @@
         </div>
         <div class="col-lg-4"></div>
     </div>
+    
+    <!-- Start Display Client Vehicle Section -->
     <table class="table table-bordered">
         <tr class="table-secondary">
             <th>SL</th>
@@ -31,9 +33,12 @@
             <td>{{item.Model}}</td>
             <td>{{item.Vin}}</td>
             <td class="text-center"><button class="btn btn-sm btn-outline-primary" (click)="edit(item)">Edit</button></td>
-            <td class="text-center"><button class="btn btn-sm btn-outline-danger" (click)="JobGroup=item" data-bs-toggle="modal" data-bs-target="#confirmModal">Remove</button></td>
+            <!-- <td class="text-center"><button class="btn btn-sm btn-outline-danger" (click)="ClientVehicle=item" data-bs-toggle="modal" data-bs-target="#confirmModal">Remove</button></td> -->
         </tr>
     </table>
+    
+    <!-- End Display Client Vehicle Section -->
+    <!-- Satrt Paging Section -->
     <div class="row" *ngIf="listClientVehicle.length>0">
         <div class="col-lg-12 ">
             <div class="pull-left ">
@@ -61,8 +66,12 @@
         </div>
     </div>
 </div>
+
+    <!-- End Paging Section -->
+    
+    <!-- Start Form Client Vehicle Section -->
 <div *ngIf="!isList">
-    <h4>Job-Group's Entry Form</h4>
+    <h4>Client's Vehicle Entry Form</h4>
     <div class="col-md 12">
         <div class="row">
             <div class="col-md-2"></div>
@@ -70,15 +79,31 @@
                 <div class="entryForm">
                     <div class="row">
                         <div class="form-floating mb-2">
-                            <input type="text" [(ngModel)]="JobGroup.Name" class="form-control" id="Name"
+                            <input type="text" [(ngModel)]="ClientVehicle.VehicleNo" class="form-control" id="VehicleNo"
                                 placeholder="">
-                            <label for="Name">Job Group Name</label>
+                            <label for="Name">Registration Number</label>
+                        </div>
+                        <div class="form-floating mb-2">
+                            <input type="text" [(ngModel)]="ClientVehicle.Model" class="form-control" id="Model"
+                                placeholder="">
+                            <label for="Name">Model</label>
+                        </div>
+                        <div class="form-floating mb-2">
+                            <input type="text" [(ngModel)]="ClientVehicle.Vin" class="form-control" id="Vin"
+                                placeholder="">
+                            <label for="Name">Vehicle Identification Number(VIN)</label>
+                        </div>
+                        <div class="form-floating mb-2">
+                            <select id="ClientId" class="form-control" [(ngModel)]="ClientVehicle.ClientId">
+                                <option *ngFor="let item of listClient" value="{{item.BpId}}">{{item.Name}}</option>
+                            </select> 
+                            <label for="ClientId">Client Name</label>
                         </div>
                         <div class="col-auto  mb-2">
-                            <button type="button" class="btn btn-success mb-3" *ngIf="JobGroup.GroupId==0"
+                            <button type="button" class="btn btn-success mb-3" *ngIf="ClientVehicle.Id==0"
                                 (click)="add()">Add Client Vehicle</button>
-                            <button type="button" class="btn btn-success mb-3" *ngIf="JobGroup.GroupId>0"
-                                (click)="update()">Update</button>
+                            <button type="button" class="btn btn-success mb-3" *ngIf="ClientVehicle.Id>0"
+                                (click)="update()">Update Client Vehicle</button>
                         </div>
                     </div>
                 </div>
@@ -87,3 +112,5 @@
         </div>
     </div>
 </div>
+
+    <!-- End Form Client Vehicle Section -->

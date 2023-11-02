@@ -1,7 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { IndividualConfig } from 'ngx-toastr';
 import { AuthService } from 'src/app/auth/auth.service';
-import { CommonService } from 'src/app/services/common.service';
+import { CommonService, toastPayload } from 'src/app/services/common.service';
 
 @Component({
   selector: 'app-clientvehicle',
@@ -14,9 +15,11 @@ export class ClientvehicleComponent {
     private httpClient: HttpClient,
     private authService:AuthService) {
     this.get();
+    this.getClient();
   }
   isList: boolean = true;
   listClientVehicle: any = [];
+  listClient:any=[];
 
   get() {
     const oHttpHeaders = new HttpHeaders(
@@ -38,9 +41,58 @@ export class ClientvehicleComponent {
       //#endregion
     });
   }
-  add(){}
-  edit(item: any){}
-  update(){}
+
+  getClient(){
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.get(this.authService.baseURL + '/api/Client',{headers: oHttpHeaders}).subscribe((res)=>{
+        this.listClient = res;
+    });
+  }
+
+  add(){
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.post(this.authService.baseURL + '/api/ClientVehicle', this.ClientVehicle,{headers: oHttpHeaders}).subscribe((res) => {
+      if (res == true) {
+        this.isList = true;
+        this.get();
+        this.reset();
+        this.showMessage('success', 'data added.');
+      } else {
+        this.showMessage('error', 'error occurred.');
+      }
+    });
+  }
+   edit(item: any) {
+    this.ClientVehicle = {      
+    Id: item.Id,
+    VehicleNo: item.VehicleNo,
+    Model: item.Model,
+    Vin: item.Vin,
+    ClientId: item.ClientId,
+    };
+    this.isList = false;
+  }
+  update(){    
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.put(this.authService.baseURL + '/api/ClientVehicle', this.ClientVehicle,{headers: oHttpHeaders}).subscribe((res) => {
+      if (res == true) {
+        this.isList = true;
+        this.get();
+        this.showMessage('success', 'data updated.');
+      } else {
+        this.showMessage('error', 'error occurred.');
+      }
+    });
+  }
 
   //#region paging varible
   pageIndex: number = 0;
@@ -70,13 +122,35 @@ export class ClientvehicleComponent {
   }
   //#endregion
 
-  JobGroup: {
-    GroupId: number,
-    Name: string
+  ClientVehicle: {
+    Id: number,
+    VehicleNo: string,
+    Model: string,
+    Vin: string,
+    ClientId: number,
   } = {
-      GroupId: 0,
-      Name: ''
+    Id: 0,
+    VehicleNo: '',
+    Model: '',
+    Vin: '',
+    ClientId:0,
     };
+    
+    toast!: toastPayload;
+
+    showMessage(type: string, message: string) {
+      this.toast = {
+        message: message,
+        title: type.toUpperCase(),
+        type: type,
+        ic: {
+          timeOut: 2500,
+          closeButton: true,
+        } as IndividualConfig,
+      };
+      this.cs.showToast(this.toast);
+    }
+
   switchView(view: string): void {
     if (view == 'form') {
       this.isList = false;
