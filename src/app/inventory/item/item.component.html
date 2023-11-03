@@ -25,18 +25,20 @@
       <div class="col-md-12">
         <table class="table table-bordered">
           <tr class="table-secondary">
-            <th>ItemCode</th>
-            <th>ItemName</th>
-            <th>BrandId</th>
-            <th>PartNoOld</th>
-            <th>PartNoNew</th>
+            <th>Item Code</th>
+            <th>Item Name</th>
+            <th>Brand</th>
+            <th>Categegory</th>
+            <th>Part No Old</th>
+            <th>Part No New</th>
             <th>Remarks</th>
             <th colspan="2">Action</th>
           </tr>
           <tr *ngFor="let listItem of listItems">
             <td>{{listItem.ItemCode}}</td>
             <td>{{listItem.ItemName}}</td>
-            <td>{{listItem.BrandId}}</td>
+            <td>{{listItem.BrandName}}</td>
+            <td>{{listItem.CategoryName}}</td>
             <td>{{listItem.PartNoOld}}</td>
             <td>{{listItem.PartNoNew}}</td>
             <td>{{listItem.Remarks}}</td>
@@ -59,17 +61,17 @@
   <h4>Spare Parts Entry Form</h4>
   <div class="row g-3">
     <div class="col-md-4">
-      <label for="itemCode" class="form-label">Item Code</label>
+      <label for="itemCode" class="form-label">Parts Code</label>
       <input type="text" class="form-control" id="itemCode" [(ngModel)]="Item.ItemCode">
     </div>
     <div class="col-md-4">
-      <label for="itemName" class="form-label">Item Name</label>
+      <label for="itemName" class="form-label">Parts Name</label>
       <input type="text" class="form-control" id="itemName" [(ngModel)]="Item.ItemName">
     </div>
     <div class="col-md-4">
       <label for="BrandName" class="form-label">Brand Name</label>
       <select class="form-control" id="BrandName" aria-label="Default select example" [(ngModel)]="Item.BrandId">
-        <option *ngFor="let listBrand of listBrand" value="{{listBrand.Id}}">{{listBrand.Name}}</option>
+        <option *ngFor="let x of listBrand" value="{{x.Id}}">{{x.Name}}</option>
       </select>
     </div>
     <div class="col-md-4">
@@ -79,6 +81,12 @@
     <div class="col-md-4">
       <label for="partNoNew" class="form-label">Part-Number (New)</label>
       <input type="text" class="form-control" id="partNoNew" [(ngModel)]="Item.PartNoNew">
+    </div>
+    <div class="col-md-4">
+      <label for="CategoryName" class="form-label">Parts Category</label>
+      <select class="form-control" id="CategoryName" aria-label="Default select example" [(ngModel)]="Item.ItemCategoryId">
+        <option *ngFor="let x of listItemCategory" value="{{x.Id}}">{{x.Name}}</option>
+      </select>
     </div>
     <div class="col-md-12">
       <label for="Description" class="form-label">Description</label>

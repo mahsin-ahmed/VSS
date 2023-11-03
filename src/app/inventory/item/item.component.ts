@@ -15,28 +15,32 @@ export class ItemComponent {
     private authService:AuthService) {
     this.get();
     this.getBrand();
+    this.getItemCategory();
   }
 
   Item: {
     Id:number,
     ItemCode:string,
     ItemName:string,
-    BrandId:number,
     PartNoOld:string,
     PartNoNew:string, 
-    Remarks:string,  
+    Remarks:string,
+    BrandId:number,
+    ItemCategoryId:number ,
+    CreateBy:number 
   }={
     Id:0,
     ItemCode:'',
     ItemName:'',
-    BrandId:0,
     PartNoOld:'',
     PartNoNew:'',
     Remarks:'',
+    BrandId:0,
+    ItemCategoryId:0,
+    CreateBy:0
   }
 
   listBrand:any=[];
-  
   getBrand(){
     const oHttpHeaders = new HttpHeaders(
       {
@@ -44,6 +48,17 @@ export class ItemComponent {
       });
     this.httpClient.get(this.authService.baseURL + '/api/Item/GetBrand',{headers: oHttpHeaders}).subscribe((res)=>{
         this.listBrand = res;
+    });
+  }
+
+  listItemCategory:any=[];
+  getItemCategory(){
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.get(this.authService.baseURL + '/api/Item/GetItemCategory',{headers: oHttpHeaders}).subscribe((res)=>{
+        this.listItemCategory = res;
     });
   }
 
@@ -71,11 +86,36 @@ export class ItemComponent {
 
   };
 
+  validateForm():boolean{
+    var isValid:boolean=true;
+    if(this.Item.ItemCode==undefined||this.Item.ItemCode==null||this.Item.ItemCode==''){
+      isValid = false;
+      this.showMessage('warning', 'Item Name is required.');
+    }
+    if(this.Item.ItemName==undefined||this.Item.ItemName==null||this.Item.ItemName==''){
+      isValid = false;
+      this.showMessage('warning', 'Item Code is required.');
+    }
+    if(this.Item.BrandId==undefined||this.Item.BrandId==null||this.Item.BrandId==0){
+      isValid = false;
+      this.showMessage('warning', 'Brand is required.');
+    }
+    if(this.Item.ItemCategoryId==undefined||this.Item.ItemCategoryId==null||this.Item.ItemCategoryId==0){
+      isValid = false;
+      this.showMessage('warning', 'Category is required.');
+    }
+    return isValid
+  }
+
   addItem() {
+    if(!this.validateForm()){
+      return;
+    }
     const oHttpHeaders = new HttpHeaders(
       {
           'Token':this.authService.UserInfo.Token
       });
+    this.Item.CreateBy = this.authService.UserInfo.UserID;
     this.httpClient.post(this.authService.baseURL + '/api/Item', this.Item,{headers: oHttpHeaders}).subscribe((res) => {
       if (res == true) {
         this.isList = true;
@@ -89,10 +129,14 @@ export class ItemComponent {
   }
   
   updateItem() {
+    if(!this.validateForm()){
+      return;
+    }
     const oHttpHeaders = new HttpHeaders(
       {
           'Token':this.authService.UserInfo.Token
       });
+    this.Item.CreateBy = this.authService.UserInfo.UserID;
     this.httpClient.put(this.authService.baseURL + '/api/Item', this.Item,{headers: oHttpHeaders}).subscribe((res) => {
       if (res == true) {
         this.isList = true;
@@ -123,10 +167,12 @@ export class ItemComponent {
       Id: item.Id,
       ItemCode: item.ItemCode,
       ItemName: item.ItemName,
-      BrandId: item.BrandId,
       PartNoOld: item.PartNoOld,
       PartNoNew: item.PartNoNew,
       Remarks: item.Remarks,
+      BrandId: item.BrandId,
+      ItemCategoryId:item.ItemCategoryId,
+      CreateBy:item.CreateBy
     };
     this.isList = false;
   }
@@ -201,10 +247,12 @@ export class ItemComponent {
       Id:0,
       ItemCode:'',
       ItemName:'',
-      BrandId:0,
       PartNoOld:'',
       PartNoNew:'',
       Remarks:'',
+      BrandId:0,
+      ItemCategoryId:0,
+      CreateBy:0
     };
   }
 }

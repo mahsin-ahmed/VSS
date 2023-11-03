@@ -7,6 +7,8 @@ import { ToastrModule } from 'ngx-toastr';
 import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
+//import { NgChartsModule } from 'ng2-charts';
+
 import { JobcardComponent } from './operation/jobcard/jobcard.component';
 import { BrandComponent } from './inventory/brand/brand.component';
 import { ClientComponent } from './operation/client/client.component';
@@ -76,7 +78,8 @@ import { ClientvehicleComponent } from './operation/clientvehicle/clientvehicle.
     AppRoutingModule,
     FormsModule,
     BrowserAnimationsModule, // required animations module
-    ToastrModule.forRoot()
+    ToastrModule.forRoot()//,
+    //NgChartsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

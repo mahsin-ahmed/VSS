@@ -10,18 +10,7 @@ import { IndividualConfig } from 'ngx-toastr';
 export class DesignationComponent {
   isList:boolean=true;
 
-  listDesignate:any =[
-    {
-    DesignateId:2,
-    Name:'Floor Supervisor',
-    Short:'FS'
-  },
-  {
-    DesignateId:3,
-    Name:'Mechanic',
-    Short:'M'
-  }
-];
+  listDesignate:any =[{"DesignateId":1,"Name":"Chairman","Short":"C"},{"DesignateId":2,"Name":"Vice Chairman","Short":"VC"},{"DesignateId":3,"Name":"Managing Director","Short":"MD"},{"DesignateId":4,"Name":"Director","Short":"D"},{"DesignateId":5,"Name":"General Manager","Short":"GM"},{"DesignateId":6,"Name":"Joint General Manager","Short":"JGM"},{"DesignateId":7,"Name":"Deputy General Manager","Short":"DGM"},{"DesignateId":8,"Name":"Asst. General Manager","Short":"AGM"},{"DesignateId":9,"Name":"Chief Manager","Short":"CM"},{"DesignateId":10,"Name":"Sr. Manager","Short":"SM"},{"DesignateId":11,"Name":"Manager","Short":"M"},{"DesignateId":12,"Name":"Joint Manager","Short":"JM"},{"DesignateId":13,"Name":"Deputy Manager","Short":"DM"},{"DesignateId":14,"Name":"Asst. Manager","Short":"AM"},{"DesignateId":15,"Name":"Sr. Executive","Short":"SE"},{"DesignateId":16,"Name":"Executive","Short":"E"},{"DesignateId":17,"Name":"Jr. Executive","Short":"JE"},{"DesignateId":18,"Name":"Sr. Associate","Short":"SA"},{"DesignateId":20,"Name":"Assistant","Short":"A"}];
   designat:{
     DesignateId:number,
     Name:string,

@@ -78,6 +78,7 @@ export class JobComponent {
       {
           'Token':this.authService.UserInfo.Token
       });
+    this.Job.CreateBy = this.authService.UserInfo.UserID;
     this.httpClient.post(this.authService.baseURL + '/api/Job', this.Job,{headers: oHttpHeaders}).subscribe((res) => {
       if (res == true) {
         this.isList = true;
@@ -100,15 +101,17 @@ export class JobComponent {
       C: item.C,
       DurationA: item.DurationA,
       DurationB: item.DurationB,
-      DurationC: item.DurationC
+      DurationC: item.DurationC,
+      CreateBy:item.CreateBy
     };
     this.isList = false;
   }
   updateJob() {
     const oHttpHeaders = new HttpHeaders(
-      {
-          'Token':this.authService.UserInfo.Token
-      });
+    {
+        'Token':this.authService.UserInfo.Token
+    });
+    this.Job.CreateBy = this.authService.UserInfo.UserID;
     this.httpClient.put(this.authService.baseURL + '/api/Job', this.Job,{headers: oHttpHeaders}).subscribe((res) => {
       if (res == true) {
         this.isList = true;
@@ -129,7 +132,8 @@ export class JobComponent {
     C: number,
     DurationA: number,
     DurationB: number,
-    DurationC: number
+    DurationC: number,
+    CreateBy:number
   } = {
       JobId: 0,
       Description: '',
@@ -139,7 +143,8 @@ export class JobComponent {
       C: 0,
       DurationA: 0,
       DurationB: 0,
-      DurationC: 0
+      DurationC: 0,
+      CreateBy:0
     };
 
     listJobGroup:any = [];
@@ -202,7 +207,8 @@ export class JobComponent {
       C: 0,
       DurationA: 0,
       DurationB: 0,
-      DurationC: 0
+      DurationC: 0,
+      CreateBy:0
     };
   }
 }

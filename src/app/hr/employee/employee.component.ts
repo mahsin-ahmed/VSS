@@ -25,6 +25,7 @@ export class EmployeeComponent {
     DesignateId:0
     };
 
+    listEmployee:any=[{"EmployeeId":1,"FirstName":"Simon","IsConfirm":false},{"EmployeeId":2,"FirstName":"Sohag","IsConfirm":false},{"EmployeeId":3,"FirstName":"Alom","IsConfirm":false},{"EmployeeId":4,"FirstName":"Sumon","IsConfirm":false},{"EmployeeId":5,"FirstName":"Rahim","IsConfirm":false},{"EmployeeId":6,"FirstName":"Ali","IsConfirm":false},{"EmployeeId":7,"FirstName":"Ripon","IsConfirm":false},{"EmployeeId":8,"FirstName":"Arif","IsConfirm":false},{"EmployeeId":9,"FirstName":"Rajib","IsConfirm":false}];
     listDesignate:any=[
       {DesignateId:1,Name:'Supervisor',Short:''},
       {DesignateId:2,Name:'Fore-Man',Short:''},        

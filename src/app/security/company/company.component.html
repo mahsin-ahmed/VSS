@@ -5,16 +5,40 @@
         <input type="text" id="CompanyName" [(ngModel)]="Company.CompanyName" class="form-control" placeholder="Company-Name" />
     </div>
     <div class="col-md-4">
-        <label class="form-label" for="Description">Description</label>
-        <input type="text" id="Description" [(ngModel)]="Company.Description" class="form-control" placeholder="Description" />
-    </div>
-    <div class="col-md-4">
         <label class="form-label" for="Description">Number of Bay</label>
         <input type="number" id="Description" [(ngModel)]="Company.Bay" class="form-control" placeholder="Bay" />
     </div>
     <div class="col-md-4">
         <label class="form-label" for="Vat">VAT</label>
         <input type="number" id="Vat" [(ngModel)]="Company.Vat" class="form-control" placeholder="VAT" />
+    </div>
+    <div class="col-md-4">
+        <label class="form-label" for="DateFormat">DateFormat</label>
+        <input type="text" id="DateFormat" [(ngModel)]="Company.DateFormat" class="form-control" placeholder="VAT" />
+    </div>
+    <div class="col-md-4">
+        <label class="form-label" for="DecimalPlace">DecimalPlace</label>
+        <input type="text" id="DecimalPlace" [(ngModel)]="Company.DecimalPlace" class="form-control" placeholder="VAT" />
+    </div>
+    <div class="col-md-4">
+        <label class="form-label" for="Phone">Phone</label>
+        <input type="text" id="Phone" [(ngModel)]="Company.Phone" class="form-control" placeholder="VAT" />
+    </div>
+    <div class="col-md-4">
+        <label class="form-label" for="Email">Email</label>
+        <input type="Email" id="Email" [(ngModel)]="Company.Email" class="form-control" placeholder="Email" />
+    </div>
+    <div class="col-md-4">
+        <label class="form-label" for="Website">Website</label>
+        <input type="text" id="Website" [(ngModel)]="Company.Website" class="form-control" placeholder="Website" />
+    </div>
+    <div class="col-md-12">
+        <label class="form-label" for="Address">Address</label>
+        <input type="text" id="Address" [(ngModel)]="Company.Address" class="form-control" placeholder="Address" />
+    </div>
+    <div class="col-md-12">
+        <label class="form-label" for="Description">Description</label>
+        <input type="text" id="Description" [(ngModel)]="Company.Description" class="form-control" placeholder="Description" />
     </div>
     <div class="col-md-4 mt-5">
         <button (click)="save()" class="btn btn-success">Update</button>

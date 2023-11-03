@@ -28,7 +28,10 @@ export class ClientComponent {
     IsDelete:boolean,
     DeleteDate:'',
     DeleteBy:number,
-    MembershipId:string
+    MembershipNo:string,
+    ContactPerson:string,
+    ContactPersonNo:string,
+    ClientInfo:string
     }={
     BpId:0,
     Name:'',
@@ -44,7 +47,10 @@ export class ClientComponent {
     IsDelete:false,
     DeleteDate:'' ,
     DeleteBy:0,
-    MembershipId:''
+    MembershipNo :'',
+    ClientInfo:'',
+    ContactPerson:'',
+    ContactPersonNo:''
     };
   listClient:any = [];
   toast!: toastPayload;
@@ -64,11 +70,27 @@ export class ClientComponent {
     });
   }
 
+  validateForm():boolean{
+    var isValid:boolean=true;
+    if(this.Client.Name==undefined||this.Client.Name==null||this.Client.Name==''){
+      isValid = false;
+      this.showMessage('warning', 'Client Name is required.');
+    }
+    if(this.Client.Phone==undefined||this.Client.Phone==null||this.Client.Phone==''){
+      isValid = false;
+      this.showMessage('warning', 'Client Phone is required.');
+    }
+    return isValid
+  }
+
   add() {
+    if(!this.validateForm()){
+      return;
+    }
     const oHttpHeaders = new HttpHeaders(
-      {
-          'Token':this.authService.UserInfo.Token
-      });
+    {
+        'Token':this.authService.UserInfo.Token
+    });
     this.Client.CreateBy = this.authService.UserInfo.UserID;
     this.httpClient.post(this.authService.baseURL + '/api/Client', this.Client,{headers: oHttpHeaders}).subscribe((res)=>{
       if(res == true){
@@ -82,7 +104,10 @@ export class ClientComponent {
     });
   }
 
-  update(){
+  update() {
+    if(!this.validateForm()){
+      return;
+    }
     const oHttpHeaders = new HttpHeaders(
       {
           'Token':this.authService.UserInfo.Token
@@ -115,7 +140,10 @@ export class ClientComponent {
     IsDelete:false,
     DeleteDate:'' ,
     DeleteBy:0,
-    MembershipId:''
+    MembershipNo :'',
+    ClientInfo:'',
+    ContactPerson:'',
+    ContactPersonNo:''
     };
   }
 
@@ -135,7 +163,10 @@ export class ClientComponent {
       IsDelete:item.IsDelete,
       DeleteDate:item.DeleteDate,
       DeleteBy:item.DeleteBy,
-      MembershipId:item.MembershipId
+      MembershipNo :item.MembershipNo,
+      ClientInfo:item.ClientInfo,
+      ContactPerson:item.ContactPerson,
+      ContactPersonNo:item.ContactPersonNo
       };
       this.isList = false;
   }

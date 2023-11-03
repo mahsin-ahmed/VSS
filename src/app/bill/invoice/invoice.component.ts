@@ -36,10 +36,11 @@ export class InvoiceComponent {
     private httpClient: HttpClient,
     private authService:AuthService) {
     this.get();
+    this.getCompany();
   }
 
-  company: Array<Company>=[];
-  getCompany(){
+  //company: Array<Company>=[];
+  /*getCompany(){
     const oHttpHeaders = new HttpHeaders(
       {
           'Token':this.authService.UserInfo.Token
@@ -47,7 +48,7 @@ export class InvoiceComponent {
     this.httpClient.get<Company>(this.authService.baseURL + '/api/JobCard/GetCompany',{headers:oHttpHeaders}).subscribe((res)=>{
         this.VAT = res.Vat;
     });
-  }
+  }*/
 
   get() {
     const oHttpHeaders = new HttpHeaders(
@@ -268,11 +269,12 @@ var jcForTem = '<!DOCTYPE html><html lang="en"><head><title>Bill Copy</title></h
   oBill:{
     Id:number,
     ClientId:number,
+    ClientName:string,
+    ClientAddress:string,
     CreateDate:string,
     CreateBy:number,
     IsPaid:boolean,
     JcId:number,
-    ClientName:string,
     JcNo:string,
     GrandTotal:number,
     InvoiceItems:any,
@@ -281,11 +283,12 @@ var jcForTem = '<!DOCTYPE html><html lang="en"><head><title>Bill Copy</title></h
   }={
     Id:0,
     ClientId:0,
+    ClientName:'',
+    ClientAddress:'',
     CreateDate:'',
     CreateBy:0,
     IsPaid:false,
     JcId:0,
-    ClientName:'',
     JcNo:'',
     GrandTotal:0,
     InvoiceItems:[],
@@ -464,6 +467,7 @@ var jcForTem = '<!DOCTYPE html><html lang="en"><head><title>Bill Copy</title></h
     this.oBill.JcId = this.JobCard.Id;
     this.oBill.ClientId = this.JobCard.ClientId;
     this.oBill.ClientName = this.JobCard.ClientName;
+    this.oBill.ClientAddress = this.JobCard.ClientAddress;
     this.oBill.JcNo = this.JobCard.JcNo;
     this.listBillItem = [];
     this.GrandTotal = 0;
@@ -529,6 +533,7 @@ var jcForTem = '<!DOCTYPE html><html lang="en"><head><title>Bill Copy</title></h
         {
             'Token':this.authService.UserInfo.Token
         });
+      this.oBill.CreateBy = this.authService.UserInfo.UserID;
       this.httpClient.post(this.authService.baseURL + '/api/Invoice', this.oBill,{headers:oHttpHeaders}).subscribe((res) => {
         if (res == true) {
           this.isList = true;
@@ -549,6 +554,7 @@ var jcForTem = '<!DOCTYPE html><html lang="en"><head><title>Bill Copy</title></h
       {
           'Token':this.authService.UserInfo.Token
       });
+    this.oBill.CreateBy = this.authService.UserInfo.UserID;
     this.httpClient.put(this.authService.baseURL + '/api/Invoice', this.oBill,{headers:oHttpHeaders}).subscribe((res) => {
       if (res == true) {
         this.isList = true;
@@ -584,32 +590,204 @@ var jcForTem = '<!DOCTYPE html><html lang="en"><head><title>Bill Copy</title></h
     Amount:number,
     Remarks:string,
     BusinessPartnerId:number
-    PayMethodId:number
+    PayMethodId:number,
+    CreateBy:number
   }={
     TrxId:'',
     Amount:0,
     Remarks:'',
     BusinessPartnerId:0,
-    PayMethodId:0
+    PayMethodId:0,
+    CreateBy:0
   }
+
   payment():void{
     this.PayTran.BusinessPartnerId = this.oBill.ClientId;
     this.PayTran.Amount = this.oBill.GrandTotal;
   }
 
+  viewBill():void{
+    this.PayTran.BusinessPartnerId = this.oBill.ClientId;
+    this.PayTran.Amount = this.oBill.GrandTotal;
+    this.openBill(this.oBill.JcId)
+  }
+
+  openBill(jcId:number) {
+    this.getFromInvoicePrint(jcId);
+  }
+
+  getFromInvoicePrint(id:number):void{
+    const oHttpHeaders = new HttpHeaders(
+    {
+        'Token':this.authService.UserInfo.Token
+    });
+    this.httpClient.get(this.authService.baseURL + '/api/Invoice/GetByJc?jcId='+id,{headers:oHttpHeaders}).subscribe((res)=>{
+      let item:any = res;
+      this.oBill = item;
+      this.listBillItem = this.oBill.InvoiceItems;
+      ////
+      var htmlInvoice ='';
+      for(var i = 0; i < this.listBillItem.length; i++){
+        var sl = i + 1;
+        var itemType = this.listBillItem[i].ItemType == 1 ? 'Job':this.listBillItem[i].ItemType == 2?'SP':'N/A';
+        htmlInvoice+='<tr style="border:1px solid gray">'
+        +'<td style="border:1px solid gray;">'+sl+'</td>'
+        +'<td style="border:1px solid gray;">'+itemType+'</td>'
+        +'<td style="border:1px solid gray;text-align: right;">'+this.listBillItem[i].Qty+'</td>'
+        +'<td style="border:1px solid gray;text-align: right;">'+this.listBillItem[i].UnitPrice+'</td>'
+        +'<td style="border:1px solid gray;text-align: right;">'+this.listBillItem[i].TotalPrice+'</td>'
+        +'<td style="border:1px solid gray;text-align: right;">'+this.listBillItem[i].Discount+'</td>'
+        +'<td style="border:1px solid gray;text-align: right;">'+this.listBillItem[i].TpAfterDiscount+'</td>'
+        +'<td style="border:1px solid gray;text-align: right;">'+this.listBillItem[i].TotalVat+'</td>'
+        +'<td style="border:1px solid gray;text-align: right;">'+this.listBillItem[i].TotalAmount+'</td>'
+        +'</tr>'
+      }
+      /*var htmlPayment = '';
+      for(var i = 0; i < this.oBill.PaySettles.length; i++){
+        var sl = i + 1;
+        htmlPayment+='<tr style="border:1px solid gray">'
+            +'<td style="border:1px solid gray">'+sl+'</td>'
+            +'<td style="border:1px solid gray">'+this.oBill.PaySettles[i].PayMethodName+'</td>'
+            +'<td style="border:1px solid gray">'+this.oBill.PaySettles[i].PayDate+'</td>'
+            +'<td style="border:1px solid gray;text-align: right;">'+this.oBill.PaySettles[i].Amount+'</td>'
+            +'</tr>'
+      }*/
+      const myWindow: Window | null = window.open("", "", "width=793,height=1123");
+      if(myWindow !=undefined) {
+        var htmlPrint = '<!DOCTYPE html><html lang="en"><head><title>Bill-Copy</title></head><body>'
+        +'<div style="margin-left:12px;margin-right:12px;margin-bottom:12px;margin-top:12px;">' 
+          +'<table style="width:100%;border-collapse: collapse;">'
+            +'<tr>'
+              +'<td style="width:25%"><img style="width:180px" title="company_logo" style="width:102px" src="'+this.Bill_Logo+'" /></td>'
+              +'<td style="width:50%">'
+                +'<div style="text-align:center;font-size:larger">'
+                +'<strong>'+this.company.CompanyName+'</strong>'
+                +'</div>'
+                +'<div style="text-align:center">'
+                +this.company.Address
+                +'<br/>('+this.company.Description+')'
+                +'</div>'  
+                +'<div style="text-align:center">Phone: '+this.company.Phone+'</div>'
+                +'<div style="text-align:center">Email: '+this.company.Email+'</div>'
+                +'<div style="text-align:center">Website: '+this.company.Website+'</div>'  
+              +'</td>'
+              +'<td style="width:25%"></td>'
+            +'</tr>'
+          +'</table>'
+          +'<div>'
+          +'<h3 style="text-align:center">Bill Copy</h3>'
+          +'<table style="width:100%;border-collapse: collapse;">'
+            +'<tr>'
+              +'<td>'
+                +'<strong>Client Name: </strong>'+this.oBill.ClientName
+              +'</td>'
+              +'<td>'
+                +'<strong>Job Card Number: </strong>'+this.oBill.JcNo
+              +'</td>'
+              +'</td>'
+            +'</tr>'
+            +'<tr>'
+              +'<td>'
+                +'<strong>Address: </strong>'+this.oBill.ClientAddress
+              +'</td>'
+              +'<td>'
+                +'<strong>Balance: </strong>'+this.oBill.BalanceAmount
+              +'</td>'
+            +'</tr>'
+          +'</table>'
+          +'<h4>Bill Items</h4>'
+          +'<table style="width:100%;border-collapse: collapse;">'
+          +'<tr style="border:1px solid gray">'
+            +'<th style="border:1px solid gray">#</th>'
+            +'<th style="border:1px solid gray">Item Type</th>'
+            +'<th style="border:1px solid gray;text-align: right;">Qty</th>'
+            +'<th style="border:1px solid gray;text-align: right;">Price</th>'
+            +'<th style="border:1px solid gray;text-align: right;">Total Price</th>'
+            +'<th style="border:1px solid gray;text-align: right;">Discount(%)</th>'
+            +'<th style="border:1px solid gray;text-align: right;">Total Price After Discount</th>'
+            +'<th style="border:1px solid gray;text-align: right;">Total VAT ('+this.VAT+'%)</th>'
+            +'<th style="border:1px solid gray;text-align: right;">Total Amount</th>'
+          +'</tr>'
+          +htmlInvoice
+          +'<tr>'
+            +'<th></th>'
+            +'<th></th>'
+            +'<th></th>'
+            +'<th></th>'
+            +'<th></th>'
+            +'<th></th>'
+            +'<th></th>'
+            +'<th style="text-align: right;">Grand Total:</th>'
+            +'<th style="text-align: right;">'+this.oBill.GrandTotal+'</th>'
+          +'</tr>'
+          +'</table>'
+          +'<h4>Payment Information</h4>'
+          +'<table style="width:100%;border-collapse: collapse;">'
+            +'<tr style="border:1px solid gray">'
+              +'<th style="border:1px solid gray">#</th>'
+              +'<th style="border:1px solid gray">Pay Method</th>'
+              +'<th style="border:1px solid gray">Pay Date</th>'
+              +'<th style="border:1px solid gray;text-align: right;">Amount</th>'
+            +'</tr>'
+            +'Payment'
+            +'</table>'
+            +'</div>';
+        myWindow.document.write(htmlPrint);
+      }
+    });
+  }
+
   pay():void{
+    var isConfirm = confirm('Are sure to pay?');
+    if(isConfirm){
+      const oHttpHeaders = new HttpHeaders(
+        {
+            'Token':this.authService.UserInfo.Token
+        });
+      this.PayTran.CreateBy = this.authService.UserInfo.UserID;
+      this.httpClient.post(this.authService.baseURL + '/api/Pay', this.PayTran,{headers:oHttpHeaders}).subscribe((res) => {
+        if (res == true) {
+          this.isList = true;
+          this.get();
+          this.showMessage('success', 'data added.');
+        } else {
+          this.showMessage('error', 'error occurred.');
+        }
+      });
+    }
+  }
+
+  listBay:any = [];
+  company:Company = {CompanyId:0,
+    CompanyCode:'',
+    CompanyName:'',
+    Description:'',
+    DateFormat:'',
+    DecimalPlace:0,
+    Bay:0,
+    Vat:0,
+    Address:'',
+    Phone:'',
+    Email:'',
+    Website:'',
+    IsActive:false,
+    Logos:[]
+  };
+  Bill_Logo:string='';
+  getCompany(){
     const oHttpHeaders = new HttpHeaders(
       {
           'Token':this.authService.UserInfo.Token
       });
-    this.httpClient.post(this.authService.baseURL + '/api/Pay', this.PayTran,{headers:oHttpHeaders}).subscribe((res) => {
-      if (res == true) {
-        this.isList = true;
-        this.get();
-        this.showMessage('success', 'data added.');
-      } else {
-        this.showMessage('error', 'error occurred.');
-      }
+    this.httpClient.get<Company>(this.authService.baseURL + '/api/JobCard/GetCompany',{headers:oHttpHeaders}).subscribe((res)=>{
+        this.company = res;
+        this.VAT = this.company.Vat;
+        var oLogo:any = this.company.Logos.filter((x:any)=>x.Name=='Bill Logo')[0];
+        this.Bill_Logo = oLogo == undefined ? '':oLogo.LogoUrl;
+        this.listBay = [];
+        for(var i = 0; i < res.Bay; i++){
+          this.listBay.push(i+1);
+        }
     });
   }
 

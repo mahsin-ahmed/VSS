@@ -31,8 +31,8 @@
         <input type="text" id="clientName" [(ngModel)]="Client.Name" class="form-control" />
     </div>
     <div class="col-md-4">
-      <label class="form-label" for="MembershipId">Membership Card Number:</label>
-      <input type="text" id="MembershipId" [(ngModel)]="Client.MembershipId" class="form-control" />
+      <label class="form-label" for="MembershipNo">Membership Card Number:</label>
+      <input type="text" id="MembershipNo" [(ngModel)]="Client.MembershipNo" class="form-control" />
     </div>
     <div class="col-md-4">
       <label class="form-label" for="Phone">Phone:</label>
@@ -40,11 +40,23 @@
     </div>
     <div class="col-md-4">
       <label class="form-label" for="Email">Email:</label>
-      <input type="text" id="Email" [(ngModel)]="Client.Email"  class="form-control" />
+      <input type="email" id="Email" [(ngModel)]="Client.Email"  class="form-control" />
     </div>
     <div class="col-md-12">
       <label class="form-label" for="Address">Address:</label>
         <input type="text" id="Address" [(ngModel)]="Client.Address" class="form-control " />
+    </div>
+    <div class="col-md-4">
+      <label class="form-label" for="ContactPerson">Contact Person:</label>
+      <input type="text" id="ContactPerson" [(ngModel)]="Client.ContactPerson"  class="form-control" />
+    </div>
+    <div class="col-md-4">
+      <label class="form-label" for="ContactPersonNo">Contact Person Phone:</label>
+      <input type="text" id="ContactPersonNo" [(ngModel)]="Client.ContactPersonNo"  class="form-control" />
+    </div>
+    <div class="col-md-12">
+      <label class="form-label" for="ClientInfo">Remarks:</label>
+        <input type="text" id="ClientInfo" [(ngModel)]="Client.ClientInfo" class="form-control " />
     </div>
     <div class="col-md-12 mt-5">
       <button type="button" class="btn btn-success" *ngIf="Client.BpId==0 && authService.UserInfo.Menu.CanCreate" (click)="add();">Add</button>

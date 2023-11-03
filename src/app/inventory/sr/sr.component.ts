@@ -32,7 +32,7 @@ export class SrComponent {
       {
           'Token':this.authService.UserInfo.Token
       });  
-    this.httpClient.get(this.authService.baseURL + '/api/SR',{headers: oHttpHeaders}).subscribe((res) => {
+    this.httpClient.get(this.authService.baseURL + '/api/SR?pi='+this.pageIndex+'&ps='+this.pageSize,{headers: oHttpHeaders}).subscribe((res) => {
       this.StoreReqs = res;
     });
   };
@@ -65,11 +65,33 @@ export class SrComponent {
         this.listSupplier = res;
     });
   }
+
+  validateForm():boolean{
+    var isValid:boolean=true;
+    if(this.StoreReq.WhId==undefined||this.StoreReq.WhId==null||this.StoreReq.WhId==0){
+      isValid = false;
+      this.showMessage('warning', 'Item Name is required.');
+    }
+    if(this.StoreReq.ItemId==undefined||this.StoreReq.ItemId==null||this.StoreReq.ItemId==0){
+      isValid = false;
+      this.showMessage('warning', 'Item is required.');
+    }
+    if(this.StoreReq.SupplierId==undefined||this.StoreReq.SupplierId==null||this.StoreReq.SupplierId==0){
+      isValid = false;
+      this.showMessage('warning', 'Supplier is required.');
+    }
+    return isValid
+  }
+
   add() {
+    if(!this.validateForm()){
+      return;
+    }
     const oHttpHeaders = new HttpHeaders(
-      {
-          'Token':this.authService.UserInfo.Token
-      });
+    {
+        'Token':this.authService.UserInfo.Token
+    });
+      this.StoreReq.CreateBy = this.authService.UserInfo.UserID;
     this.httpClient.post(this.authService.baseURL + '/api/sr', this.StoreReq,{headers: oHttpHeaders}).subscribe((res)=>{
       if(res == true){
         this.isList = true;
@@ -82,10 +104,14 @@ export class SrComponent {
     });
    }
   update() {
+    if(!this.validateForm()){
+      return;
+    }
     const oHttpHeaders = new HttpHeaders(
       {
           'Token':this.authService.UserInfo.Token
       });
+    this.StoreReq.CreateBy = this.authService.UserInfo.UserID;
     this.httpClient.put(this.authService.baseURL + '/api/sr', this.StoreReq,{headers: oHttpHeaders}).subscribe((res)=>{
       if(res == true){
         this.isList = true;
@@ -119,6 +145,7 @@ export class SrComponent {
     PurPrice: number,
     SalePrice: number,
     Remark: string,
+    CreateBy:number
   } = {
       Id: 0,
       WhId: 0,
@@ -127,6 +154,7 @@ export class SrComponent {
       PurPrice: 0,
       SalePrice: 0,
       Remark: '',
+      CreateBy:0
     }
 
   editStoreReq(item: any) {
@@ -138,6 +166,7 @@ export class SrComponent {
       PurPrice: item.PurPrice,
       SalePrice: item.SalePrice,
       Remark: item.Remark,
+      CreateBy:item.CreateBy
     };
     this.isList = false;
   }
@@ -211,6 +240,7 @@ export class SrComponent {
       PurPrice: 0,
       SalePrice: 0,
       Remark: '',
+      CreateBy:0
     };
   }
 

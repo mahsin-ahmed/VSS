@@ -52,11 +52,23 @@ export class ClientvehicleComponent {
     });
   }
 
+  validateForm():boolean{
+    var isValid:boolean=true;
+    if(this.ClientVehicle.ClientId==undefined||this.ClientVehicle.ClientId==null||this.ClientVehicle.ClientId==0){
+      isValid = false;
+      this.showMessage('warning', 'Client is required.');
+    }
+    return isValid
+  }
   add(){
+    if(!this.validateForm()){
+      return;
+    }
     const oHttpHeaders = new HttpHeaders(
       {
           'Token':this.authService.UserInfo.Token
       });
+    this.ClientVehicle.CreateBy = this.authService.UserInfo.UserID;
     this.httpClient.post(this.authService.baseURL + '/api/ClientVehicle', this.ClientVehicle,{headers: oHttpHeaders}).subscribe((res) => {
       if (res == true) {
         this.isList = true;
@@ -68,21 +80,28 @@ export class ClientvehicleComponent {
       }
     });
   }
-   edit(item: any) {
+
+  edit(item: any) {
     this.ClientVehicle = {      
     Id: item.Id,
     VehicleNo: item.VehicleNo,
     Model: item.Model,
     Vin: item.Vin,
     ClientId: item.ClientId,
+    CreateBy:item.CreateBy
     };
     this.isList = false;
   }
-  update(){    
+
+  update(){
+    if(!this.validateForm()){
+      return;
+    }    
     const oHttpHeaders = new HttpHeaders(
-      {
-          'Token':this.authService.UserInfo.Token
-      });
+    {
+        'Token':this.authService.UserInfo.Token
+    });
+    this.ClientVehicle.CreateBy = this.authService.UserInfo.UserID;
     this.httpClient.put(this.authService.baseURL + '/api/ClientVehicle', this.ClientVehicle,{headers: oHttpHeaders}).subscribe((res) => {
       if (res == true) {
         this.isList = true;
@@ -128,12 +147,14 @@ export class ClientvehicleComponent {
     Model: string,
     Vin: string,
     ClientId: number,
+    CreateBy:number
   } = {
     Id: 0,
     VehicleNo: '',
     Model: '',
     Vin: '',
     ClientId:0,
+    CreateBy:0
     };
     
     toast!: toastPayload;

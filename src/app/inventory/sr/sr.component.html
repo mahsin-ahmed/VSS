@@ -24,24 +24,23 @@
       <div class="col-md-12">
         <table class="table table-bordered">
           <tr class="table-secondary">
-            <th>WhId</th>
-            <th>ItemId</th>
-            <th>SupplierId</th>
+            <th>Warehouse</th>
+            <th>Item</th>
+            <th>Supplier</th>
             <th>PurPrice</th>
             <th>SalePrice</th>
             <th>Remarks</th>
             <th colspan="2">Action</th>
           </tr>
           <tr *ngFor="let item of StoreReqs">
-            <td>{{item.WhId}}</td>
-            <td>{{item.ItemId}}</td>
-            <td>{{item.SupplierId}}</td>
+            <td>{{item.WHName}}</td>
+            <td>{{item.ItemName}}</td>
+            <td>{{item.SupplierName}}</td>
             <td>{{item.PurPrice}}</td>
             <td>{{item.SalePrice}}</td>
             <td>{{item.Remark}}</td>
             <td><button class="btn btn-sm btn-outline-primary" (click)="editStoreReq(item)">Edit</button></td>
-            <td><button class="btn btn-sm btn-outline-danger" (click)="StoreReqs=item" data-bs-toggle="modal"
-                data-bs-target="#confirmModal">Remove</button></td>
+            <td><button class="btn btn-sm btn-outline-danger" (click)="StoreReqs=item" data-bs-toggle="modal" data-bs-target="#confirmModal">Remove</button></td>
           </tr>
         </table>
       </div>

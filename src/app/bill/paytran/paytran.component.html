@@ -1,7 +1,7 @@
 <a href="javascript:void(0)" *ngIf="!isList" (click)="switchView('list')">Go to List</a>
 <!-- <a href="javascript:void(0)" *ngIf="isList" (click)="switchView('form')">Go to Entry</a> -->
 <div *ngIf="isList">
-    <h4 class="text-center">List of Payment</h4>
+    <h4 class="text-center">List of Payment Transaction</h4>
     <table class="table table-bordered">
         <tr class="table-secondary">
             <th>#</th>
@@ -17,7 +17,7 @@
             <th>#</th>
         </tr>
         <tr *ngFor="let item of listJobCard; let i = index">
-            <td><a href="javascript:void(0)" (click)="openWin(item)">View</a></td>
+            <td><a href="javascript:void(0)" (click)="openWin(item)">Bill Copy</a></td>
             <td>{{i+1}}</td>
             <td>{{item.JcNo}}</td>
             <td>{{item.VehicleNo}}</td>

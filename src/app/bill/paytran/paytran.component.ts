@@ -247,8 +247,6 @@ export class PaytranComponent {
     this.getFromInvoicePrint(item.Id);
   }
 
-
-
   listBay:any = [];
   company:Company = {CompanyId:0,
     CompanyCode:'',
@@ -281,7 +279,6 @@ export class PaytranComponent {
         }
     });
   }
-
 }
 
 export interface Company{

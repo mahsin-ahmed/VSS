@@ -2,6 +2,24 @@
 <a href="javascript:void(0)" *ngIf="isList" (click)="isList=false">Go to Entry</a>
   <div *ngIf="isList">
     <h4 class="text-center">List of Employee</h4>
+    <table class="table table-bordered">
+      <tr class="table-secondary">
+          <th scope="col">#</th>
+          <th>Name</th>
+          <th>Mobile</th>
+          <th>Email</th>
+          <th>#</th>
+          <th>#</th>
+      </tr>
+      <tr *ngFor="let item of listEmployee; let i = index">
+          <td>{{i+1}}</td>
+          <td>{{item.FirstName}} {{item.MiddleName}} {{item.LastName}}</td>
+          <td>{{item.Mobile}}</td>
+          <td>{{item.Email}}</td>
+          <td><button class="btn btn-sm btn-outline-primary">Edit</button></td>
+          <td><button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal">Remove</button></td>
+      </tr>
+      </table>
   </div>
   <div *ngIf="!isList">
     <h4 class="text-center">Employee Entry</h4>

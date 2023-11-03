@@ -401,9 +401,9 @@ export class JobcardComponent {
   }
 
   listMechanic:any = [];
-
+  listJcStatusFitler:any=[{Id:1,Name:'Close'},{Id:2,Name:'Open'}];
   listJcStatus:any=[{Id:1,Name:'Close'},{Id:2,Name:'Open'}];
-  JobStatus:number = 0;
+  JobStatus:number = 2;
   listJobStatus:any=[{Id:1,Name:'Close'},{Id:2,Name:'Open'}];
   listJcJob:any=[];
 
@@ -945,15 +945,25 @@ export class JobcardComponent {
     this.getByIdView(item.Id);
   }
 
-  VehicleNo:string = '';
-  listJobCardS:any=[];
-  searchVehicle(){
+  //VehicleNo:string = '';
+  //listJobCardS:any=[];
+  /*searchVehicle(){
     const oHttpHeaders = new HttpHeaders(
       {
           'Token':this.authService.UserInfo.Token
       });
     this.httpClient.get(this.authService.baseURL + '/api/JobCard/GetByVehicleNo?vehicleno='+this.VehicleNo,{headers:oHttpHeaders}).subscribe((res)=>{
       this.listJobCardS = res;
+    });
+  }*/
+  listVehicle:any=[];
+  getVehicleByClient(){
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.get(this.authService.baseURL + '/api/ClientVehicle/GetVehiclesByClient?id='+this.JobCard.ClientId,{headers:oHttpHeaders}).subscribe((res)=>{
+      this.listVehicle = res;
     });
   }
 
@@ -1039,13 +1049,13 @@ export class JobcardComponent {
 
   itemValue:string = '';
   listItemS:any = [];
-  value:string ='';
+  //value:string ='';
   searchItem(){
     const oHttpHeaders = new HttpHeaders(
       {
           'Token':this.authService.UserInfo.Token
       });
-    this.httpClient.get(this.authService.baseURL + '/api/JobCard/GetItemByParts?value='+this.value,{headers:oHttpHeaders}).subscribe((res)=>{
+    this.httpClient.get(this.authService.baseURL + '/api/JobCard/GetItemByParts?value='+this.itemValue,{headers:oHttpHeaders}).subscribe((res)=>{
       this.listItemS = res;
     });
   }
@@ -1068,7 +1078,52 @@ export class JobcardComponent {
     this.JcSpare.SpareAmount=item.SpareAmount;
   }
 
+  phone:string = '';
+  listClientS:any = [];
+  searchClient(){
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.get(this.authService.baseURL + '/api/JobCard/GetClientByPhone?value='+this.phone,{headers:oHttpHeaders}).subscribe((res)=>{
+      this.listClientS = res;
+    });
+  }
+
+  selectClient(item:any){
+    this.JobCard.ClientId=item.BpId;
+    this.JobCard.ClientName=item.Name;
+    this.JobCard.ClientAddress=item.Address;
+    this.JobCard.ClientPhone=item.Phone;
+    this.JobCard.ClientEmail=item.Email;
+    this.JobCard.MembershipNo=item.MembershipNo;
+    this.JobCard.Description=item.ClientInfo;
+  }
+
+  validateForm():boolean{
+    var isValid:boolean=true;
+    if(this.JobCard.JcNo==undefined||this.JobCard.JcNo==null||this.JobCard.JcNo==''){
+      isValid = false;
+      this.showMessage('warning', 'Jc No is required.');
+    }
+    if(this.JobCard.ClientId==undefined||this.JobCard.ClientId==null||this.JobCard.ClientId==0){
+      isValid = false;
+      this.showMessage('warning', 'Client is required.');
+    }
+    if(this.JobCard.JobDetails.length == 0 && this.JobCard.JcSpares.length==0){
+      isValid = false;
+      this.showMessage('warning', 'job or spare-parts is required.');
+    }
+    if(this.listMechanic.filter((x:any)=>x.IsSelect == true).length==0){
+      isValid = false;
+      this.showMessage('warning', 'Mechanic is required.');
+    }
+    return isValid
+  }
   add(){
+    if(!this.validateForm()){
+      return;
+    }
     var Resources:any =[];
     for(var i =0; i< this.listMechanic.length; i++){
       if(this.listMechanic[i].IsSelect){
@@ -1095,6 +1150,9 @@ export class JobcardComponent {
   }
 
   update(){
+    if(!this.validateForm()){
+      return;
+    }
     var Resources:any =[];
     for(var i =0; i< this.listMechanic.length; i++){
       if(this.listMechanic[i].IsSelect){

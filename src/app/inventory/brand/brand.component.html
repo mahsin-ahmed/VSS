@@ -1,1 +1,25 @@
-<p>brand works!</p>
+<a href="javascript:void(0)" *ngIf="!isList" (click)="isList=true">Go to List</a>
+<a href="javascript:void(0)" *ngIf="isList" (click)="isList=false;">Go to Entry</a>
+<div *ngIf="isList">
+    <h4 class="text-center">List of Brand</h4>
+    <table class="table table-bordered">
+    <tr class="table-secondary">
+        <th scope="col">#</th>
+        <th>Brand Name</th>
+        <th>Country</th>
+        <th>#</th>
+        <th>#</th>
+    </tr>
+    <tr *ngFor="let item of listBrand; let i = index">
+        <td>{{i+1}}</td>
+        <td>{{item.Name}}</td>
+        <td>{{item.Country}}</td>
+        <td><button class="btn btn-sm btn-outline-primary" >Edit</button></td>
+        <td><button class="btn btn-sm btn-outline-danger" >Remove</button></td>
+    </tr>
+    </table>
+</div>
+<div *ngIf="!isList">
+    <h4 class="text-center">Entry of Brand</h4>
+    
+</div>

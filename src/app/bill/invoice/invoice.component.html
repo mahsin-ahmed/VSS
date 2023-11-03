@@ -3,7 +3,8 @@
 <a href="javascript:void(0)" *ngIf="!isList" (click)="isList=true;get();">Go to List</a>
 <!-- <a href="javascript:void(0)" *ngIf="isList" (click)="isList=false">Go to Entry</a> -->
 <div *ngIf="isList">
-    <h4 class="text-center">Job-Card To Bill</h4>
+    <h4 class="text-center">Bill Create</h4>
+    <h5 class="text-center">(from job-card)</h5>
     <table class="table table-bordered">
         <tr class="table-secondary">
             <th>Action</th>
@@ -20,7 +21,7 @@
             <th>#</th>
         </tr>
         <tr *ngFor="let item of listJobCard; let i = index">
-            <td><a href="javascript:void(0)" (click)="openWin()">View</a></td>
+            <td><a href="javascript:void(0)" (click)="openWin()">View Job-Card</a></td>
             <td>{{i+1}}</td>
             <td>{{item.JcNo}}</td>
             <td>{{item.VehicleNo}}</td>
@@ -33,19 +34,20 @@
             <td>{{item.JcStatus == 1 ? 'Close' : 'Open'}}</td>
             <td>
                 <button class="btn btn-sm btn-primary" (click)="createBill(item)" *ngIf="item.IsInvoice==0">Create Bill</button>
-                <button class="btn btn-sm btn-primary" (click)="editBill(item)" *ngIf="item.IsInvoice>0">Edit Bill</button>
+                <button class="btn btn-sm btn-primary" (click)="editBill(item)" *ngIf="item.IsInvoice>0">Edit/View/Pay Bill</button>
             </td>
         </tr>
     </table>
 </div>
 <div *ngIf="!isList">
-    <h4 class="text-center">{{oBill.IsInvoice>0?'Update':'Create'}} Bill</h4>
+    <h4 class="text-center">Bill {{oBill.IsInvoice>0?'Update':'Create'}}</h4>
     <div class="row g-3">
         <div class="col-md-4">
-            <strong>Job Card Number: </strong>{{oBill.JcNo}}
+          <strong>Client Name: </strong>{{oBill.ClientName}} <br />
+          <strong>Address: </strong>{{oBill.ClientAddress}}
         </div>
         <div class="col-md-4">
-            <strong>Client Name: </strong>{{oBill.ClientName}}
+            <strong>Job Card Number: </strong>{{oBill.JcNo}}
         </div>
     </div>
     <div class="row g-3">
@@ -77,11 +79,12 @@
         </tr>
         <tr>
             <th>
-                <button (click)="add()" class="btn btn-success" *ngIf="oBill.IsInvoice==0">Add</button>
-                <button (click)="update()" class="btn btn-primary" *ngIf="oBill.IsInvoice>0">Update</button>
+                <button (click)="add()" class="btn btn-success" *ngIf="oBill.IsInvoice==0">Create Bill</button>
+                <button (click)="update()" class="btn btn-primary" *ngIf="oBill.IsInvoice>0">Update Bill</button>
             </th>
             <th>
-                <button (click)="payment()" class="btn btn-success" *ngIf="oBill.IsInvoice>0" href="javascript:void()" data-bs-toggle="modal" data-bs-target="#paymentModal">Payment</button>
+                <button (click)="viewBill()" class="btn btn-secondary" *ngIf="oBill.IsInvoice>0" href="javascript:void()">View Bill</button>
+                <button (click)="payment()" class="btn btn-success" *ngIf="oBill.IsInvoice>0" href="javascript:void()" data-bs-toggle="modal" data-bs-target="#paymentModal">Pay Bill</button>
             </th>
             <th></th>
             <th></th>
