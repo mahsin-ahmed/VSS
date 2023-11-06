@@ -5,11 +5,11 @@ import { CommonService, toastPayload } from 'src/app/services/common.service';
 import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
-  selector: 'app-sr',
-  templateUrl: './sr.component.html',
-  styleUrls: ['./sr.component.css']
+  selector: 'app-storerec',
+  templateUrl: './storerec.component.html',
+  styleUrls: ['./storerec.component.css']
 })
-export class SrComponent {
+export class StorerecComponent {
   constructor(private cs: CommonService, 
     private httpClient: HttpClient,
     private authService:AuthService) {
@@ -243,5 +243,4 @@ export class SrComponent {
       CreateBy:0
     };
   }
-
 }

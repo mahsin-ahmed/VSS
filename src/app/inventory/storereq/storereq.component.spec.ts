@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SrComponent } from './sr.component';
+import { StorereqComponent } from './storereq.component';
 
-describe('SrComponent', () => {
-  let component: SrComponent;
-  let fixture: ComponentFixture<SrComponent>;
+describe('StorereqComponent', () => {
+  let component: StorereqComponent;
+  let fixture: ComponentFixture<StorereqComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [SrComponent]
+      declarations: [StorereqComponent]
     });
-    fixture = TestBed.createComponent(SrComponent);
+    fixture = TestBed.createComponent(StorereqComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

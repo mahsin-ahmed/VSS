@@ -407,7 +407,27 @@ export class JobcardComponent {
   listJobStatus:any=[{Id:1,Name:'Close'},{Id:2,Name:'Open'}];
   listJcJob:any=[];
 
+  validateJcJob():boolean{
+    var isValid:boolean=true;
+    if(this.JcJob.JobGroupId==0 || this.JcJob.JobGroupId == null || this.JcJob.JobGroupId == undefined){
+      isValid = false;
+      this.showMessage('warning', 'Job-Group is required.');
+    }
+    if(this.JcJob.JobId==undefined||this.JcJob.JobId==null||this.JcJob.JobId==0){
+      isValid = false;
+      this.showMessage('warning', 'Job is required.');
+    }
+    if(this.JcJob.Price ==undefined && this.JcJob.Price==null && this.JcJob.Price==0){
+      isValid = false;
+      this.showMessage('warning', 'Price is required.');
+    }
+    return isValid
+  }
+
   addJob(){
+    if(!this.validateJcJob()){
+      return;
+    }
     var JobName = this.listAllJob.filter((x:any)=>x.JobId==this.JcJob.JobId)[0] ==undefined ? '' : this.listAllJob.filter((x:any)=>x.JobId==this.JcJob.JobId)[0].Description;
     var JobGroupName = this.listJobGroup.filter((x:any)=>x.GroupId==this.JcJob.JobGroupId)[0] ==undefined ? '' : this.listJobGroup.filter((x:any)=>x.GroupId==this.JcJob.JobGroupId)[0].Name;
     var EngineSizeName = this.listEngine.filter((x:any)=>x.EngineSizeId==this.JcJob.EngineSizeId)[0] ==undefined ? '' : this.listEngine.filter((x:any)=>x.EngineSizeId==this.JcJob.EngineSizeId)[0].Code + ' ' + this.listEngine.filter((x:any)=>x.EngineSizeId==this.JcJob.EngineSizeId)[0].CC;
@@ -431,6 +451,9 @@ export class JobcardComponent {
   }
 
   updateJob(){
+    if(!this.validateJcJob()){
+      return;
+    }
     var JobName = this.listAllJob.filter((x:any)=>x.JobId==this.JcJob.JobId)[0] ==undefined ? '' : this.listAllJob.filter((x:any)=>x.JobId==this.JcJob.JobId)[0].Description;
     var JobGroupName = this.listJobGroup.filter((x:any)=>x.GroupId==this.JcJob.JobGroupId)[0] ==undefined ? '' : this.listJobGroup.filter((x:any)=>x.GroupId==this.JcJob.JobGroupId)[0].Name;
     var EngineSizeName = this.listEngine.filter((x:any)=>x.EngineSizeId==this.JcJob.EngineSizeId)[0] ==undefined ? '' : this.listEngine.filter((x:any)=>x.EngineSizeId==this.JcJob.EngineSizeId)[0].Code + ' ' + this.listEngine.filter((x:any)=>x.EngineSizeId==this.JcJob.EngineSizeId)[0].CC;
@@ -514,10 +537,8 @@ export class JobcardComponent {
   }
 
   listItem:any = [];
-
   //ItemStatus:number =0;
   listItemStatus:any=[{Id:1,Name:'User'},{Id:2,Name:'Refund'}];
-
   resetSpare(){
     this.JcSpare = {
       Id:0,
@@ -541,9 +562,31 @@ export class JobcardComponent {
   }
 
   //SpareAmount:number=0;
+  validateJcSp():boolean{
+    var isValid:boolean=true;
+    if(this.JcSpare.ItemId==undefined||this.JcSpare.ItemId==null||this.JcSpare.ItemId==0){
+      isValid = false;
+      this.showMessage('warning', 'Spare Parts is required.');
+    }
+    if(this.JcSpare.SalePrice==undefined||this.JcSpare.SalePrice==null||this.JcSpare.SalePrice==0){
+      isValid = false;
+      this.showMessage('warning', 'Unit Price is required.');
+    }
+    if(this.JcSpare.Quantity==undefined||this.JcSpare.Quantity==null||this.JcSpare.Quantity==0){
+      isValid = false;
+      this.showMessage('warning', 'Quantity is required.');
+    }
+    if(this.JcSpare.SpareAmount==undefined||this.JcSpare.SpareAmount==null||this.JcSpare.SpareAmount==0){
+      isValid = false;
+      this.showMessage('warning', 'Amount is required.');
+    }
+    return isValid
+  }
   listJcSpare:any=[];
-  
   addSpare() : void {
+    if(!this.validateJcSp()){
+      return;
+    }
     this.JcSpare.SpareAmount = this.JcSpare.Quantity * this.JcSpare.SalePrice;
     this.JobCard.JcSpares = this.JobCard.JcSpares == undefined ? [] : this.JobCard.JcSpares;
     this.JobCard.JcSpares.push({
@@ -570,6 +613,9 @@ export class JobcardComponent {
   }
 
   updateSpare() : void {
+    if(!this.validateJcSp()){
+      return;
+    }
     this.JcSpare.SpareAmount = this.JcSpare.Quantity * this.JcSpare.SalePrice;
     this.JobCard.JcSpares = this.JobCard.JcSpares == undefined ? [] : this.JobCard.JcSpares;
     var oJcSpare = this.JobCard.JcSpares.filter((x:any)=>x.Id == this.JcSpare.Id)[0];

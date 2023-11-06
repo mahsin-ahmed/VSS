@@ -29,7 +29,9 @@ import { LoginComponent } from './login/login.component';
 import { EnginesizeComponent } from './operation/enginesize/enginesize.component';
 import { JobgroupComponent } from './operation/jobgroup/jobgroup.component';
 import { JobComponent } from './operation/job/job.component';
-import { SrComponent } from './inventory/sr/sr.component';
+import { StorereqComponent } from './inventory/storereq/storereq.component';
+import { StorerecComponent } from './inventory/storerec/storerec.component';
+import { StoreretComponent } from './inventory/storeret/storeret.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ClientvehicleComponent } from './operation/clientvehicle/clientvehicle.component';
 
@@ -38,24 +40,27 @@ const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch:'full' },
   //{ path: '**', redirectTo: '/login' },
 
-  { path: 'invoice', component: InvoiceComponent },
-  { path: 'payment', component: PaytranComponent },
-  { path: 'transaction', component: PaytranComponent },
+  { path: 'invoice', component: InvoiceComponent, canActivate:[authGuard] },
+  { path: 'payment', component: PaytranComponent, canActivate:[authGuard] },
+  { path: 'transaction', component: PaytranComponent, canActivate:[authGuard] },
 
-  { path: 'designation', component: DesignationComponent },
-  { path: 'employee', component: EmployeeComponent },
+  { path: 'designation', component: DesignationComponent, canActivate:[authGuard] },
+  { path: 'employee', component: EmployeeComponent, canActivate:[authGuard] },
 
-  { path: 'brand', component: BrandComponent },
-  { path: 'color', component: ColorComponent },
-  { path: 'item', component: ItemComponent },
-  { path: 'item-category', component: ItemcategoryComponent },
-  { path: 'item-group', component: ItemgroupComponent },
-  { path: 'item-price', component: ItempriceComponent },
-  { path: 'manufacturer', component: ManufacturerComponent },
-  { path: 'size', component: SizeComponent },
-  { path: 'unit', component: UnitComponent },
+  { path: 'brand', component: BrandComponent, canActivate:[authGuard] },
+  { path: 'color', component: ColorComponent, canActivate:[authGuard] },
+  { path: 'item', component: ItemComponent, canActivate:[authGuard] },
+  { path: 'item-category', component: ItemcategoryComponent, canActivate:[authGuard] },
+  { path: 'item-group', component: ItemgroupComponent, canActivate:[authGuard] },
+  { path: 'item-price', component: ItempriceComponent, canActivate:[authGuard] },
+  { path: 'manufacturer', component: ManufacturerComponent, canActivate:[authGuard] },
+  { path: 'size', component: SizeComponent, canActivate:[authGuard] },
+  { path: 'unit', component: UnitComponent, canActivate:[authGuard] }, 
   { path: 'store', component: WarehouseComponent, canActivate:[authGuard] },
-  { path:'sr', component:SrComponent, canActivate:[authGuard] },
+  { path:'sr', component:StorereqComponent, canActivate:[authGuard] },
+  { path:'store-req', component:StorereqComponent, canActivate:[authGuard] },
+  { path:'store-rec', component:StorerecComponent, canActivate:[authGuard] },
+  { path:'store-ret', component:StoreretComponent, canActivate:[authGuard] },
 
   { path: 'job-card', component: JobcardComponent, canActivate:[authGuard] },
   { path: 'client-vehicle', component: ClientvehicleComponent, canActivate:[authGuard] },
