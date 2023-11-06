@@ -1,25 +1,95 @@
-<a href="javascript:void(0)" *ngIf="!isList" (click)="isList=true">Go to List</a>
-<a href="javascript:void(0)" *ngIf="isList" (click)="isList=false;">Go to Entry</a>
+<a href="javascript:void(0)" *ngIf="!isList;" (click)="isList=true;reset()">List</a>
+<a href="javascript:void(0)" *ngIf="isList && authService.UserInfo.Menu.CanCreate" (click)="isList=false;reset();get()">New</a>
 <div *ngIf="isList">
-    <h4 class="text-center">List of Brand</h4>
-    <table class="table table-bordered">
+  <div class="row">
+    <div class="col-lg-4">
+        Show
+        <select style="width: 50px;height: 32px;" [(ngModel)]="pageSize" (change)="search()">
+            <option *ngFor="let item of listPageSize" value={{item}}>
+                {{item}}
+            </option>
+        </select> 
+        records
+    </div>
+    <div class="col-lg-4">
+      <h4 class="text-center">List of Brands</h4>
+    </div>
+    <div class="col-lg-4">
+        <table>
+            <tr>
+                <td>Phone: </td>
+                <td>
+                    <input type="text" [(ngModel)]="phone" placeholder="mobile" />
+                    <button type="button" (click)="search()"><i class="fa fa-search"></i></button>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+  <table class="table table-bordered">
     <tr class="table-secondary">
         <th scope="col">#</th>
-        <th>Brand Name</th>
+        <th>Brand Code</th>
+        <th>Name</th>
         <th>Country</th>
+        <th>Remarks</th>
         <th>#</th>
         <th>#</th>
     </tr>
     <tr *ngFor="let item of listBrand; let i = index">
         <td>{{i+1}}</td>
+        <td>{{item.Code}}</td>
         <td>{{item.Name}}</td>
         <td>{{item.Country}}</td>
-        <td><button class="btn btn-sm btn-outline-primary" >Edit</button></td>
-        <td><button class="btn btn-sm btn-outline-danger" >Remove</button></td>
+        <td>{{item.Remarks}}</td>
+        <td><button class="btn btn-sm btn-outline-primary" (click)="edit(item)" *ngIf="authService.UserInfo.Menu.CanEdit" >Edit</button></td>
+        <td>
+          <button class="btn btn-sm btn-outline-danger" (click)="Brand=item" data-bs-toggle="modal" data-bs-target="#confirmModal"  *ngIf="authService.UserInfo.Menu.CanDelete">Remove</button>
+        </td>
     </tr>
-    </table>
+  </table>
 </div>
 <div *ngIf="!isList">
-    <h4 class="text-center">Entry of Brand</h4>
+  <h4 class="text-center">Brand Entry</h4>
+  <div class="row g-3">
+    <div class="col-md-4">
+        <label class="form-label" for="brandCode">Brand Code:</label>
+        <input type="text" id="brandCode" [(ngModel)]="Brand.Code" class="form-control" />
+    </div>
+    <div class="col-md-4">
+      <label class="form-label" for="brandName">Brand Name:</label>
+      <input type="text" id="brandName" [(ngModel)]="Brand.Name" class="form-control" />
+    </div>
+    <div class="col-md-4">
+      <label class="form-label" for="country">Country:</label>
+      <input type="text" id="country" [(ngModel)]="Brand.Country"  class="form-control" />
+    </div>
     
+    <div class="col-md-4">
+      <label class="form-label" for="remarks">Remarks:</label>
+      <input type="text" id="remarks" [(ngModel)]="Brand.Remarks"  class="form-control" />
+    </div>
+    <div class="col-md-12 mt-5">
+      <button type="button" class="btn btn-success" *ngIf="Brand.Id==0 && authService.UserInfo.Menu.CanCreate" (click)="add();">Add</button>
+      <button type="button" class="btn btn-success" *ngIf="Brand.Id>0 && authService.UserInfo.Menu.CanEdit" (click)="update();">update</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+      <div class="modal-header">
+          <h5 class="modal-title text-primary">Are you sure to remove?</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-danger">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" (click)="reset();">No</button>/
+          <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal" (click)="remove(Brand)">Yes</button>
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Close</button>
+      </div>
+      </div>
+  </div>
 </div>
