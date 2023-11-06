@@ -1,11 +1,13 @@
-<a href="javascript:void(0)" *ngIf="!isList" (click)="switchView('list')">Go to List</a>
-<a href="javascript:void(0)" *ngIf="isList" (click)="switchView('form')">Go to Entry</a>
 
+<div>
+    <a href="javascript:void(0)" *ngIf="!isList" (click)="switchView('list')">List</a>
+    <a href="javascript:void(0)" *ngIf="isList && authService.UserInfo.Menu.CanCreate" (click)="switchView('form')">New</a>
+</div>
 <div *ngIf="isList">
     <div class="row">
         <div class="col-lg-4">
             Show
-            <select style="width: 50px;height: 32px;" [(ngModel)]="pageSize" (change)="changePageSize()">
+            <select style="width: 50px;height: 32px;" [(ngModel)]="pageSize" (change)="search()">
                 <option *ngFor="let item of listPageSize" value={{item}}>
                     {{item}}
                 </option>
@@ -13,15 +15,33 @@
             records
         </div>
         <div class="col-lg-4">
-            <h4>List of Client's Vehicle</h4>
+            <h4 class="text-center">List of Client's Vehicle</h4>
         </div>
-        <div class="col-lg-4"></div>
+        <div class="col-lg-4">
+            <table>
+                <tr>
+                    <td>Phone: </td>
+                    <td>
+                        <input type="text" [(ngModel)]="phone" placeholder="mobile" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>Vehicle Reg.: </td>
+                    <td>
+                        <input type="text" [(ngModel)]="vehicle" placeholder="vehicle reg." /> 
+                        <button type="button" (click)="search()"><i class="fa fa-search"></i></button>
+                    </td>
+                </tr>
+            </table>
+        </div>
     </div>
     
     <!-- Start Display Client Vehicle Section -->
     <table class="table table-bordered">
         <tr class="table-secondary">
             <th>SL</th>
+            <th>Client</th>
+            <th>Phone</th>
             <th>Car Reg. No.</th>
             <th>Model</th>
             <th>VIN</th>
@@ -29,10 +49,12 @@
         </tr>
         <tr *ngFor="let item of listClientVehicle; let i = index">
             <td>{{i + 1}}</td>
+            <td>{{item.ClientName}}</td>
+            <td>{{item.Phone}}</td>
             <td>{{item.VehicleNo}}</td>
             <td>{{item.Model}}</td>
             <td>{{item.Vin}}</td>
-            <td class="text-center"><button class="btn btn-sm btn-outline-primary" (click)="edit(item)">Edit</button></td>
+            <td class="text-center"><button class="btn btn-sm btn-outline-primary" (click)="edit(item)" *ngIf="authService.UserInfo.Menu.CanEdit">Edit</button></td>
             <!-- <td class="text-center"><button class="btn btn-sm btn-outline-danger" (click)="ClientVehicle=item" data-bs-toggle="modal" data-bs-target="#confirmModal">Remove</button></td> -->
         </tr>
     </table>

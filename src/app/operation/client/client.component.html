@@ -1,7 +1,31 @@
-<a href="javascript:void(0)" *ngIf="!isList;" (click)="isList=true;reset()">Go to List</a>
-<a href="javascript:void(0)" *ngIf="isList && authService.UserInfo.Menu.CanCreate" (click)="isList=false;reset();get()">Go to Entry</a>
+<a href="javascript:void(0)" *ngIf="!isList;" (click)="isList=true;reset()">List</a>
+<a href="javascript:void(0)" *ngIf="isList && authService.UserInfo.Menu.CanCreate" (click)="isList=false;reset();get()">New</a>
 <div *ngIf="isList">
-  <h4 class="text-center">List of Client</h4>
+  <div class="row">
+    <div class="col-lg-4">
+        Show
+        <select style="width: 50px;height: 32px;" [(ngModel)]="pageSize" (change)="search()">
+            <option *ngFor="let item of listPageSize" value={{item}}>
+                {{item}}
+            </option>
+        </select> 
+        records
+    </div>
+    <div class="col-lg-4">
+      <h4 class="text-center">List of Client</h4>
+    </div>
+    <div class="col-lg-4">
+        <table>
+            <tr>
+                <td>Phone: </td>
+                <td>
+                    <input type="text" [(ngModel)]="phone" placeholder="mobile" />
+                    <button type="button" (click)="search()"><i class="fa fa-search"></i></button>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
   <table class="table table-bordered">
     <tr class="table-secondary">
         <th scope="col">#</th>
@@ -18,7 +42,7 @@
         <td>{{item.Address}}</td>
         <td><button class="btn btn-sm btn-outline-primary" (click)="edit(item)" *ngIf="authService.UserInfo.Menu.CanEdit" >Edit</button></td>
         <td>
-          <button class="btn btn-sm btn-outline-danger" (click)="Client=item" data-bs-toggle="modal" data-bs-target="#confirmModal"  *ngIf="authService.UserInfo.Menu.CanDelete" (click)="add();">Remove</button>
+          <button class="btn btn-sm btn-outline-danger" (click)="Client=item" data-bs-toggle="modal" data-bs-target="#confirmModal"  *ngIf="authService.UserInfo.Menu.CanDelete">Remove</button>
         </td>
     </tr>
   </table>

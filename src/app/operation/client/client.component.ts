@@ -59,14 +59,47 @@ export class ClientComponent {
     public authService:AuthService) { 
     this.get();
   }
+
+  //#region paging varible
+  pageIndex: number = 0;
+  pageSize:number = 10;
+  rowCount:number = 0;
+  listPageSize:any = [5,10,20];
+  pageStart:number = 0;
+  pageEnd:number = 0;
+  totalRowsInList:number=0;
+  pagedItems:any = [];
+  pager:{
+    pages:any,
+    totalPages:number
+  } = {
+    pages:[],
+    totalPages:0
+  };  
+
+  changePageSize(){
+    this.pageIndex = 0;
+    this.get();
+  }
+
+  changePageNumber(pageIndex:number){
+    this.pageIndex = pageIndex;
+    this.get();
+  }
+  //#endregion
   //baseUrl:string='http://localhost:56297';
+  phone:string = '';
   get(){
     const oHttpHeaders = new HttpHeaders(
-      {
-          'Token':this.authService.UserInfo.Token
-      });
-    this.httpClient.get(this.authService.baseURL + '/api/Client',{headers: oHttpHeaders}).subscribe((res)=>{
+    {
+        'Token':this.authService.UserInfo.Token
+    });
+    this.httpClient.get(this.authService.baseURL + '/api/Client?pi='+this.pageIndex+'&ps='+this.pageSize+'&phone='+this.phone,{headers: oHttpHeaders}).subscribe((res)=>{
+      if(res){
         this.listClient = res;
+      }else{
+        this.showMessage('warning', 'Session expired, please login.');
+      }
     });
   }
 
@@ -183,8 +216,7 @@ export class ClientComponent {
       }else{
         this.showMessage('error', 'error occurred.');
       }
-    });
-    
+    });    
   }
 
   //type: 'success', 'error', 'warning', 'info'
@@ -200,6 +232,10 @@ export class ClientComponent {
       } as IndividualConfig,
     };
     this.cs.showToast(this.toast);
+  }
+
+  search():void{
+    this.get();
   }
 
 }

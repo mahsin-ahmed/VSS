@@ -85,6 +85,7 @@
             <th>
                 <button (click)="viewBill()" class="btn btn-secondary" *ngIf="oBill.IsInvoice>0" href="javascript:void()">View Bill</button>
                 <button (click)="payment()" class="btn btn-success" *ngIf="oBill.IsInvoice>0" href="javascript:void()" data-bs-toggle="modal" data-bs-target="#paymentModal">Pay Bill</button>
+                <button class="btn btn-danger" *ngIf="oBill.IsInvoice>0" href="javascript:void()" data-bs-toggle="modal" data-bs-target="#paymentModal">Due Delivery</button>
             </th>
             <th></th>
             <th></th>

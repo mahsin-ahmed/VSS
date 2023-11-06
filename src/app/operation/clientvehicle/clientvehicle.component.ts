@@ -13,33 +13,43 @@ export class ClientvehicleComponent {
 
   constructor(private cs: CommonService, 
     private httpClient: HttpClient,
-    private authService:AuthService) {
+    public authService:AuthService) {
     this.get();
     this.getClient();
   }
   isList: boolean = true;
   listClientVehicle: any = [];
   listClient:any=[];
-
+  phone:string = '';
+  vehicle:string = '';
   get() {
     const oHttpHeaders = new HttpHeaders(
       {
           'Token':this.authService.UserInfo.Token
       });
-    this.httpClient.get(this.authService.baseURL + '/api/ClientVehicle?pi='+this.pageIndex+'&ps='+this.pageSize,{headers: oHttpHeaders}).subscribe((res) => {
-      this.listClientVehicle = res;
-      //#region paging
-      this.rowCount = this.listClientVehicle.length > 0 ? this.listClientVehicle[0].RowCount : 0;
-      this.totalRowsInList = this.listClientVehicle.length;
-      this.pager.totalPages = Math.ceil(this.rowCount / this.pageSize);
-      this.pager.pages = [];
-      for(var i = 0; i<this.pager.totalPages; i++){
-        this.pager.pages.push(i+1);
+    this.httpClient.get(this.authService.baseURL + '/api/ClientVehicle?pi='+this.pageIndex+'&ps='+this.pageSize+'&phone='+this.phone+'&vehicle='+this.vehicle,{headers: oHttpHeaders}).subscribe((res) => {
+      if(res)
+      {
+        this.listClientVehicle = res;
+        //#region paging
+        this.rowCount = this.listClientVehicle.length > 0 ? this.listClientVehicle[0].RowCount : 0;
+        this.totalRowsInList = this.listClientVehicle.length;
+        this.pager.totalPages = Math.ceil(this.rowCount / this.pageSize);
+        this.pager.pages = [];
+        for(var i = 0; i<this.pager.totalPages; i++){
+          this.pager.pages.push(i+1);
+        }
+        this.pageStart = (this.pageIndex * this.pageSize) + 1;
+        this.pageEnd = (this.pageStart - 1) + this.totalRowsInList;
+        //#endregion
+      }else{
+        this.showMessage('warning', 'Session expired, please login.');
       }
-      this.pageStart = (this.pageIndex * this.pageSize) + 1;
-      this.pageEnd = (this.pageStart - 1) + this.totalRowsInList;
-      //#endregion
     });
+  }
+
+  search():void{
+    this.get();
   }
 
   getClient(){
@@ -183,7 +193,6 @@ export class ClientvehicleComponent {
     }
   }
 
-  reset() {
-    };
+  reset() {}
 
 }

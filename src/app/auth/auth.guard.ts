@@ -13,7 +13,7 @@ export const authGuard: CanActivateFn = (route, state) => {
     if(state.url=='' || state.url=='/dashboard') {
       return true;
     }
-    var oMenu = authService.UserInfo.Permissions.filter((x:any)=>x.MenuPath==state.url)[0];
+    var oMenu = authService.UserInfo.Permissions.filter((x:any)=>x.MenuPath==state.url && x.CanView==true)[0];
     if(oMenu != undefined){
       authService.UserInfo.Menu = oMenu;
       return true; //return true;
