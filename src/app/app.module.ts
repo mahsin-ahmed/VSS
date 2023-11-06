@@ -40,6 +40,7 @@ import { ClientvehicleComponent } from './operation/clientvehicle/clientvehicle.
 import { StorerecComponent } from './inventory/storerec/storerec.component';
 import { StoreretComponent } from './inventory/storeret/storeret.component';
 import { StorereqComponent } from './inventory/storereq/storereq.component';
+import { SalepriceComponent } from './inventory/saleprice/saleprice.component';
 
 @NgModule({
   declarations: [
@@ -74,7 +75,8 @@ import { StorereqComponent } from './inventory/storereq/storereq.component';
     ClientvehicleComponent,
     StorerecComponent,
     StoreretComponent,
-    StorereqComponent
+    StorereqComponent,
+    SalepriceComponent
   ],
   imports: [
     BrowserModule,
