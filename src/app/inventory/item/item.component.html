@@ -1,5 +1,5 @@
-<a href="javascript:void(0)" *ngIf="!isList" (click)="switchView('list')">Go to List</a>
-<a href="javascript:void(0)" *ngIf="isList" (click)="switchView('form')">Go to Entry</a>
+<a href="javascript:void(0)" *ngIf="!isList" (click)="switchView('list')">List</a>
+<a href="javascript:void(0)" *ngIf="isList" (click)="switchView('form')">New</a>
 
 <!-- start list view part  -->
 <!-- ================================================== -->
@@ -25,26 +25,26 @@
       <div class="col-md-12">
         <table class="table table-bordered">
           <tr class="table-secondary">
-            <th>Item Code</th>
-            <th>Item Name</th>
+            <th>Parts Name</th>
             <th>Brand</th>
-            <th>Categegory</th>
-            <th>Part No Old</th>
-            <th>Part No New</th>
+            <th>Model</th>
+            <th>Part-No Old</th>
+            <th>Part-No New</th>
             <th>Remarks</th>
             <th colspan="2">Action</th>
           </tr>
-          <tr *ngFor="let listItem of listItems">
-            <td>{{listItem.ItemCode}}</td>
-            <td>{{listItem.ItemName}}</td>
-            <td>{{listItem.BrandName}}</td>
-            <td>{{listItem.CategoryName}}</td>
-            <td>{{listItem.PartNoOld}}</td>
-            <td>{{listItem.PartNoNew}}</td>
-            <td>{{listItem.Remarks}}</td>
-            <td><button class="btn btn-sm btn-outline-primary" (click)="editJob(listItem)">Edit</button></td>
-            <td><button class="btn btn-sm btn-outline-danger" (click)="Item=listItem" data-bs-toggle="modal"
-                data-bs-target="#confirmModal">Remove</button></td>
+          <tr *ngFor="let item of listItems">
+            <td>{{item.ItemName}}</td>
+            <td>{{item.BrandName}}</td>
+            <td>{{item.CategoryName}}</td>
+            <td>{{item.PartNoOld}}</td>
+            <td>{{item.PartNoNew}}</td>
+            <td>{{item.Remarks}}</td>
+            <td><button class="btn btn-sm btn-outline-primary" (click)="edit(item)">Edit</button></td>
+            <td>
+              <button class="btn btn-sm btn-outline-danger" (click)="oItem=item" data-bs-toggle="modal"
+                data-bs-target="#confirmModal">Remove</button>
+            </td>
           </tr>
         </table>
       </div>
@@ -58,44 +58,44 @@
 <!-- Start Entry Form -->
 <!-- ========================================================= -->
 <div *ngIf="!isList">
-  <h4>Spare Parts Entry Form</h4>
+  <h4>Spare Parts Entry</h4>
   <div class="row g-3">
-    <div class="col-md-4">
+    <!-- <div class="col-md-4">
       <label for="itemCode" class="form-label">Parts Code</label>
-      <input type="text" class="form-control" id="itemCode" [(ngModel)]="Item.ItemCode">
-    </div>
+      <input type="text" class="form-control" id="itemCode" [(ngModel)]="oItem.ItemCode">
+    </div> -->
     <div class="col-md-4">
       <label for="itemName" class="form-label">Parts Name</label>
-      <input type="text" class="form-control" id="itemName" [(ngModel)]="Item.ItemName">
+      <input type="text" class="form-control" id="itemName" [(ngModel)]="oItem.ItemName">
     </div>
     <div class="col-md-4">
       <label for="BrandName" class="form-label">Brand Name</label>
-      <select class="form-control" id="BrandName" aria-label="Default select example" [(ngModel)]="Item.BrandId">
+      <select class="form-control" id="BrandName" aria-label="Default select example" [(ngModel)]="oItem.BrandId" (change)="changeBrand();">
         <option *ngFor="let x of listBrand" value="{{x.Id}}">{{x.Name}}</option>
       </select>
     </div>
     <div class="col-md-4">
+      <label for="ModelId" class="form-label">Brand-Model</label>
+      <select class="form-control" id="ModelId" [(ngModel)]="oItem.ModelId">
+        <option *ngFor="let x of listBrandModel" value="{{x.Id}}">{{x.ModelCode}}</option>
+      </select>
+    </div>
+    <div class="col-md-4">
       <label for="partNoOld" class="form-label">Part-Number (Old)</label>
-      <input type="text" class="form-control" id="partNoOld" [(ngModel)]="Item.PartNoOld">
+      <input type="text" class="form-control" id="partNoOld" [(ngModel)]="oItem.PartNoOld">
     </div>
     <div class="col-md-4">
       <label for="partNoNew" class="form-label">Part-Number (New)</label>
-      <input type="text" class="form-control" id="partNoNew" [(ngModel)]="Item.PartNoNew">
-    </div>
-    <div class="col-md-4">
-      <label for="CategoryName" class="form-label">Parts Category</label>
-      <select class="form-control" id="CategoryName" aria-label="Default select example" [(ngModel)]="Item.ItemCategoryId">
-        <option *ngFor="let x of listItemCategory" value="{{x.Id}}">{{x.Name}}</option>
-      </select>
+      <input type="text" class="form-control" id="partNoNew" [(ngModel)]="oItem.PartNoNew">
     </div>
     <div class="col-md-12">
       <label for="Description" class="form-label">Description</label>
-      <textarea class="form-control" id="Description" rows="3" [(ngModel)]="Item.Remarks"></textarea>
+      <textarea class="form-control" id="Description" rows="3" [(ngModel)]="oItem.Remarks"></textarea>
     </div>
     <div class="col-md-4">
       <div class="col-auto  mb-2">
-        <button type="button" class="btn btn-success mb-3" *ngIf="Item.Id==0" (click)="addItem()">Add Item</button>
-        <button type="button" class="btn btn-success mb-3" *ngIf="Item.Id" (click)="updateItem()">Update Item</button>
+        <button type="button" class="btn btn-success mb-3" *ngIf="oItem.Id==0" (click)="addItem()">Add Item</button>
+        <button type="button" class="btn btn-success mb-3" *ngIf="oItem.Id" (click)="updateItem()">Update Item</button>
       </div>
     </div>
   </div>
@@ -114,7 +114,7 @@
       <div class="modal-body text-danger">
         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" (click)="reset();">No</button>/
         <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal"
-          (click)="removeItem(Item)">Yes</button>
+          (click)="removeItem(oItem)">Yes</button>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Close</button>

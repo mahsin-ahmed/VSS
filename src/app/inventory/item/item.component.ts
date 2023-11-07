@@ -15,29 +15,20 @@ export class ItemComponent {
     private authService:AuthService) {
     this.get();
     this.getBrand();
-    this.getItemCategory();
+    //this.getItemCategory();
   }
 
-  Item: {
-    Id:number,
-    ItemCode:string,
-    ItemName:string,
-    PartNoOld:string,
-    PartNoNew:string, 
-    Remarks:string,
-    BrandId:number,
-    ItemCategoryId:number ,
-    CreateBy:number 
-  }={
+  oItem: Item={
     Id:0,
-    ItemCode:'',
     ItemName:'',
+    BrandId:0,
+    ModelId:0,
     PartNoOld:'',
     PartNoNew:'',
     Remarks:'',
-    BrandId:0,
-    ItemCategoryId:0,
-    CreateBy:0
+    IsActive:false,
+    CreateBy:0,
+    CreateAt:'',
   }
 
   listBrand:any=[];
@@ -62,8 +53,19 @@ export class ItemComponent {
     });
   }
 
-  listItems:any =[];
+  //GetBrandModel
+  listBrandModel:any=[];
+  getBrandModel(){
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.get(this.authService.baseURL + '/api/Item/GetBrandModel?id='+this.oItem.BrandId,{headers: oHttpHeaders}).subscribe((res)=>{
+        this.listBrandModel = res;
+    });
+  }
 
+  listItems:any =[];
   get(){
     const oHttpHeaders = new HttpHeaders(
       {
@@ -88,21 +90,25 @@ export class ItemComponent {
 
   validateForm():boolean{
     var isValid:boolean=true;
-    if(this.Item.ItemCode==undefined||this.Item.ItemCode==null||this.Item.ItemCode==''){
+    if(this.oItem.ItemName==undefined||this.oItem.ItemName==null||this.oItem.ItemName==''){
       isValid = false;
       this.showMessage('warning', 'Item Name is required.');
     }
-    if(this.Item.ItemName==undefined||this.Item.ItemName==null||this.Item.ItemName==''){
-      isValid = false;
-      this.showMessage('warning', 'Item Code is required.');
-    }
-    if(this.Item.BrandId==undefined||this.Item.BrandId==null||this.Item.BrandId==0){
+    if(this.oItem.BrandId==undefined||this.oItem.BrandId==null||this.oItem.BrandId==0){
       isValid = false;
       this.showMessage('warning', 'Brand is required.');
     }
-    if(this.Item.ItemCategoryId==undefined||this.Item.ItemCategoryId==null||this.Item.ItemCategoryId==0){
+    if(this.oItem.ModelId==undefined||this.oItem.ModelId==null||this.oItem.ModelId==0){
       isValid = false;
-      this.showMessage('warning', 'Category is required.');
+      this.showMessage('warning', 'Model is required.');
+    }
+    if(this.oItem.PartNoOld==undefined||this.oItem.PartNoOld==null||this.oItem.PartNoOld==''){
+      isValid = false;
+      this.showMessage('warning', 'PartNo Old is required.');
+    }
+    if(this.oItem.PartNoNew==undefined||this.oItem.PartNoNew==null||this.oItem.PartNoNew==''){
+      isValid = false;
+      this.showMessage('warning', 'PartNo New is required.');
     }
     return isValid
   }
@@ -115,8 +121,8 @@ export class ItemComponent {
       {
           'Token':this.authService.UserInfo.Token
       });
-    this.Item.CreateBy = this.authService.UserInfo.UserID;
-    this.httpClient.post(this.authService.baseURL + '/api/Item', this.Item,{headers: oHttpHeaders}).subscribe((res) => {
+    this.oItem.CreateBy = this.authService.UserInfo.UserID;
+    this.httpClient.post(this.authService.baseURL + '/api/Item', this.oItem,{headers: oHttpHeaders}).subscribe((res) => {
       if (res == true) {
         this.isList = true;
         this.get();
@@ -136,8 +142,8 @@ export class ItemComponent {
       {
           'Token':this.authService.UserInfo.Token
       });
-    this.Item.CreateBy = this.authService.UserInfo.UserID;
-    this.httpClient.put(this.authService.baseURL + '/api/Item', this.Item,{headers: oHttpHeaders}).subscribe((res) => {
+    this.oItem.CreateBy = this.authService.UserInfo.UserID;
+    this.httpClient.put(this.authService.baseURL + '/api/Item', this.oItem,{headers: oHttpHeaders}).subscribe((res) => {
       if (res == true) {
         this.isList = true;
         this.get();
@@ -162,18 +168,20 @@ export class ItemComponent {
     });      
   }
 
-  editJob(item: any) {
-    this.Item = {
+  edit(item: any) {
+    this.oItem = {
       Id: item.Id,
-      ItemCode: item.ItemCode,
       ItemName: item.ItemName,
       PartNoOld: item.PartNoOld,
       PartNoNew: item.PartNoNew,
       Remarks: item.Remarks,
       BrandId: item.BrandId,
-      ItemCategoryId:item.ItemCategoryId,
-      CreateBy:item.CreateBy
+      CreateBy:item.CreateBy,
+      CreateAt:item.CreateAt,
+      IsActive:item.IsActive,
+      ModelId:item.ModelId
     };
+    this.getBrandModel();
     this.isList = false;
   }
 
@@ -229,7 +237,7 @@ export class ItemComponent {
   }
   toast!: toastPayload;
 
-  showMessage(type: string, message: string) {
+  showMessage(type: string, message: string):void {
     this.toast = {
       message: message,
       title: type.toUpperCase(),
@@ -242,17 +250,35 @@ export class ItemComponent {
     this.cs.showToast(this.toast);
   }
 
-  reset() {
-    this.Item = {
+  reset():void {
+    this.oItem = {
       Id:0,
-      ItemCode:'',
       ItemName:'',
       PartNoOld:'',
       PartNoNew:'',
       Remarks:'',
       BrandId:0,
-      ItemCategoryId:0,
-      CreateBy:0
+      CreateBy:0,
+      CreateAt:'',
+      IsActive:false,
+      ModelId:0
     };
   }
+
+  changeBrand():void{
+    this.getBrandModel();
+  }
+}
+
+export interface Item{
+  Id:number,
+  ItemName:string,
+  BrandId:number,
+  ModelId:number,
+  PartNoOld:string,
+  PartNoNew:string,
+  Remarks:string,
+  IsActive:boolean,
+  CreateBy:number,
+  CreateAt:string,
 }

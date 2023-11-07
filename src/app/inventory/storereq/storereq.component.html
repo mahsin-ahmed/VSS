@@ -25,19 +25,19 @@
         <table class="table table-bordered">
           <tr class="table-secondary">
             <th>Warehouse</th>
-            <th>Item</th>
+            <th>Part Name</th>
+            <th>Part No.</th>
             <th>Supplier</th>
-            <th>PurPrice</th>
-            <th>SalePrice</th>
+            <th>Quantity</th>
             <th>Remarks</th>
             <th colspan="2">Action</th>
           </tr>
           <tr *ngFor="let item of StoreReqs">
             <td>{{item.WHName}}</td>
             <td>{{item.ItemName}}</td>
+            <td>{{item.PartNo}}</td>
             <td>{{item.SupplierName}}</td>
-            <td>{{item.PurPrice}}</td>
-            <td>{{item.SalePrice}}</td>
+            <td>{{item.Quantity}}</td>
             <td>{{item.Remark}}</td>
             <td><button class="btn btn-sm btn-outline-primary" (click)="editStoreReq(item)">Edit</button></td>
             <td><button class="btn btn-sm btn-outline-danger" (click)="StoreReqs=item" data-bs-toggle="modal" data-bs-target="#confirmModal">Remove</button></td>
@@ -52,43 +52,37 @@
 <!-- Start Entry Form -->
 <!-- ========================================================= -->
 <div *ngIf="!isList">
-  <h4 class="mb-3">Store Requisition Entry Form</h4>
+  <h4 class="mb-3">Store Requisition Entry</h4>
   <div class="row g-3">
     <div class="col-md-4">
       <label for="WarehouseId" class="form-label">Warehouse Name</label>
-      <select class="form-control" id="WarehouseId" aria-label="Default select example" [(ngModel)]="StoreReq.WhId">
+      <select class="form-control" id="WarehouseId" aria-label="Default select example" [(ngModel)]="oStoreReq.WhId">
         <option *ngFor="let listWH of listWareHouse" value="{{listWH.Id}}">{{listWH.Name}}</option>
       </select>
     </div>
     <div class="col-md-4">
-      <label for="itemName" class="form-label">Item Name</label>
-      <select class="form-control" id="itemName" aria-label="Default select example" [(ngModel)]="StoreReq.ItemId">
-        <option *ngFor="let listItem of listItem" value="{{listItem.Id}}">{{listItem.ItemName}}</option>
-      </select>
+      <label for="itemName" class="form-label">Spare Parts: <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#searchPartNo">Search</a></label>
+      <input type="text" id="Quantity" [(ngModel)]="PartNo" class="form-control" placeholder="part-no" readonly />
+    </div>
+    <div class="col-md-4">
+        <label for="Qty" class="form-label">Quantity:</label>
+        <input type="number" id="Qty" [(ngModel)]="oStoreReq.Qty" class="form-control" style="text-align: right;" />
     </div>
     <div class="col-md-4">
       <label for="SuplierName" class="form-label">Supplier Name</label>
-      <select class="form-control" id="SuplierName" aria-label="Default select example" [(ngModel)]="StoreReq.SupplierId">
+      <select class="form-control" id="SuplierName" aria-label="Default select example" [(ngModel)]="oStoreReq.SupplierId">
         <option *ngFor="let listSP of listSupplier" value="{{listSP.BpId}}">{{listSP.Name}}</option>
       </select>
     </div>
-    <div class="col-md-4">
-      <label for="PurchasePrice" class="form-label">Purchase Price</label>
-      <input type="text" class="form-control" id="PurchasePrice" [(ngModel)]="StoreReq.PurPrice">
-    </div>
-    <div class="col-md-4">
-      <label for="SalePrice" class="form-label">Sale Price</label>
-      <input type="text" class="form-control" id="SalePrice" [(ngModel)]="StoreReq.SalePrice">
-    </div>
+    
     <div class="col-md-12">
       <label for="Description" class="form-label">Description</label>
-      <textarea class="form-control" id="Description" rows="3" [(ngModel)]="StoreReq.Remark"></textarea>
+      <textarea class="form-control" id="Description" rows="3" [(ngModel)]="oStoreReq.Remark"></textarea>
     </div>
     <div class="col-md-4">
       <div class="col-auto  mb-2">
-        <button type="button" class="btn btn-success mb-3" *ngIf="StoreReq.Id==0" (click)="add()"> 
-      Submit Requisition</button>
-        <button type="button" class="btn btn-success mb-3" *ngIf="StoreReq.Id>0" (click)="update()">Update Item</button>
+        <button type="button" class="btn btn-success mb-3" *ngIf="oStoreReq.Id==0" (click)="add()"> Add Requisition</button>
+        <button type="button" class="btn btn-success mb-3" *ngIf="oStoreReq.Id>0" (click)="update()">Update Requisition</button>
       </div>
     </div>
   </div>
@@ -117,3 +111,51 @@
   </div>
 </div>
 <!-- End Modal Part -->
+
+<div class="modal fade" id="searchPartNo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title text-primary">Search A Spare Parts</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="row g-3">
+              <div class="col-md-4">
+                <label class="form-label" for="PartNo">Part No.</label>
+                <input type="text" id="PartNo" [(ngModel)]="PartNo"  class="form-control" />
+              </div>
+              <div class="col-md-4 mt-5">
+                <button type="button" class="btn btn-secondary" (click)="searchItem();">Search</button>
+              </div>
+              <div class="col-md-12">
+                <table class="table table-bordered">
+                  <tr class="table-secondary">
+                      <th scope="col">#</th>
+                      <th>Code</th>
+                      <th>Part No Old</th>
+                      <th>Part No New</th>
+                      <th>Item</th>
+                      <th>Brand</th>
+                      <th>Model</th>
+                      <th>#</th>
+                  </tr>
+                  <tr *ngFor="let item of listItem; let i = index">
+                      <td>{{i+1}}</td>
+                      <td>{{item.PartNoOld}}</td>
+                      <td>{{item.PartNoNew}}</td>
+                      <td>{{item.ItemName}}</td>
+                      <td>{{item.BrandName}}</td>
+                      <td>{{item.ModelCode}}</td>
+                      <td><button class="btn btn-sm btn-primary" (click)="selectItem(item);" data-bs-dismiss="modal">Select</button></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>

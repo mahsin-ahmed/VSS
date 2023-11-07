@@ -15,7 +15,7 @@ export class StorereqComponent {
     private authService:AuthService) {
     this.get();
     this.getWareHouse();
-    this.getItemName();  
+    //this.getItemName();  
     this.getSuplierName();
   }
   
@@ -23,7 +23,7 @@ export class StorereqComponent {
   //baseUrl: string = 'http://localhost:56297';
 
   listWareHouse: any = [];
-  listItem: any = [];
+  //listItem: any = [];
   listSupplier: any = [];
   StoreReqs: any = [];
 
@@ -46,7 +46,7 @@ export class StorereqComponent {
         this.listWareHouse = res;
     });
   }
-  getItemName(){
+  /*getItemName(){
     const oHttpHeaders = new HttpHeaders(
       {
           'Token':this.authService.UserInfo.Token
@@ -54,7 +54,7 @@ export class StorereqComponent {
     this.httpClient.get(this.authService.baseURL + '/api/Item/getItemName',{headers: oHttpHeaders}).subscribe((res)=>{
         this.listItem = res;
     });
-  }
+  }*/
 
   getSuplierName(){
     const oHttpHeaders = new HttpHeaders(
@@ -68,15 +68,15 @@ export class StorereqComponent {
 
   validateForm():boolean{
     var isValid:boolean=true;
-    if(this.StoreReq.WhId==undefined||this.StoreReq.WhId==null||this.StoreReq.WhId==0){
+    if(this.oStoreReq.WhId==undefined||this.oStoreReq.WhId==null||this.oStoreReq.WhId==0){
       isValid = false;
       this.showMessage('warning', 'Item Name is required.');
     }
-    if(this.StoreReq.ItemId==undefined||this.StoreReq.ItemId==null||this.StoreReq.ItemId==0){
+    if(this.oStoreReq.ItemId==undefined||this.oStoreReq.ItemId==null||this.oStoreReq.ItemId==0){
       isValid = false;
       this.showMessage('warning', 'Item is required.');
     }
-    if(this.StoreReq.SupplierId==undefined||this.StoreReq.SupplierId==null||this.StoreReq.SupplierId==0){
+    if(this.oStoreReq.SupplierId==undefined||this.oStoreReq.SupplierId==null||this.oStoreReq.SupplierId==0){
       isValid = false;
       this.showMessage('warning', 'Supplier is required.');
     }
@@ -91,8 +91,8 @@ export class StorereqComponent {
     {
         'Token':this.authService.UserInfo.Token
     });
-      this.StoreReq.CreateBy = this.authService.UserInfo.UserID;
-    this.httpClient.post(this.authService.baseURL + '/api/sr', this.StoreReq,{headers: oHttpHeaders}).subscribe((res)=>{
+      this.oStoreReq.CreateBy = this.authService.UserInfo.UserID;
+    this.httpClient.post(this.authService.baseURL + '/api/StoreReq', this.oStoreReq,{headers: oHttpHeaders}).subscribe((res)=>{
       if(res == true){
         this.isList = true;
         this.get();
@@ -111,8 +111,8 @@ export class StorereqComponent {
       {
           'Token':this.authService.UserInfo.Token
       });
-    this.StoreReq.CreateBy = this.authService.UserInfo.UserID;
-    this.httpClient.put(this.authService.baseURL + '/api/sr', this.StoreReq,{headers: oHttpHeaders}).subscribe((res)=>{
+    this.oStoreReq.CreateBy = this.authService.UserInfo.UserID;
+    this.httpClient.put(this.authService.baseURL + '/api/StoreReq', this.oStoreReq,{headers: oHttpHeaders}).subscribe((res)=>{
       if(res == true){
         this.isList = true;
         this.get();
@@ -137,7 +137,7 @@ export class StorereqComponent {
     }); 
    }
 
-  StoreReq: {
+  /*StoreReq: {
     Id: number,
     WhId: number,
     ItemId: number,
@@ -155,10 +155,10 @@ export class StorereqComponent {
       SalePrice: 0,
       Remark: '',
       CreateBy:0
-    }
+    }*/
 
   editStoreReq(item: any) {
-    this.StoreReq = {
+    this.StoreReqs ={
       Id: item.Id,
       WhId: item.WhId,
       ItemId: item.ItemId,
@@ -231,17 +231,60 @@ export class StorereqComponent {
     this.cs.showToast(this.toast);
   }
 
+  oStoreReq:StoreReq={
+    Id:0,
+    WhId:0,
+    ItemId:0,
+    SupplierId:0,
+    Qty:0,
+    Remark:'',
+    CreateDate:'',
+    CreateBy:0,
+    UpdateDate:'',
+    UpdateBy:0
+  };
   reset() {
-    this.StoreReq = {
-      Id: 0,
-      WhId: 0,
-      ItemId: 0,
-      SupplierId: 0,
-      PurPrice: 0,
-      SalePrice: 0,
-      Remark: '',
-      CreateBy:0
+    this.oStoreReq = {
+      Id:0,
+      WhId:0,
+      ItemId:0,
+      SupplierId:0,
+      Qty:0,
+      Remark:'',
+      CreateDate:'',
+      CreateBy:0,
+      UpdateDate:'',
+      UpdateBy:0
     };
   }
 
+  PartNo:string='';
+  listItem:any = [];
+  //value:string ='';
+  searchItem(){
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.get(this.authService.baseURL + '/api/JobCard/GetItemByParts?value='+this.PartNo,{headers:oHttpHeaders}).subscribe((res)=>{
+      this.listItem = res;
+    });
+  }
+
+  selectItem(item:any){
+    this.oStoreReq.ItemId = item.Id;
+  }
+}
+
+export interface StoreReq{
+  Id:number
+  WhId:number,
+  ItemId:number,
+  SupplierId:number,
+  Qty:number,
+  Remark:string,
+  CreateDate:string
+  CreateBy:number,
+  UpdateDate:string,
+  UpdateBy:number
 }
