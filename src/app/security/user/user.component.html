@@ -1,1 +1,166 @@
-<p>user works!</p>
+<a href="javascript:void(0)" *ngIf="!isList;" (click)="isList=true;reset()">List</a>
+<a href="javascript:void(0)" *ngIf="isList && authService.UserInfo.Menu.CanCreate"
+    (click)="isList=false;reset();get()">New</a>
+<div *ngIf="isList">
+    <div class="row">
+        <div class="col-lg-4">
+            Show
+            <select style="width: 50px;height: 32px;" [(ngModel)]="pageSize" (change)="search()">
+                <option *ngFor="let item of listPageSize" value={{item}}>
+                    {{item}}
+                </option>
+            </select>
+            records
+        </div>
+        <div class="col-lg-4">
+            <h4 class="text-center">List of Users</h4>
+        </div>
+        <div class="col-lg-4">
+            <table>
+                <tr>
+                    <td>Phone: </td>
+                    <td>
+                        <input type="text" [(ngModel)]="phone" placeholder="mobile" />
+                        <button type="button" (click)="search()"><i class="fa fa-search"></i></button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <table class="table table-bordered">
+        <tr class="table-secondary">
+            <th scope="col">User Code</th>
+            <th>User Name</th>
+            <th>Full Name</th>
+            <th>Email</th>
+            <th>Mobile</th>
+            <th>Phone</th>
+            <th>#</th>
+            <th>#</th>
+        </tr>
+        <tr *ngFor="let item of listUser">
+            <td>{{item.UserCode}}</td>
+            <td>{{item.UserName}}</td>
+            <td>{{item.FirstName}} {{item.MiddleName}} {{item.LastName}}</td>
+            <td>{{item.Email}}</td>
+            <td>{{item.MobileNo}}</td>
+            <td>{{item.PhoneNo}}</td>
+            
+            <td><button class="btn btn-sm btn-outline-primary" (click)="edit(item)"
+                    *ngIf="authService.UserInfo.Menu.CanEdit">Edit</button></td>
+            <td>
+                <button class="btn btn-sm btn-outline-danger" (click)="User=item" data-bs-toggle="modal"
+                    data-bs-target="#confirmModal" *ngIf="authService.UserInfo.Menu.CanDelete">Remove</button>
+            </td>
+        </tr>
+    </table>
+    <!-- Start Pagination  -->
+    <div class="row" *ngIf="listUser.length>0">
+        <div class="col-lg-3">
+            <div class="pull-left ">
+                <span class="well well-sm">Showing <span class="text-success"><b>{{pageStart}}</b></span> to <span
+                        class="text-success"><b>{{pageEnd}}</b></span> of <span
+                        class="text-success"><b>{{rowCount}}</b></span> records</span>
+            </div>
+        </div>
+        <div class="col-lg-9">
+            <div class="table-responsive">
+                <ul class="pagination" *ngIf="pager.pages && pager.pages.length">
+                    <li>
+                        <a class="btn btn-sm btn-outline-secondary" [ngClass]="{disabled:pageIndex == 0}"
+                            href="javascript:void(0);" (click)="changePageNumber(0)"><i class="fa fa-angle-double-left"
+                                aria-hidden="true"></i>Start</a>
+                    </li>
+                    <li>
+                        <a class="btn btn-sm btn-outline-info" [ngClass]="{disabled:pageIndex == 0}"
+                            href="javascript:void(0);" (click)="changePageNumber(pageIndex - 1)"><i
+                                class="fa fa-angle-left" aria-hidden="true"></i>Previous</a>
+                    </li>
+                    <li *ngFor="let page of pager.pages">
+                        <a class="btn btn-sm btn-outline-secondary" [ngClass]="{active:pageIndex == (page - 1)}"
+                            href="javascript:void(0);" (click)="changePageNumber(page - 1)">{{page}}</a>
+                    </li>
+                    <li>
+                        <a class="btn btn-sm btn-outline-info"
+                            [ngClass]="{disabled:pageIndex == (pager.totalPages - 1)}" href="javascript:void(0);"
+                            (click)="changePageNumber(pageIndex + 1)"><i class="fa fa-angle-right"
+                                aria-hidden="true"></i>Next</a>
+                    </li>
+                    <li>
+                        <a class="btn btn-sm btn-outline-secondary"
+                            [ngClass]="{disabled:pageIndex == (pager.totalPages - 1)}" href="javascript:void(0);"
+                            (click)="changePageNumber(pager.totalPages - 1)"><i class="fa fa-angle-double-right"
+                                aria-hidden="true"></i>End</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- End Pagination -->
+</div>
+<div *ngIf="!isList">
+    <h4 class="text-center">User Entry Form</h4>
+    <div class="row g-3">
+        <div class="col-md-4">
+            <label class="form-label" for="Name">User Code:</label>
+            <input type="text" id="Name" [(ngModel)]="User.UserCode" class="form-control" />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label" for="UserName">UserName:</label>
+            <input type="text" id="UserName" [(ngModel)]="User.UserName" class="form-control" />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label" for="FirstName">FirstName:</label>
+            <input type="text" id="FirstName" [(ngModel)]="User.FirstName" class="form-control" />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label" for="MiddleName">MiddleName:</label>
+            <input type="text" id="MiddleName" [(ngModel)]="User.MiddleName" class="form-control" />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label" for="LastName">LastName:</label>
+            <input type="text" id="LastName" [(ngModel)]="User.LastName" class="form-control" />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label" for="Email">Email:</label>
+            <input type="email" id="Email" [(ngModel)]="User.Email" class="form-control" />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label" for="MobileNo">MobileNo:</label>
+            <input type="text" id="MobileNo" [(ngModel)]="User.MobileNo" class="form-control" />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label" for="PhoneNo">PhoneNo:</label>
+            <input type="text" id="PhoneNo" [(ngModel)]="User.PhoneNo" class="form-control" />
+        </div>
+
+        <div class="col-md-12 mt-5">
+            <button type="button" class="btn btn-success"
+                *ngIf="User.UserID==0 && authService.UserInfo.Menu.CanCreate" (click)="add();">Add
+                User</button>
+            <button type="button" class="btn btn-success"
+                *ngIf="User.UserID>0 && authService.UserInfo.Menu.CanEdit"
+                (click)="update();">update User</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-primary">Are you sure to remove?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-danger">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"
+                    (click)="reset();">No</button>/
+                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal"
+                    (click)="remove(User)">Yes</button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
