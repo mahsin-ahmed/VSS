@@ -41,6 +41,7 @@ import { StorerecComponent } from './inventory/storerec/storerec.component';
 import { StoreretComponent } from './inventory/storeret/storeret.component';
 import { StorereqComponent } from './inventory/storereq/storereq.component';
 import { SalepriceComponent } from './inventory/saleprice/saleprice.component';
+import { MenuComponent } from './security/menu/menu.component';
 
 @NgModule({
   declarations: [
@@ -56,6 +57,7 @@ import { SalepriceComponent } from './inventory/saleprice/saleprice.component';
     ItemcategoryComponent,
     ItemgroupComponent,
     ItempriceComponent,
+    MenuComponent,
     ManufacturerComponent,
     MenupermissionComponent,
     ModuleComponent,
