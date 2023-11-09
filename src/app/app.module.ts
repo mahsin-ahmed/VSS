@@ -42,6 +42,7 @@ import { StoreretComponent } from './inventory/storeret/storeret.component';
 import { StorereqComponent } from './inventory/storereq/storereq.component';
 import { SalepriceComponent } from './inventory/saleprice/saleprice.component';
 import { MenuComponent } from './security/menu/menu.component';
+import { BrandmodelComponent } from './inventory/brandmodel/brandmodel.component';
 
 @NgModule({
   declarations: [
@@ -78,7 +79,8 @@ import { MenuComponent } from './security/menu/menu.component';
     StorerecComponent,
     StoreretComponent,
     StorereqComponent,
-    SalepriceComponent
+    SalepriceComponent,
+    BrandmodelComponent
   ],
   imports: [
     BrowserModule,

@@ -34,6 +34,7 @@ import { StorerecComponent } from './inventory/storerec/storerec.component';
 import { StoreretComponent } from './inventory/storeret/storeret.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ClientvehicleComponent } from './operation/clientvehicle/clientvehicle.component';
+import { BrandmodelComponent } from './inventory/brandmodel/brandmodel.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -48,6 +49,7 @@ const routes: Routes = [
   { path: 'employee', component: EmployeeComponent, canActivate:[authGuard] },
 
   { path: 'brand', component: BrandComponent, canActivate:[authGuard] },
+  { path: 'brand-model', component: BrandmodelComponent, canActivate:[authGuard] },
   { path: 'color', component: ColorComponent, canActivate:[authGuard] },
   { path: 'item', component: ItemComponent, canActivate:[authGuard] },
   { path: 'item-category', component: ItemcategoryComponent, canActivate:[authGuard] },
