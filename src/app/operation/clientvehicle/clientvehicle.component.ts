@@ -57,7 +57,7 @@ export class ClientvehicleComponent {
       {
           'Token':this.authService.UserInfo.Token
       });
-    this.httpClient.get(this.authService.baseURL + '/api/Client',{headers: oHttpHeaders}).subscribe((res)=>{
+    this.httpClient.get(this.authService.baseURL + '/api/Client/GetClient',{headers: oHttpHeaders}).subscribe((res)=>{
         this.listClient = res;
     });
   }
