@@ -17,6 +17,7 @@ export class JobComponent {
     this.getJobGroup();
   }
   isList: boolean = true;
+  phone:string = '';
   //baseUrl: string = 'http://localhost:56297';
 
   // Pagination part Start
@@ -122,6 +123,8 @@ export class JobComponent {
       }
     });
   }
+
+  search(){};
 
   Job: {
     JobId: number,

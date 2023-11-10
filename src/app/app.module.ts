@@ -43,6 +43,9 @@ import { StorereqComponent } from './inventory/storereq/storereq.component';
 import { SalepriceComponent } from './inventory/saleprice/saleprice.component';
 import { MenuComponent } from './security/menu/menu.component';
 import { BrandmodelComponent } from './inventory/brandmodel/brandmodel.component';
+import { SupplierComponent } from './inventory/supplier/supplier.component';
+import { WorkgroupComponent } from './operation/workgroup/workgroup.component';
+import { WorkgroupmemberComponent } from './operation/workgroupmember/workgroupmember.component';
 
 @NgModule({
   declarations: [
@@ -80,7 +83,10 @@ import { BrandmodelComponent } from './inventory/brandmodel/brandmodel.component
     StoreretComponent,
     StorereqComponent,
     SalepriceComponent,
-    BrandmodelComponent
+    BrandmodelComponent,
+    SupplierComponent,
+    WorkgroupComponent,
+    WorkgroupmemberComponent
   ],
   imports: [
     BrowserModule,

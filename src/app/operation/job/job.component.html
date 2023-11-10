@@ -10,13 +10,23 @@
                 <option *ngFor="let item of listPageSize" value={{item}}>
                     {{item}}
                 </option>
-            </select> 
+            </select>
             records
         </div>
         <div class="col-lg-4">
             <h4>List of Job</h4>
         </div>
-        <div class="col-lg-4"></div>
+        <div class="col-lg-4">
+            <table>
+                <tr>
+                    <td>Description: </td>
+                    <td>
+                        <input type="text" [(ngModel)]="phone" placeholder="Description" />
+                        <button type="button" (click)="search()"><i class="fa fa-search"></i></button>
+                    </td>
+                </tr>
+            </table>
+        </div>
     </div>
     <!-- End Select Page Size Section -->
 
@@ -52,26 +62,39 @@
     <div class="row" *ngIf="listJobGroup.length>0">
         <div class="col-lg-3">
             <div class="pull-left ">
-                <span class="well well-sm">Showing  <span class="text-success"><b>{{pageStart}}</b></span> to <span class="text-success"><b>{{pageEnd}}</b></span> of <span class="text-success"><b>{{rowCount}}</b></span> records</span>
+                <span class="well well-sm">Showing <span class="text-success"><b>{{pageStart}}</b></span> to <span
+                        class="text-success"><b>{{pageEnd}}</b></span> of <span
+                        class="text-success"><b>{{rowCount}}</b></span> records</span>
             </div>
         </div>
         <div class="col-lg-9">
             <div class="table-responsive">
                 <ul class="pagination" *ngIf="pager.pages && pager.pages.length">
                     <li>
-                        <a class="btn btn-sm btn-outline-secondary" [ngClass]="{disabled:pageIndex == 0}" href="javascript:void(0);" (click)="changePageNumber(0)"><i class="fa fa-angle-double-left" aria-hidden="true"></i>Start</a>
+                        <a class="btn btn-sm btn-outline-secondary" [ngClass]="{disabled:pageIndex == 0}"
+                            href="javascript:void(0);" (click)="changePageNumber(0)"><i class="fa fa-angle-double-left"
+                                aria-hidden="true"></i>Start</a>
                     </li>
                     <li>
-                        <a class="btn btn-sm btn-outline-info" [ngClass]="{disabled:pageIndex == 0}" href="javascript:void(0);" (click)="changePageNumber(pageIndex - 1)"><i class="fa fa-angle-left" aria-hidden="true"></i>Previous</a>
+                        <a class="btn btn-sm btn-outline-info" [ngClass]="{disabled:pageIndex == 0}"
+                            href="javascript:void(0);" (click)="changePageNumber(pageIndex - 1)"><i
+                                class="fa fa-angle-left" aria-hidden="true"></i>Previous</a>
                     </li>
                     <li *ngFor="let page of pager.pages">
-                        <a class="btn btn-sm btn-outline-secondary" [ngClass]="{active:pageIndex == (page - 1)}" href="javascript:void(0);" (click)="changePageNumber(page - 1)">{{page}}</a>
+                        <a class="btn btn-sm btn-outline-secondary" [ngClass]="{active:pageIndex == (page - 1)}"
+                            href="javascript:void(0);" (click)="changePageNumber(page - 1)">{{page}}</a>
                     </li>
                     <li>
-                        <a class="btn btn-sm btn-outline-info" [ngClass]="{disabled:pageIndex == (pager.totalPages - 1)}" href="javascript:void(0);" (click)="changePageNumber(pageIndex + 1)"><i class="fa fa-angle-right" aria-hidden="true"></i>Next</a>
+                        <a class="btn btn-sm btn-outline-info"
+                            [ngClass]="{disabled:pageIndex == (pager.totalPages - 1)}" href="javascript:void(0);"
+                            (click)="changePageNumber(pageIndex + 1)"><i class="fa fa-angle-right"
+                                aria-hidden="true"></i>Next</a>
                     </li>
                     <li>
-                        <a class="btn btn-sm btn-outline-secondary" [ngClass]="{disabled:pageIndex == (pager.totalPages - 1)}" href="javascript:void(0);" (click)="changePageNumber(pager.totalPages - 1)"><i class="fa fa-angle-double-right" aria-hidden="true"></i>End</a>
+                        <a class="btn btn-sm btn-outline-secondary"
+                            [ngClass]="{disabled:pageIndex == (pager.totalPages - 1)}" href="javascript:void(0);"
+                            (click)="changePageNumber(pager.totalPages - 1)"><i class="fa fa-angle-double-right"
+                                aria-hidden="true"></i>End</a>
                     </li>
                 </ul>
             </div>
@@ -97,8 +120,9 @@
                     <div class="col-md-6">
                         <div class="form-floating mb-2">
                             <select id="JobGroupId" class="form-control" [(ngModel)]="Job.JobGroupId">
-                                <option *ngFor="let item of listJobGroup" value="{{item.GroupId}}">{{item.Name}}</option>
-                            </select>                            
+                                <option *ngFor="let item of listJobGroup" value="{{item.GroupId}}">{{item.Name}}
+                                </option>
+                            </select>
                             <label for="JobGroupId">Job Group:</label>
                         </div>
                     </div>
