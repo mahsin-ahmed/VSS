@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { StorerecComponent } from './storerec.component';
+import { StorereqrecComponent } from './storereqrec.component';
 
 describe('StorerecComponent', () => {
-  let component: StorerecComponent;
-  let fixture: ComponentFixture<StorerecComponent>;
+  let component: StorereqrecComponent;
+  let fixture: ComponentFixture<StorereqrecComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [StorerecComponent]
+      declarations: [StorereqrecComponent]
     });
-    fixture = TestBed.createComponent(StorerecComponent);
+    fixture = TestBed.createComponent(StorereqrecComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

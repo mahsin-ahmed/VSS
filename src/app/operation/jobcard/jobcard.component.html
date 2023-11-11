@@ -17,10 +17,9 @@
     </div>
     <div class="col-lg-4">
       <label for="jcStatus" class="form-label">JC Status:</label>
-        <select id="jcStatus" [(ngModel)]="jcStatus" (change)="get();">
-          <!-- <option value="0">Select All</option> -->
-          <option *ngFor="let item of listJcStatusFitler" value="{{item.Id}}">{{item.Name}}</option>
-        </select>
+      <select id="jcStatus" [(ngModel)]="jcStatus" (change)="get();">
+        <option *ngFor="let item of listJcStatusFitler" value="{{item.Id}}">{{item.Name}}</option>
+      </select>
     </div>
   </div>
   <table class="table table-bordered">
@@ -431,7 +430,7 @@
               <input type="text" id="itemValue" [(ngModel)]="itemValue"  class="form-control" />
             </div>
             <div class="col-md-4 mt-5">
-              <button type="button" class="btn btn-secondary" (click)="searchItem();">Search</button>
+              <button type="button" class="btn btn-secondary" (click)="searchItem();">Search</button>&nbsp;<a routerLink="/store-req" data-bs-dismiss="modal">Requisition</a> 
             </div>
             <div class="col-md-12">
               <table class="table table-bordered">

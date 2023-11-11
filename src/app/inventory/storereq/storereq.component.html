@@ -8,16 +8,22 @@
     <div class="col-lg-4">
       Show
       <select style="width: 50px;height: 32px;" [(ngModel)]="pageSize" (change)="changePageSize()">
-        <option *ngFor="let listItem of listPageSize" value={{listItem}}>
-          {{listItem}}
+        <option *ngFor="let x of listPageSize" value={{x}}>
+          {{x}}
         </option>
       </select>
       records
     </div>
     <div class="col-lg-4 mb-5">
-      <h4>List of Store Requisition</h4>
+      <h4 class="text-center">List of Store Requisition</h4>
     </div>
-    <div class="col-lg-4"></div>
+    <div class="col-lg-4">
+        <label for="jcStatus" class="form-label">JC Status:</label>
+        <select id="jcStatus" [(ngModel)]="reqStatus" (change)="get();">
+            <option value="1">Initial</option>
+            <option value="2">Approve</option>
+          </select>
+    </div>
   </div>
   <div class="itemList">
     <div class="row">
@@ -26,21 +32,19 @@
           <tr class="table-secondary">
             <th>Warehouse</th>
             <th>Part Name</th>
-            <th>Part No.</th>
             <th>Supplier</th>
             <th>Quantity</th>
             <th>Remarks</th>
             <th colspan="2">Action</th>
           </tr>
-          <tr *ngFor="let item of StoreReqs">
+          <tr *ngFor="let item of listStoreReq">
             <td>{{item.WHName}}</td>
             <td>{{item.ItemName}}</td>
-            <td>{{item.PartNo}}</td>
             <td>{{item.SupplierName}}</td>
-            <td>{{item.Quantity}}</td>
+            <td>{{item.Qty}}</td>
             <td>{{item.Remark}}</td>
-            <td><button class="btn btn-sm btn-outline-primary" (click)="editStoreReq(item)">Edit</button></td>
-            <td><button class="btn btn-sm btn-outline-danger" (click)="StoreReqs=item" data-bs-toggle="modal" data-bs-target="#confirmModal">Remove</button></td>
+            <td><button class="btn btn-sm btn-outline-primary" (click)="edit(item)">Edit</button></td>
+            <td><button class="btn btn-sm btn-outline-danger" (click)="oStoreReq=item" data-bs-toggle="modal" data-bs-target="#confirmModal">Remove</button></td>
           </tr>
         </table>
       </div>
@@ -52,7 +56,7 @@
 <!-- Start Entry Form -->
 <!-- ========================================================= -->
 <div *ngIf="!isList">
-  <h4 class="mb-3">Store Requisition Entry</h4>
+  <h4 class="mb-3 text-center">Store Requisition Entry</h4>
   <div class="row g-3">
     <div class="col-md-4">
       <label for="WarehouseId" class="form-label">Warehouse Name</label>
@@ -69,9 +73,17 @@
         <input type="number" id="Qty" [(ngModel)]="oStoreReq.Qty" class="form-control" style="text-align: right;" />
     </div>
     <div class="col-md-4">
-      <label for="SuplierName" class="form-label">Supplier Name</label>
+      <label for="SuplierName" class="form-label">Supplier Name:</label>
       <select class="form-control" id="SuplierName" aria-label="Default select example" [(ngModel)]="oStoreReq.SupplierId">
         <option *ngFor="let listSP of listSupplier" value="{{listSP.BpId}}">{{listSP.Name}}</option>
+      </select>
+    </div>
+    <div class="col-md-4">
+      <label for="ReqUrgentType" class="form-label">Urgency:</label>
+      <select class="form-control" id="ReqUrgentType" aria-label="Default select example" [(ngModel)]="oStoreReq.ReqUrgentType">
+        <option value="1">Very Urgent</option>
+        <option value="2">Semi Urgent</option>
+        <option value="3">Regular</option>
       </select>
     </div>
     
@@ -102,7 +114,7 @@
       <div class="modal-body text-danger">
         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" (click)="reset();">No</button>/
         <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal"
-          (click)="remove(StoreReqs)">Yes</button>
+          (click)="remove(oStoreReq)">Yes</button>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Close</button>

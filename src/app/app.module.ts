@@ -37,10 +37,11 @@ import { JobgroupComponent } from './operation/jobgroup/jobgroup.component';
 import { EnginesizeComponent } from './operation/enginesize/enginesize.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ClientvehicleComponent } from './operation/clientvehicle/clientvehicle.component';
-import { StorerecComponent } from './inventory/storerec/storerec.component';
+import { StorereqrecComponent } from './inventory/storereqrec/storereqrec.component';
 import { StoreretComponent } from './inventory/storeret/storeret.component';
 import { StorereqComponent } from './inventory/storereq/storereq.component';
 import { SalepriceComponent } from './inventory/saleprice/saleprice.component';
+import { StoreretrecComponent } from './inventory/storeretrec/storeretrec.component';
 
 @NgModule({
   declarations: [
@@ -73,10 +74,11 @@ import { SalepriceComponent } from './inventory/saleprice/saleprice.component';
     EnginesizeComponent,
     DashboardComponent,
     ClientvehicleComponent,
-    StorerecComponent,
+    StorereqrecComponent,
     StoreretComponent,
     StorereqComponent,
-    SalepriceComponent
+    SalepriceComponent,
+    StoreretrecComponent
   ],
   imports: [
     BrowserModule,

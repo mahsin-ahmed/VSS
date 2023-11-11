@@ -19,6 +19,7 @@ export class LoginComponent {
   private app:AppComponent) {}
   User:{UserName:string,UserPass:string}={UserName:'',UserPass:''};
   login(): void {
+    this.showMessage('info', 'Your are logging, please wait....');
     this.httpClient.post(this.authService.baseURL + '/api/Login', this.User).subscribe((res) => {
       var isLogIn:boolean = false;
       if(res != null){
@@ -32,6 +33,20 @@ export class LoginComponent {
         }
       });
     });
+  }
+
+  toast!: toastPayload;
+  showMessage(type: string, message: string) {
+    this.toast = {
+      message: message,
+      title: type.toUpperCase(),
+      type: type,
+      ic: {
+        timeOut: 2500,
+        closeButton: true,
+      } as IndividualConfig,
+    };
+    this.cs.showToast(this.toast);
   }
 
 }

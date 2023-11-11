@@ -206,9 +206,9 @@ export class ClientComponent {
 
   remove(item:any){
     const oHttpHeaders = new HttpHeaders(
-      {
-          'Token':this.authService.UserInfo.Token
-      });
+    {
+        'Token':this.authService.UserInfo.Token
+    });
     this.httpClient.delete(this.authService.baseURL + '/api/Client/' + this.Client.BpId,{headers: oHttpHeaders}).subscribe((res)=>{
       if(res == true){
         this.get();

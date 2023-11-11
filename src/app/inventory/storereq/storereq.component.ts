@@ -25,27 +25,34 @@ export class StorereqComponent {
   listWareHouse: any = [];
   //listItem: any = [];
   listSupplier: any = [];
-  StoreReqs: any = [];
+  listStoreReq: any = [];
 
+  reqStatus:number=1;
+  storeTranTypeId:number=1
   get() {
     const oHttpHeaders = new HttpHeaders(
-      {
-          'Token':this.authService.UserInfo.Token
-      });  
-    this.httpClient.get(this.authService.baseURL + '/api/SR?pi='+this.pageIndex+'&ps='+this.pageSize,{headers: oHttpHeaders}).subscribe((res) => {
-      this.StoreReqs = res;
+    {
+        'Token':this.authService.UserInfo.Token
+    });  
+    this.httpClient.get(this.authService.baseURL + '/api/StoreReq?reqStatus='+this.reqStatus+'&storeTranTypeId='+this.storeTranTypeId+'&pi='+this.pageIndex+'&ps='+this.pageSize,{headers: oHttpHeaders}).subscribe((res) => {
+      if(res){
+        this.listStoreReq = res;
+      }else{
+        this.showMessage('warning', 'Session expired, please login again.');
+      }
     });
   };
 
   getWareHouse(){
     const oHttpHeaders = new HttpHeaders(
-      {
-          'Token':this.authService.UserInfo.Token
-      });
+    {
+        'Token':this.authService.UserInfo.Token
+    });
     this.httpClient.get(this.authService.baseURL + '/api/WareHouse/getWareHouse',{headers: oHttpHeaders}).subscribe((res)=>{
         this.listWareHouse = res;
     });
   }
+
   /*getItemName(){
     const oHttpHeaders = new HttpHeaders(
       {
@@ -91,7 +98,8 @@ export class StorereqComponent {
     {
         'Token':this.authService.UserInfo.Token
     });
-      this.oStoreReq.CreateBy = this.authService.UserInfo.UserID;
+    this.oStoreReq.StoreTranTypeId = 1; // purchase requisition
+    this.oStoreReq.CreateBy = this.authService.UserInfo.UserID;
     this.httpClient.post(this.authService.baseURL + '/api/StoreReq', this.oStoreReq,{headers: oHttpHeaders}).subscribe((res)=>{
       if(res == true){
         this.isList = true;
@@ -102,15 +110,17 @@ export class StorereqComponent {
         this.showMessage('error', 'error occurred.');
       }
     });
-   }
-  update() {
+  }
+
+  update():void {
     if(!this.validateForm()){
       return;
     }
     const oHttpHeaders = new HttpHeaders(
-      {
-          'Token':this.authService.UserInfo.Token
-      });
+    {
+        'Token':this.authService.UserInfo.Token
+    });
+    this.oStoreReq.StoreTranTypeId = 1; // purchase requisition
     this.oStoreReq.CreateBy = this.authService.UserInfo.UserID;
     this.httpClient.put(this.authService.baseURL + '/api/StoreReq', this.oStoreReq,{headers: oHttpHeaders}).subscribe((res)=>{
       if(res == true){
@@ -120,14 +130,15 @@ export class StorereqComponent {
       }else{
         this.showMessage('error', 'error occurred.');
       }
-  });
-   }
-  remove(StoreReqs: any) {
+    });
+  }
+
+  remove(storeReq: any):void {
     const oHttpHeaders = new HttpHeaders(
-      {
-          'Token':this.authService.UserInfo.Token
-      });
-    this.httpClient.delete(this.authService.baseURL + '/api/sr/' + StoreReqs.Id,{headers: oHttpHeaders}).subscribe((res)=>{
+    {
+        'Token':this.authService.UserInfo.Token
+    });
+    this.httpClient.delete(this.authService.baseURL + '/api/StoreReq/' + storeReq.Id,{headers: oHttpHeaders}).subscribe((res)=>{
       if(res == true){
         this.get();
         this.showMessage('success', 'data removed.');
@@ -135,40 +146,23 @@ export class StorereqComponent {
         this.showMessage('error', 'error occurred.');
       }
     }); 
-   }
+  }
 
-  /*StoreReq: {
-    Id: number,
-    WhId: number,
-    ItemId: number,
-    SupplierId: number,
-    PurPrice: number,
-    SalePrice: number,
-    Remark: string,
-    CreateBy:number
-  } = {
-      Id: 0,
-      WhId: 0,
-      ItemId: 0,
-      SupplierId: 0,
-      PurPrice: 0,
-      SalePrice: 0,
-      Remark: '',
-      CreateBy:0
-    }*/
-
-  editStoreReq(item: any) {
-    this.StoreReqs ={
+  edit(item: any) {
+    this.oStoreReq ={
       Id: item.Id,
       WhId: item.WhId,
       ItemId: item.ItemId,
       SupplierId: item.SupplierId,
-      PurPrice: item.PurPrice,
-      SalePrice: item.SalePrice,
       Remark: item.Remark,
-      CreateBy:item.CreateBy
+      CreateBy:item.CreateBy,
+      Qty:item.Qty,
+      ReqStatus:item.ReqStatus,
+      StoreTranTypeId:item.StoreTranTypeId,
+      ReqUrgentType:item.ReqUrgentType
     };
     this.isList = false;
+    this.searchItem();
   }
 
 
@@ -238,10 +232,10 @@ export class StorereqComponent {
     SupplierId:0,
     Qty:0,
     Remark:'',
-    CreateDate:'',
+    ReqStatus:1,
     CreateBy:0,
-    UpdateDate:'',
-    UpdateBy:0
+    StoreTranTypeId:1,
+    ReqUrgentType:3
   };
   reset() {
     this.oStoreReq = {
@@ -251,28 +245,30 @@ export class StorereqComponent {
       SupplierId:0,
       Qty:0,
       Remark:'',
-      CreateDate:'',
+      ReqStatus:1,
       CreateBy:0,
-      UpdateDate:'',
-      UpdateBy:0
+      StoreTranTypeId:1,
+      ReqUrgentType:3
     };
+    this.PartNo = '';
   }
 
   PartNo:string='';
   listItem:any = [];
   //value:string ='';
-  searchItem(){
+  searchItem():void {
     const oHttpHeaders = new HttpHeaders(
-      {
-          'Token':this.authService.UserInfo.Token
-      });
+    {
+        'Token':this.authService.UserInfo.Token
+    });
     this.httpClient.get(this.authService.baseURL + '/api/JobCard/GetItemByParts?value='+this.PartNo,{headers:oHttpHeaders}).subscribe((res)=>{
       this.listItem = res;
     });
   }
 
-  selectItem(item:any){
+  selectItem(item:any):void {
     this.oStoreReq.ItemId = item.Id;
+    this.PartNo = 'old:' + item.PartNoOld + ' new:' + item.PartNoNew;
   }
 }
 
@@ -283,8 +279,8 @@ export interface StoreReq{
   SupplierId:number,
   Qty:number,
   Remark:string,
-  CreateDate:string
+  ReqStatus:number,
   CreateBy:number,
-  UpdateDate:string,
-  UpdateBy:number
+  StoreTranTypeId:number,
+  ReqUrgentType:number
 }

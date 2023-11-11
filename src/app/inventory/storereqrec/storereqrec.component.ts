@@ -5,11 +5,11 @@ import { CommonService, toastPayload } from 'src/app/services/common.service';
 import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
-  selector: 'app-storeret',
-  templateUrl: './storeret.component.html',
-  styleUrls: ['./storeret.component.css']
+  selector: 'app-storereqrec',
+  templateUrl: './storereqrec.component.html',
+  styleUrls: ['./storereqrec.component.css']
 })
-export class StoreretComponent {
+export class StorereqrecComponent {
   constructor(private cs: CommonService, 
     private httpClient: HttpClient,
     private authService:AuthService) {
@@ -21,14 +21,12 @@ export class StoreretComponent {
   
   isList: boolean = true;
   //baseUrl: string = 'http://localhost:56297';
-
   listWareHouse: any = [];
   //listItem: any = [];
   listSupplier: any = [];
   listStoreReq: any = [];
-
   reqStatus:number=1;
-  storeTranTypeId:number=2; // Store Return
+  storeTranTypeId:number=1; // purchase receive
   get() {
     const oHttpHeaders = new HttpHeaders(
     {
@@ -41,7 +39,7 @@ export class StoreretComponent {
         this.showMessage('warning', 'Session expired, please login again.');
       }
     });
-  };
+  }
 
   getWareHouse(){
     const oHttpHeaders = new HttpHeaders(
@@ -52,16 +50,6 @@ export class StoreretComponent {
         this.listWareHouse = res;
     });
   }
-
-  /*getItemName(){
-    const oHttpHeaders = new HttpHeaders(
-      {
-          'Token':this.authService.UserInfo.Token
-      });
-    this.httpClient.get(this.authService.baseURL + '/api/Item/getItemName',{headers: oHttpHeaders}).subscribe((res)=>{
-        this.listItem = res;
-    });
-  }*/
 
   getSuplierName(){
     const oHttpHeaders = new HttpHeaders(
@@ -90,7 +78,7 @@ export class StoreretComponent {
     return isValid
   }
 
-  add() {
+  approveReqRecStore() {
     if(!this.validateForm()){
       return;
     }
@@ -98,13 +86,13 @@ export class StoreretComponent {
     {
         'Token':this.authService.UserInfo.Token
     });
-    this.oStoreReq.StoreTranTypeId = 2; // purchase requisition
+    this.oStoreReq.StoreTranTypeId = 1; // purchase requisition
     this.oStoreReq.CreateBy = this.authService.UserInfo.UserID;
-    this.httpClient.post(this.authService.baseURL + '/api/StoreReq', this.oStoreReq,{headers: oHttpHeaders}).subscribe((res)=>{
+    this.httpClient.post(this.authService.baseURL + '/api/StoreTran', this.oStoreRec,{headers: oHttpHeaders}).subscribe((res)=>{
       if(res == true){
         this.isList = true;
         this.get();
-        this.reset();
+        this.resetRec();
         this.showMessage('success', 'data added.');
       }else{
         this.showMessage('error', 'error occurred.');
@@ -120,9 +108,9 @@ export class StoreretComponent {
     {
         'Token':this.authService.UserInfo.Token
     });
-    this.oStoreReq.StoreTranTypeId = 2; // purchase requisition
+    this.oStoreReq.StoreTranTypeId = 1; // purchase requisition
     this.oStoreReq.CreateBy = this.authService.UserInfo.UserID;
-    this.httpClient.put(this.authService.baseURL + '/api/StoreReq', this.oStoreReq,{headers: oHttpHeaders}).subscribe((res)=>{
+    this.httpClient.put(this.authService.baseURL + '/api/StoreTran', this.oStoreRec,{headers: oHttpHeaders}).subscribe((res)=>{
       if(res == true){
         this.isList = true;
         this.get();
@@ -148,7 +136,30 @@ export class StoreretComponent {
     }); 
   }
 
-  edit(item: any) {
+  getRecByReqId(item:any):void {
+    const oHttpHeaders = new HttpHeaders(
+    {
+        'Token':this.authService.UserInfo.Token
+    });  
+    this.httpClient.get(this.authService.baseURL + '/api/StoreTran/GetRecByReqId?reqId='+this.oStoreReq.Id,{headers: oHttpHeaders}).subscribe((res) => {
+      var oStoreReceive:any = res;
+      this.oStoreRec ={
+        Id:oStoreReceive.Id,
+        WhId:oStoreReceive.WhId,
+        PurchasePrice:oStoreReceive.PurchasePrice,
+        BusinessPartnerId:oStoreReceive.SupplierId,
+        ItemId:oStoreReceive.ItemId,
+        Qty:oStoreReceive.Qty,
+        Remark:oStoreReceive.Remark,
+        StoreTranTypeId:oStoreReceive.StoreRecTypeId,
+        ReqId:oStoreReceive.ReqId,
+        CreateBy:this.authService.UserInfo.UserID,
+        ItemName:item.ItemName
+      };
+    });
+  }
+
+  edit(item: any):void {
     this.oStoreReq ={
       Id: item.Id,
       WhId: item.WhId,
@@ -160,10 +171,37 @@ export class StoreretComponent {
       ReqStatus:item.ReqStatus,
       StoreTranTypeId:item.StoreTranTypeId
     };
+    this.getRecByReqId(item);
     this.isList = false;
-    this.searchItem();
   }
 
+  review(item:any):void{
+    this.oStoreReq ={
+      Id: item.Id,
+      WhId: item.WhId,
+      ItemId: item.ItemId,
+      SupplierId: item.SupplierId,
+      Remark: item.Remark,
+      CreateBy:item.CreateBy,
+      Qty:item.Qty,
+      ReqStatus:item.ReqStatus,
+      StoreTranTypeId:item.StoreTranTypeId
+    };
+    this.oStoreRec ={
+      Id:0,
+      WhId:this.oStoreReq.WhId,
+      PurchasePrice:0,
+      BusinessPartnerId:this.oStoreReq.SupplierId,
+      ItemId:this.oStoreReq.ItemId,
+      Qty:this.oStoreReq.Qty,
+      Remark:'',
+      StoreTranTypeId:1,
+      ReqId:this.oStoreReq.Id,
+      CreateBy:this.authService.UserInfo.UserID,
+      ItemName:item.ItemName
+    };
+    this.isList = false;
+  }
 
   // Pagination part Start
   //----------------------------------------------------------------------------
@@ -204,7 +242,7 @@ export class StoreretComponent {
       this.isList = false;
     } else {
       this.isList = true;
-      this.reset();
+      this.resetReq();
       this.pageIndex = 0;
       this.get();
     }
@@ -233,9 +271,9 @@ export class StoreretComponent {
     Remark:'',
     ReqStatus:1,
     CreateBy:0,
-    StoreTranTypeId:2
+    StoreTranTypeId:1
   };
-  reset() {
+  resetReq() {
     this.oStoreReq = {
       Id:0,
       WhId:0,
@@ -245,9 +283,38 @@ export class StoreretComponent {
       Remark:'',
       ReqStatus:1,
       CreateBy:0,
-      StoreTranTypeId:2
+      StoreTranTypeId:1
     };
     this.PartNo = '';
+  }
+
+  oStoreRec:StoreTran={
+    Id:0,
+  WhId:0,
+  PurchasePrice:0,
+  BusinessPartnerId:0,
+  ItemId:0,
+  Qty:0,
+  Remark:'',
+  StoreTranTypeId:1,
+  ReqId:0,
+  CreateBy:0,
+  ItemName:''
+  };
+  resetRec() {
+    this.oStoreRec = {
+      Id:0,
+  WhId:0,
+  PurchasePrice:0,
+  BusinessPartnerId:0,
+  ItemId:0,
+  Qty:0,
+  Remark:'',
+  StoreTranTypeId:1,
+  ReqId:0,
+  CreateBy:0,
+  ItemName:''
+    };
   }
 
   PartNo:string='';
@@ -279,4 +346,18 @@ export interface StoreReq{
   ReqStatus:number,
   CreateBy:number,
   StoreTranTypeId:number
+}
+
+export interface StoreTran{
+  Id:number,
+  WhId:number,
+  PurchasePrice:number,
+  BusinessPartnerId:number,
+  ItemId:number,
+  Qty:number,
+  Remark:string,
+  StoreTranTypeId:number,
+  ReqId:number,
+  CreateBy:number,
+  ItemName:string,
 }

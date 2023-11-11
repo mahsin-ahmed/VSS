@@ -1,5 +1,5 @@
 <a href="javascript:void(0)" *ngIf="!isList" (click)="switchView('list')">List</a>
-<a href="javascript:void(0)" *ngIf="isList" (click)="switchView('form')">New</a>
+<!-- <a href="javascript:void(0)" *ngIf="isList" (click)="switchView('form')">New</a> -->
 
 <!-- start store requisition view part  -->
 <!-- ================================================== -->
@@ -15,10 +15,10 @@
       records
     </div>
     <div class="col-lg-4 mb-5">
-      <h4 class="text-center">List of Store Return</h4>
+      <h4 class="text-center">List of Store Return Receive</h4>
     </div>
     <div class="col-lg-4">
-        <label for="jcStatus" class="form-label">JC Status:</label>
+        <label for="jcStatus" class="form-label">Requisition Status:</label>
         <select id="jcStatus" [(ngModel)]="reqStatus" (change)="get();">
             <option value="1">Initial</option>
             <option value="2">Approve</option>
@@ -30,21 +30,28 @@
       <div class="col-md-12">
         <table class="table table-bordered">
           <tr class="table-secondary">
+            <th>#</th>
             <th>Warehouse</th>
             <th>Part Name</th>
             <th>Supplier</th>
-            <th>Quantity</th>
-            <th>Remarks</th>
+            <th>Return Qty</th>
+            <th>Receive Qty</th>
+            <!-- <th>Purchase Price</th> -->
+            <th>Status</th>
             <th colspan="2">Action</th>
           </tr>
-          <tr *ngFor="let item of listStoreReq">
+          <tr *ngFor="let item of listStoreReq; let i = index">
+            <td>{{i + 1}}</td>
             <td>{{item.WHName}}</td>
             <td>{{item.ItemName}}</td>
             <td>{{item.SupplierName}}</td>
             <td>{{item.Qty}}</td>
-            <td>{{item.Remark}}</td>
-            <td><button class="btn btn-sm btn-outline-primary" (click)="edit(item)">Edit</button></td>
-            <td><button class="btn btn-sm btn-outline-danger" (click)="oStoreReq=item" data-bs-toggle="modal" data-bs-target="#confirmModal">Remove</button></td>
+            <td>{{item.RecQty}}</td>
+            <!-- <td>{{item.PurchasePrice}}</td> -->
+            <td>{{item.ReqStatus == 1 ? 'Initial' : item.ReqStatus == 2 ? 'Approved' : 'N/A'}}</td>
+            <td><button class="btn btn-sm btn-outline-primary" (click)="review(item)" *ngIf="item.ReqStatus == 1">Approve</button></td>
+            <td><button class="btn btn-sm btn-outline-primary" (click)="edit(item)" *ngIf="item.ReqStatus == 2">Edit</button></td>
+            <!-- <td><button class="btn btn-sm btn-outline-danger" (click)="oStoreReq=item" data-bs-toggle="modal" data-bs-target="#confirmModal">Remove</button></td> -->
           </tr>
         </table>
       </div>
@@ -56,37 +63,41 @@
 <!-- Start Entry Form -->
 <!-- ========================================================= -->
 <div *ngIf="!isList">
-  <h4 class="mb-3 text-center">Store Return Entry</h4>
+  <h4 class="mb-3 text-center">Store Return Receive Entry</h4>
   <div class="row g-3">
     <div class="col-md-4">
-      <label for="WarehouseId" class="form-label">Warehouse Name</label>
-      <select class="form-control" id="WarehouseId" aria-label="Default select example" [(ngModel)]="oStoreReq.WhId">
+      <label for="WhId" class="form-label">Warehouse Name</label>
+      <select class="form-control" id="WhId" aria-label="Default select example" [(ngModel)]="oStoreRec.WhId">
         <option *ngFor="let listWH of listWareHouse" value="{{listWH.Id}}">{{listWH.Name}}</option>
       </select>
     </div>
     <div class="col-md-4">
-      <label for="itemName" class="form-label">Spare Parts: <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#searchPartNo">Search</a></label>
-      <input type="text" id="Quantity" [(ngModel)]="PartNo" class="form-control" placeholder="part-no" readonly />
+      <label for="ItemName" class="form-label">Spare Parts Name:</label>
+      <input type="text" id="ItemName" [(ngModel)]="oStoreRec.ItemName" class="form-control" placeholder="part-no" readonly />
     </div>
     <div class="col-md-4">
         <label for="Qty" class="form-label">Quantity:</label>
-        <input type="number" id="Qty" [(ngModel)]="oStoreReq.Qty" class="form-control" style="text-align: right;" />
+        <input type="number" id="Qty" [(ngModel)]="oStoreRec.Qty" class="form-control" style="text-align: right;" />
     </div>
+    <!-- <div class="col-md-4">
+      <label for="PurchasePrice" class="form-label">Purchase Price:</label>
+      <input type="number" id="PurchasePrice" [(ngModel)]="oStoreRec.PurchasePrice" class="form-control" style="text-align: right;" />
+    </div> -->
     <div class="col-md-4">
       <label for="SuplierName" class="form-label">Supplier Name</label>
-      <select class="form-control" id="SuplierName" aria-label="Default select example" [(ngModel)]="oStoreReq.SupplierId">
+      <select class="form-control" id="SuplierName" aria-label="Default select example" [(ngModel)]="oStoreRec.BusinessPartnerId">
         <option *ngFor="let listSP of listSupplier" value="{{listSP.BpId}}">{{listSP.Name}}</option>
       </select>
     </div>
     
     <div class="col-md-12">
-      <label for="Description" class="form-label">Description</label>
-      <textarea class="form-control" id="Description" rows="3" [(ngModel)]="oStoreReq.Remark"></textarea>
+      <label for="Remark" class="form-label">Remark</label>
+      <textarea class="form-control" id="Remark" rows="3" [(ngModel)]="oStoreRec.Remark"></textarea>
     </div>
     <div class="col-md-4">
       <div class="col-auto  mb-2">
-        <button type="button" class="btn btn-success mb-3" *ngIf="oStoreReq.Id==0" (click)="add()"> Add Requisition</button>
-        <button type="button" class="btn btn-success mb-3" *ngIf="oStoreReq.Id>0" (click)="update()">Update Requisition</button>
+        <button type="button" class="btn btn-success mb-3" *ngIf="oStoreRec.Id==0" (click)="approveReqRecStore()"> Approve Return & Store Receive</button>
+        <button type="button" class="btn btn-success mb-3" *ngIf="oStoreRec.Id>0" (click)="update()">Update Store Receive</button>
       </div>
     </div>
   </div>
@@ -104,7 +115,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body text-danger">
-        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" (click)="reset();">No</button>/
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" (click)="resetRec();">No</button>/
         <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal"
           (click)="remove(oStoreReq)">Yes</button>
       </div>

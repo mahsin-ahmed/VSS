@@ -30,8 +30,9 @@ import { EnginesizeComponent } from './operation/enginesize/enginesize.component
 import { JobgroupComponent } from './operation/jobgroup/jobgroup.component';
 import { JobComponent } from './operation/job/job.component';
 import { StorereqComponent } from './inventory/storereq/storereq.component';
-import { StorerecComponent } from './inventory/storerec/storerec.component';
+import { StorereqrecComponent } from './inventory/storereqrec/storereqrec.component';
 import { StoreretComponent } from './inventory/storeret/storeret.component';
+import { StoreretrecComponent } from './inventory/storeretrec/storeretrec.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ClientvehicleComponent } from './operation/clientvehicle/clientvehicle.component';
 
@@ -59,8 +60,9 @@ const routes: Routes = [
   { path: 'store', component: WarehouseComponent, canActivate:[authGuard] },
   { path:'sr', component:StorereqComponent, canActivate:[authGuard] },
   { path:'store-req', component:StorereqComponent, canActivate:[authGuard] },
-  { path:'store-rec', component:StorerecComponent, canActivate:[authGuard] },
+  { path:'store-req-rec', component:StorereqrecComponent, canActivate:[authGuard] },
   { path:'store-ret', component:StoreretComponent, canActivate:[authGuard] },
+  { path:'store-ret-rec', component:StoreretrecComponent, canActivate:[authGuard] },
 
   { path: 'job-card', component: JobcardComponent, canActivate:[authGuard] },
   { path: 'client-vehicle', component: ClientvehicleComponent, canActivate:[authGuard] },
