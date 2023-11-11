@@ -105,7 +105,17 @@ export class WorkgroupmemberComponent {
   }
 
   edit(item: any) { };
-  reset() { };
+
+  reset() {
+    this.WorkGroupMember ={
+      WgId:0,
+      WgName:'',
+      EmpId:0,
+      FirstName:'',
+      MiddleName:'',
+      LastName:'',
+    };
+  }
   update() { };
   remove(item: any) { };
   search() { };
