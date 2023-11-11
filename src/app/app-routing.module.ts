@@ -35,6 +35,10 @@ import { StoreretComponent } from './inventory/storeret/storeret.component';
 import { StoreretrecComponent } from './inventory/storeretrec/storeretrec.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ClientvehicleComponent } from './operation/clientvehicle/clientvehicle.component';
+import { BrandmodelComponent } from './inventory/brandmodel/brandmodel.component';
+import { SupplierComponent } from './inventory/supplier/supplier.component';
+import { WorkgroupComponent } from './operation/workgroup/workgroup.component';
+import { WorkgroupmemberComponent } from './operation/workgroupmember/workgroupmember.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -49,6 +53,8 @@ const routes: Routes = [
   { path: 'employee', component: EmployeeComponent, canActivate:[authGuard] },
 
   { path: 'brand', component: BrandComponent, canActivate:[authGuard] },
+  { path: 'brand-model', component: BrandmodelComponent, canActivate:[authGuard] },
+  { path: 'supplier', component: SupplierComponent, canActivate:[authGuard] },
   { path: 'color', component: ColorComponent, canActivate:[authGuard] },
   { path: 'item', component: ItemComponent, canActivate:[authGuard] },
   { path: 'item-category', component: ItemcategoryComponent, canActivate:[authGuard] },
@@ -67,6 +73,8 @@ const routes: Routes = [
   { path: 'job-card', component: JobcardComponent, canActivate:[authGuard] },
   { path: 'client-vehicle', component: ClientvehicleComponent, canActivate:[authGuard] },
   { path: 'client', component: ClientComponent, canActivate:[authGuard] },
+  { path: 'work-group', component: WorkgroupComponent, canActivate:[authGuard] },
+  { path: 'work-group-member', component: WorkgroupmemberComponent, canActivate:[authGuard] },
   { path: 'job', component: JobComponent, canActivate:[authGuard] },
   { path: 'job-group', component: JobgroupComponent, canActivate:[authGuard] },
   { path: 'engine-size', component: EnginesizeComponent, canActivate:[authGuard] },

@@ -37,11 +37,18 @@ import { JobgroupComponent } from './operation/jobgroup/jobgroup.component';
 import { EnginesizeComponent } from './operation/enginesize/enginesize.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ClientvehicleComponent } from './operation/clientvehicle/clientvehicle.component';
-import { StorereqrecComponent } from './inventory/storereqrec/storereqrec.component';
+import { StoreretrecComponent } from './inventory/storeretrec/storeretrec.component';
 import { StoreretComponent } from './inventory/storeret/storeret.component';
 import { StorereqComponent } from './inventory/storereq/storereq.component';
 import { SalepriceComponent } from './inventory/saleprice/saleprice.component';
-import { StoreretrecComponent } from './inventory/storeretrec/storeretrec.component';
+import { MenuComponent } from './security/menu/menu.component';
+import { BrandmodelComponent } from './inventory/brandmodel/brandmodel.component';
+import { SupplierComponent } from './inventory/supplier/supplier.component';
+import { WorkgroupComponent } from './operation/workgroup/workgroup.component';
+import { WorkgroupmemberComponent } from './operation/workgroupmember/workgroupmember.component';
+import { StorereqrecComponent } from './inventory/storereqrec/storereqrec.component';
+
+//StorereqrecComponent
 
 @NgModule({
   declarations: [
@@ -57,6 +64,7 @@ import { StoreretrecComponent } from './inventory/storeretrec/storeretrec.compon
     ItemcategoryComponent,
     ItemgroupComponent,
     ItempriceComponent,
+    MenuComponent,
     ManufacturerComponent,
     MenupermissionComponent,
     ModuleComponent,
@@ -74,11 +82,15 @@ import { StoreretrecComponent } from './inventory/storeretrec/storeretrec.compon
     EnginesizeComponent,
     DashboardComponent,
     ClientvehicleComponent,
-    StorereqrecComponent,
+    StoreretrecComponent,
     StoreretComponent,
     StorereqComponent,
     SalepriceComponent,
-    StoreretrecComponent
+    BrandmodelComponent,
+    SupplierComponent,
+    WorkgroupComponent,
+    WorkgroupmemberComponent,
+    StorereqrecComponent
   ],
   imports: [
     BrowserModule,

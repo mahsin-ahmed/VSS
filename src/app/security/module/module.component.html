@@ -1,1 +1,93 @@
-<p>module works!</p>
+<!-- <a href="javascript:void(0)" *ngIf="!isList;" (click)="isList=true;reset()">List</a>
+<a href="javascript:void(0)" *ngIf="isList && authService.UserInfo.Menu.CanCreate"
+    (click)="isList=false;reset();get()">New</a> -->
+<div *ngIf="isList">
+    <div class="row">
+        <div class="col-lg-4 mt-3">
+            Show
+            <select style="width: 50px;height: 32px;" [(ngModel)]="pageSize" (change)="search()">
+                <option *ngFor="let item of listPageSize" value={{item}}>
+                    {{item}}
+                </option>
+            </select>
+            records
+        </div>
+        <div class="col-lg-4 mt-4">
+            <h4 class="text-center">List of Modules</h4>
+        </div>
+        <!-- <div class="col-lg-4">
+            <table>
+                <tr>
+                    <td>Phone: </td>
+                    <td>
+                        <input type="text" [(ngModel)]="phone" placeholder="mobile" />
+                        <button type="button" (click)="search()"><i class="fa fa-search"></i></button>
+                    </td>
+                </tr>
+            </table>
+        </div> -->
+    </div>
+    <table class="table table-bordered">
+        <tr class="table-secondary">
+            <th scope="col">Module ID</th>
+            <th>Module Name</th>
+            <th>Path</th>
+            <th>Description</th>
+        </tr>
+        <tr *ngFor="let item of listModule">
+            <td>{{item.ModuleId}}</td>
+            <td>{{item.ModuleName}}</td>
+            <td>{{item.ModulePath}}</td>
+            <td>{{item.Description}}</td>
+            <!-- <td><button class="btn btn-sm btn-outline-primary" (click)="edit(item)"
+                    *ngIf="authService.UserInfo.Menu.CanEdit">Edit</button></td>
+            <td>
+                <button class="btn btn-sm btn-outline-danger" (click)="Menu=item" data-bs-toggle="modal"
+                    data-bs-target="#confirmModal" *ngIf="authService.UserInfo.Menu.CanDelete">Remove</button>
+            </td> -->
+        </tr>
+    </table>
+    <!-- Start Pagination  -->
+    <div class="row" *ngIf="listModule.length>0">
+        <div class="col-lg-3">
+            <div class="pull-left ">
+                <span class="well well-sm">Showing <span class="text-success"><b>{{pageStart}}</b></span> to <span
+                        class="text-success"><b>{{pageEnd}}</b></span> of <span
+                        class="text-success"><b>{{rowCount}}</b></span> records</span>
+            </div>
+        </div>
+        <div class="col-lg-9">
+            <div class="table-responsive">
+                <ul class="pagination" *ngIf="pager.pages && pager.pages.length">
+                    <li>
+                        <a class="btn btn-sm btn-outline-secondary" [ngClass]="{disabled:pageIndex == 0}"
+                            href="javascript:void(0);" (click)="changePageNumber(0)"><i class="fa fa-angle-double-left"
+                                aria-hidden="true"></i>Start</a>
+                    </li>
+                    <li>
+                        <a class="btn btn-sm btn-outline-info" [ngClass]="{disabled:pageIndex == 0}"
+                            href="javascript:void(0);" (click)="changePageNumber(pageIndex - 1)"><i
+                                class="fa fa-angle-left" aria-hidden="true"></i>Previous</a>
+                    </li>
+                    <li *ngFor="let page of pager.pages">
+                        <a class="btn btn-sm btn-outline-secondary" [ngClass]="{active:pageIndex == (page - 1)}"
+                            href="javascript:void(0);" (click)="changePageNumber(page - 1)">{{page}}</a>
+                    </li>
+                    <li>
+                        <a class="btn btn-sm btn-outline-info"
+                            [ngClass]="{disabled:pageIndex == (pager.totalPages - 1)}" href="javascript:void(0);"
+                            (click)="changePageNumber(pageIndex + 1)"><i class="fa fa-angle-right"
+                                aria-hidden="true"></i>Next</a>
+                    </li>
+                    <li>
+                        <a class="btn btn-sm btn-outline-secondary"
+                            [ngClass]="{disabled:pageIndex == (pager.totalPages - 1)}" href="javascript:void(0);"
+                            (click)="changePageNumber(pager.totalPages - 1)"><i class="fa fa-angle-double-right"
+                                aria-hidden="true"></i>End</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- End Pagination -->
+</div>

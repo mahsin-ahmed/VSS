@@ -5,11 +5,12 @@ import { AuthService } from 'src/app/auth/auth.service';
 import { CommonService, toastPayload } from 'src/app/services/common.service';
 
 @Component({
-  selector: 'app-user',
-  templateUrl: './user.component.html',
-  styleUrls: ['./user.component.css']
+  selector: 'app-workgroupmember',
+  templateUrl: './workgroupmember.component.html',
+  styleUrls: ['./workgroupmember.component.css']
 })
-export class UserComponent {
+export class WorkgroupmemberComponent {
+
   isList: boolean = true;
   isNew: boolean = true;
   phone: string = '';
@@ -19,6 +20,8 @@ export class UserComponent {
     private httpClient: HttpClient,
     public authService: AuthService) {
     this.get();
+    this.getEmployee();
+    this.getWorkGroup();
   }
 
   get() {
@@ -26,13 +29,13 @@ export class UserComponent {
       {
         'Token': this.authService.UserInfo.Token
       });
-    this.httpClient.get(this.authService.baseURL + '/api/User?pi=' + this.pageIndex + '&ps=' + this.pageSize + '&phone=' + this.phone, { headers: oHttpHeaders }).subscribe((res) => {
+    this.httpClient.get(this.authService.baseURL + '/api/WorkGroupEmp?pi=' + this.pageIndex + '&ps=' + this.pageSize + '&phone=' + this.phone, { headers: oHttpHeaders }).subscribe((res) => {
       if (res) {
-        this.listUser = res;
+        this.listWorkGroupMember = res;
 
         //#region paging
-        this.rowCount = this.listUser.length > 0 ? this.listUser[0].RowCount : 0;
-        this.totalRowsInList = this.listUser.length;
+        this.rowCount = this.listWorkGroupMember.length > 0 ? this.listWorkGroupMember[0].RowCount : 0;
+        this.totalRowsInList = this.listWorkGroupMember.length;
         this.pager.totalPages = Math.ceil(this.rowCount / this.pageSize);
         this.pager.pages = [];
         for (var i = 0; i < this.pager.totalPages; i++) {
@@ -47,55 +50,71 @@ export class UserComponent {
     });
   }
 
-  validateForm(): boolean {
-    var isValid: boolean = true;
-    if (this.User.UserCode == undefined || this.User.UserCode == null || this.User.UserCode == '') {
-      isValid = false;
-      this.showMessage('warning', 'User code is required.');
-    }
-    if (this.User.UserName == undefined || this.User.UserName == null || this.User.UserName == '') {
-      isValid = false;
-      this.showMessage('warning', 'User code is required.');
-    }
-    return isValid;
-  }
+  getWorkGroup() {
 
-  add() {
-    if (!this.validateForm()) {
-      return;
-    }
     const oHttpHeaders = new HttpHeaders(
       {
         'Token': this.authService.UserInfo.Token
       });
-    this.User.CreateBy = this.authService.UserInfo.UserID;
-    this.httpClient.post(this.authService.baseURL + '/api/User', this.User, { headers: oHttpHeaders }).subscribe((res) => {
-      if (res == true) {
+    this.httpClient.get(this.authService.baseURL + '/api/WorkGroup/GetWorkGroup', { headers: oHttpHeaders }).subscribe((res) => {
+      this.listWorkGroup = res;
+    });
+  };
+  getEmployee() {
+    const oHttpHeaders = new HttpHeaders(
+      {
+        'Token': this.authService.UserInfo.Token
+      });
+    this.httpClient.get(this.authService.baseURL + '/api/Employee/GetEmployee', { headers: oHttpHeaders }).subscribe((res) => {
+      this.listEmployee = res;
+    });
+  };
+
+  validateForm():boolean{
+    var isValid:boolean=true;
+    if(this.WorkGroupMember.WgId==undefined||this.WorkGroupMember.WgId==null||this.WorkGroupMember.WgId==0){
+      isValid = false;
+      this.showMessage('warning', 'WorkGroup Name is required.');
+    }
+    if(this.WorkGroupMember.EmpId==undefined||this.WorkGroupMember.EmpId==null||this.WorkGroupMember.EmpId==0){
+      isValid = false;
+      this.showMessage('warning', 'Employee Name is required.');
+    }
+    return isValid
+  }
+
+  add() {
+    if(!this.validateForm()){
+      return;
+    }
+    const oHttpHeaders = new HttpHeaders(
+    {
+        'Token':this.authService.UserInfo.Token
+    });
+    //this.Brand.CreateBy = this.authService.UserInfo.UserID;
+    this.httpClient.post(this.authService.baseURL + '/api/WorkGroupEmp', this.WorkGroupMember,{headers: oHttpHeaders}).subscribe((res)=>{
+      if(res == true){
         this.isList = true;
         this.get();
         this.reset();
         this.showMessage('success', 'data added.');
-      } else {
+      }else{
         this.showMessage('error', 'error occurred.');
       }
     });
   }
 
-  edit(item: any) {
-    this.User = {
-      UserID: item.UserID,
-      UserCode:  item.UserCode,
-      UserName:  item.UserName,
-      FirstName:  item.FirstName,
-      MiddleName: item.MiddleName,
-      LastName:  item.LastName,
-      Email:  item.Email,
-      MobileNo:  item.MobileNo,
-      PhoneNo:  item.PhoneNo,
-      CreateBy:  0,
-      UpdateBy:0,
-    };
-    this.isList = false;
+  edit(item:any){
+    this.WorkGroupMember ={
+      Id:item.Id,
+      WgId:item.WgId,
+      WgName:item.WgName,
+      EmpId:item.EmpId,
+      FirstName:item.FirstName,
+      MiddleName:item.MiddleName,
+      LastName:item.LastName,
+      };
+      this.isList = false;
   }
 
   update() {
@@ -106,8 +125,8 @@ export class UserComponent {
       {
           'Token':this.authService.UserInfo.Token
       });
-    this.User.UpdateBy = this.authService.UserInfo.UserID;
-    this.httpClient.put(this.authService.baseURL + '/api/User', this.User,{headers: oHttpHeaders}).subscribe((res)=>{
+    //this.Brand.UpdateBy = this.authService.UserInfo.UserID;
+    this.httpClient.put(this.authService.baseURL + '/api/WorkGroupEmp', this.WorkGroupMember,{headers: oHttpHeaders}).subscribe((res)=>{
       if(res == true){
         this.isList = true;
         this.get();
@@ -118,13 +137,12 @@ export class UserComponent {
     });
   }
 
-  
   remove(item:any){
     const oHttpHeaders = new HttpHeaders(
       {
           'Token':this.authService.UserInfo.Token
       });
-    this.httpClient.delete(this.authService.baseURL + '/api/User/' + this.User.UserID,{headers: oHttpHeaders}).subscribe((res)=>{
+    this.httpClient.delete(this.authService.baseURL + '/api/WorkGroupEmp/' + this.WorkGroupMember.Id,{headers: oHttpHeaders}).subscribe((res)=>{
       if(res == true){
         this.get();
         this.showMessage('success', 'data removed.');
@@ -133,50 +151,51 @@ export class UserComponent {
       }
     });    
   }
+  reset() {
+    this.WorkGroupMember ={
+      Id:0,
+      WgId:0,
+      WgName:'',
+      EmpId:0,
+      FirstName:'',
+      MiddleName:'',
+      LastName:'',
+    };
+  }
   search() { };
 
+  listWorkGroupMember: any = [];
 
-  listUser: any = [];
-  User: {
-    UserID: number,
-    UserCode: string,
-    UserName: string,
+  WorkGroupMember: {
+    Id:number,
+    WgId: number,
+    WgName: string,
+    EmpId: number,
     FirstName: string,
     MiddleName: string,
     LastName: string,
-    Email: string,
-    MobileNo: string,
-    PhoneNo: string,
-    CreateBy: number,
-    UpdateBy:number,
   } = {
-      UserID: 0,
-      UserCode: '',
-      UserName: '',
+      Id:0,
+      WgId: 0,
+      WgName: '',
+      EmpId: 0,
       FirstName: '',
       MiddleName: '',
       LastName: '',
-      Email: '',
-      MobileNo: '',
-      PhoneNo: '',
-      CreateBy: 0,
-      UpdateBy:0,
     };
-  reset() {
-    this.User = {
-      UserID: 0,
-      UserCode: '',
-      UserName: '',
-      FirstName: '',
-      MiddleName: '',
-      LastName: '',
-      Email: '',
-      MobileNo: '',
-      PhoneNo: '',
-      CreateBy: 0,
-      UpdateBy:0
+
+  listWorkGroup: any = [];
+  WorkGroup: {
+    WgId: number,
+    WgName: string,
+  } = {
+      WgId: 0,
+      WgName: ''
     };
-  }
+
+  listEmployee: any = [];
+
+
   //type: 'success', 'error', 'warning', 'info'
   //message: '<span>Action in '+type+'</span>',
   showMessage(type: string, message: string) {
@@ -191,7 +210,6 @@ export class UserComponent {
     };
     this.cs.showToast(this.toast);
   }
-
 
   //#region paging varible
   pageIndex: number = 0;

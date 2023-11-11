@@ -36,7 +36,7 @@
         <th>#</th>
         <th>#</th>
     </tr>
-    <tr *ngFor="let item of listBrand; let i = index">
+    <tr *ngFor="let item of listSupplier; let i = index">
         <td>{{i+1}}</td>
         <td>{{item.Code}}</td>
         <td>{{item.Name}}</td>
@@ -44,12 +44,12 @@
         <td>{{item.Remarks}}</td>
         <td><button class="btn btn-sm btn-outline-primary" (click)="edit(item)" *ngIf="authService.UserInfo.Menu.CanEdit" >Edit</button></td>
         <td>
-          <button class="btn btn-sm btn-outline-danger" (click)="Brand=item" data-bs-toggle="modal" data-bs-target="#confirmModal"  *ngIf="authService.UserInfo.Menu.CanDelete">Remove</button>
+          <button class="btn btn-sm btn-outline-danger" (click)="Supplier=item" data-bs-toggle="modal" data-bs-target="#confirmModal"  *ngIf="authService.UserInfo.Menu.CanDelete">Remove</button>
         </td>
     </tr>
   </table>
 <!-- Start Pagination  -->
-<div class="row" *ngIf="listBrand.length>0">
+<div class="row" *ngIf="listSupplier.length>0">
   <div class="col-lg-3">
       <div class="pull-left ">
           <span class="well well-sm">Showing  <span class="text-success"><b>{{pageStart}}</b></span> to <span class="text-success"><b>{{pageEnd}}</b></span> of <span class="text-success"><b>{{rowCount}}</b></span> records</span>
@@ -84,24 +84,24 @@
   <div class="row g-3">
     <div class="col-md-4">
         <label class="form-label" for="brandCode">Brand Code:</label>
-        <input type="text" id="brandCode" [(ngModel)]="Brand.Code" class="form-control" />
+        <input type="text" id="brandCode" [(ngModel)]="Supplier.Code" class="form-control" />
     </div>
     <div class="col-md-4">
       <label class="form-label" for="brandName">Brand Name:</label>
-      <input type="text" id="brandName" [(ngModel)]="Brand.Name" class="form-control" />
+      <input type="text" id="brandName" [(ngModel)]="Supplier.Name" class="form-control" />
     </div>
     <div class="col-md-4">
       <label class="form-label" for="country">Country:</label>
-      <input type="text" id="country" [(ngModel)]="Brand.Country"  class="form-control" />
+      <input type="text" id="country" [(ngModel)]="Supplier.Country"  class="form-control" />
     </div>
     
     <div class="col-md-4">
       <label class="form-label" for="remarks">Remarks:</label>
-      <input type="text" id="remarks" [(ngModel)]="Brand.Remarks"  class="form-control" />
+      <input type="text" id="remarks" [(ngModel)]="Supplier.Remarks"  class="form-control" />
     </div>
     <div class="col-md-12 mt-5">
-      <button type="button" class="btn btn-success" *ngIf="Brand.Id==0 && authService.UserInfo.Menu.CanCreate" (click)="add();">Add</button>
-      <button type="button" class="btn btn-success" *ngIf="Brand.Id>0 && authService.UserInfo.Menu.CanEdit" (click)="update();">update</button>
+      <button type="button" class="btn btn-success" *ngIf="Supplier.Id==0 && authService.UserInfo.Menu.CanCreate" (click)="add();">Add</button>
+      <button type="button" class="btn btn-success" *ngIf="Supplier.Id>0 && authService.UserInfo.Menu.CanEdit" (click)="update();">update</button>
     </div>
   </div>
 </div>
@@ -115,7 +115,7 @@
       </div>
       <div class="modal-body text-danger">
           <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" (click)="reset();">No</button>/
-          <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal" (click)="remove(Brand)">Yes</button>
+          <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal" (click)="remove(Supplier)">Yes</button>
       </div>
       <div class="modal-footer">
           <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Close</button>

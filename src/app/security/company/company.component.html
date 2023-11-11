@@ -1,46 +1,153 @@
-<h4 class="text-center">Company</h4>
-<div class="row g-3">
-    <div class="col-md-4">
-        <label class="form-label" for="CompanyName">Company</label>
-        <input type="text" id="CompanyName" [(ngModel)]="Company.CompanyName" class="form-control" placeholder="Company-Name" />
+<a href="javascript:void(0)" *ngIf="!isList;" (click)="isList=true;reset()">List</a>
+<a href="javascript:void(0)" *ngIf="isList && authService.UserInfo.Menu.CanCreate"
+    (click)="isList=false;reset();get()">New</a>
+<div *ngIf="isList">
+    <div class="row">
+        <div class="col-lg-4">
+            Show
+            <select style="width: 50px;height: 32px;" [(ngModel)]="pageSize" (change)="search()">
+                <option *ngFor="let item of listPageSize" value={{item}}>
+                    {{item}}
+                </option>
+            </select>
+            records
+        </div>
+        <div class="col-lg-4">
+            <h4 class="text-center">Company Information</h4>
+        </div>
     </div>
-    <div class="col-md-4">
-        <label class="form-label" for="Description">Number of Bay</label>
-        <input type="number" id="Description" [(ngModel)]="Company.Bay" class="form-control" placeholder="Bay" />
+    <table class="table table-bordered">
+        <tr class="table-secondary">
+            <th scope="col">Company Code</th>
+            <th>Company Name</th>
+            <th>Description</th>
+            <th>#</th>
+        </tr>
+        <tr *ngFor="let item of listCompany">
+            <td>{{item.CompanyCode}}</td>
+            <td>{{item.CompanyName}}</td>
+            <td><button class="btn btn-sm btn-outline-primary" (click)="edit(item)"
+                    *ngIf="authService.UserInfo.Menu.CanEdit">Edit</button></td>
+            <td>
+                <button class="btn btn-sm btn-outline-danger" (click)="Company=item" data-bs-toggle="modal"
+                    data-bs-target="#confirmModal" *ngIf="authService.UserInfo.Menu.CanDelete">Remove</button>
+            </td>
+        </tr>
+    </table>
+    <!-- Start Pagination  -->
+    <div class="row" *ngIf="listCompany.length>0">
+        <div class="col-lg-3">
+            <div class="pull-left ">
+                <span class="well well-sm">Showing <span class="text-success"><b>{{pageStart}}</b></span> to <span
+                        class="text-success"><b>{{pageEnd}}</b></span> of <span
+                        class="text-success"><b>{{rowCount}}</b></span> records</span>
+            </div>
+        </div>
+        <div class="col-lg-9">
+            <div class="table-responsive">
+                <ul class="pagination" *ngIf="pager.pages && pager.pages.length">
+                    <li>
+                        <a class="btn btn-sm btn-outline-secondary" [ngClass]="{disabled:pageIndex == 0}"
+                            href="javascript:void(0);" (click)="changePageNumber(0)"><i class="fa fa-angle-double-left"
+                                aria-hidden="true"></i>Start</a>
+                    </li>
+                    <li>
+                        <a class="btn btn-sm btn-outline-info" [ngClass]="{disabled:pageIndex == 0}"
+                            href="javascript:void(0);" (click)="changePageNumber(pageIndex - 1)"><i
+                                class="fa fa-angle-left" aria-hidden="true"></i>Previous</a>
+                    </li>
+                    <li *ngFor="let page of pager.pages">
+                        <a class="btn btn-sm btn-outline-secondary" [ngClass]="{active:pageIndex == (page - 1)}"
+                            href="javascript:void(0);" (click)="changePageNumber(page - 1)">{{page}}</a>
+                    </li>
+                    <li>
+                        <a class="btn btn-sm btn-outline-info"
+                            [ngClass]="{disabled:pageIndex == (pager.totalPages - 1)}" href="javascript:void(0);"
+                            (click)="changePageNumber(pageIndex + 1)"><i class="fa fa-angle-right"
+                                aria-hidden="true"></i>Next</a>
+                    </li>
+                    <li>
+                        <a class="btn btn-sm btn-outline-secondary"
+                            [ngClass]="{disabled:pageIndex == (pager.totalPages - 1)}" href="javascript:void(0);"
+                            (click)="changePageNumber(pager.totalPages - 1)"><i class="fa fa-angle-double-right"
+                                aria-hidden="true"></i>End</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
-    <div class="col-md-4">
-        <label class="form-label" for="Vat">VAT</label>
-        <input type="number" id="Vat" [(ngModel)]="Company.Vat" class="form-control" placeholder="VAT" />
+    <!-- End Pagination -->
+</div>
+<div *ngIf="!isList">
+    <h4 class="text-center">Company Entry Form</h4>
+    <div class="row g-3">
+        <div class="col-md-4">
+            <label class="form-label" for="CompanyName">Company Name:</label>
+            <input type="text" id="CompanyName" [(ngModel)]="Company.CompanyName" class="form-control" />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label" for="Short">Number of Bay:</label>
+            <input type="text" id="Short" [(ngModel)]="Company.Bay" class="form-control" />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label" for="Short">VAT:</label>
+            <input type="text" id="Short" [(ngModel)]="Company.Vat" class="form-control" />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label" for="Short">Date Format:</label>
+            <input type="text" id="Short" [(ngModel)]="Company.DateFormat" class="form-control" />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label" for="Short">DecimalPlace:</label>
+            <input type="text" id="Short" [(ngModel)]="Company.DecimalPlace" class="form-control" />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label" for="Short">Phone:</label>
+            <input type="text" id="Short" [(ngModel)]="Company.Phone" class="form-control" />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label" for="Short">Email:</label>
+            <input type="text" id="Short" [(ngModel)]="Company.Email" class="form-control" />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label" for="Website">Website</label>
+            <input type="text" id="Website" [(ngModel)]="Company.Website" class="form-control" placeholder="Website" />
+        </div>
+        <div class="col-md-12">
+            <label class="form-label" for="Address">Address</label>
+            <input type="text" id="Address" [(ngModel)]="Company.Address" class="form-control" placeholder="Address" />
+        </div>
+        <div class="col-md-12">
+            <label class="form-label" for="Description">Description</label>
+            <input type="text" id="Description" [(ngModel)]="Company.Description" class="form-control" placeholder="Description" />
+        </div>
+        <div class="col-md-12 mt-5">
+            <button type="button" class="btn btn-success"
+                *ngIf="Company.CompanyId==0 && authService.UserInfo.Menu.CanCreate" (click)="add();">Add
+                Designation</button>
+            <button type="button" class="btn btn-success"
+                *ngIf="Company.CompanyId>0 && authService.UserInfo.Menu.CanEdit"
+                (click)="update();">update</button>
+        </div>
     </div>
-    <div class="col-md-4">
-        <label class="form-label" for="DateFormat">DateFormat</label>
-        <input type="text" id="DateFormat" [(ngModel)]="Company.DateFormat" class="form-control" placeholder="VAT" />
-    </div>
-    <div class="col-md-4">
-        <label class="form-label" for="DecimalPlace">DecimalPlace</label>
-        <input type="text" id="DecimalPlace" [(ngModel)]="Company.DecimalPlace" class="form-control" placeholder="VAT" />
-    </div>
-    <div class="col-md-4">
-        <label class="form-label" for="Phone">Phone</label>
-        <input type="text" id="Phone" [(ngModel)]="Company.Phone" class="form-control" placeholder="VAT" />
-    </div>
-    <div class="col-md-4">
-        <label class="form-label" for="Email">Email</label>
-        <input type="Email" id="Email" [(ngModel)]="Company.Email" class="form-control" placeholder="Email" />
-    </div>
-    <div class="col-md-4">
-        <label class="form-label" for="Website">Website</label>
-        <input type="text" id="Website" [(ngModel)]="Company.Website" class="form-control" placeholder="Website" />
-    </div>
-    <div class="col-md-12">
-        <label class="form-label" for="Address">Address</label>
-        <input type="text" id="Address" [(ngModel)]="Company.Address" class="form-control" placeholder="Address" />
-    </div>
-    <div class="col-md-12">
-        <label class="form-label" for="Description">Description</label>
-        <input type="text" id="Description" [(ngModel)]="Company.Description" class="form-control" placeholder="Description" />
-    </div>
-    <div class="col-md-4 mt-5">
-        <button (click)="save()" class="btn btn-success">Update</button>
+</div>
+
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-primary">Are you sure to remove?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-danger">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"
+                    (click)="reset();">No</button>/
+                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal"
+                    (click)="remove(Company)">Yes</button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
     </div>
 </div>

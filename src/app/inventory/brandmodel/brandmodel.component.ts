@@ -5,14 +5,14 @@ import { AuthService } from 'src/app/auth/auth.service';
 import { CommonService, toastPayload } from 'src/app/services/common.service';
 
 @Component({
-  selector: 'app-role',
-  templateUrl: './role.component.html',
-  styleUrls: ['./role.component.css']
+  selector: 'app-brandmodel',
+  templateUrl: './brandmodel.component.html',
+  styleUrls: ['./brandmodel.component.css']
 })
-export class RoleComponent { 
+export class BrandmodelComponent {
   isList:boolean=true;
   isNew:boolean = true;
-  phone:string = '';  
+  phone:string = '';
   toast!: toastPayload;
 
   constructor(private cs:CommonService,
@@ -26,13 +26,12 @@ export class RoleComponent {
     {
         'Token':this.authService.UserInfo.Token
     });
-    this.httpClient.get(this.authService.baseURL + '/api/Role?pi='+this.pageIndex+'&ps='+this.pageSize+'&phone='+this.phone,{headers: oHttpHeaders}).subscribe((res)=>{
+    this.httpClient.get(this.authService.baseURL + '/api/BrandModel?pi='+this.pageIndex+'&ps='+this.pageSize+'&phone='+this.phone,{headers: oHttpHeaders}).subscribe((res)=>{
       if(res){
-        this.listRole = res;
-        
+        this.listBrandModel = res;       
       //#region paging
-      this.rowCount = this.listRole.length > 0 ? this.listRole[0].RowCount : 0;
-      this.totalRowsInList = this.listRole.length;
+      this.rowCount = this.listBrandModel.length > 0 ? this.listBrandModel[0].RowCount : 0;
+      this.totalRowsInList = this.listBrandModel.length;
       this.pager.totalPages = Math.ceil(this.rowCount / this.pageSize);
       this.pager.pages = [];
       for(var i = 0; i<this.pager.totalPages; i++){
@@ -46,59 +45,63 @@ export class RoleComponent {
       }
     });
   }
-
+  
   validateForm():boolean{
     var isValid:boolean=true;
-    if(this.Role.RoleName==undefined||this.Role.RoleName==null||this.Role.RoleName==''){
+    if(this.BrandModel.BrandId==undefined||this.BrandModel.BrandId==null||this.BrandModel.BrandId==0){
       isValid = false;
-      this.showMessage('warning', 'Role name is required.');
+      this.showMessage('warning', 'Brand model ID is required.');
     }
-    return isValid;
+    if(this.BrandModel.ModelCode==undefined||this.BrandModel.ModelCode==null||this.BrandModel.ModelCode==''){
+      isValid = false;
+      this.showMessage('warning', 'Brand model code is required.');
+    }
+    return isValid
   }
 
-  add() {    
+  add() {
     if(!this.validateForm()){
       return;
     }
     const oHttpHeaders = new HttpHeaders(
-      {
-          'Token':this.authService.UserInfo.Token
-      });
-    //this.Role.CreateBy = this.authService.UserInfo.UserID;
-    this.httpClient.post(this.authService.baseURL + '/api/Role', this.Role,{headers: oHttpHeaders}).subscribe((res) => {
-      if (res == true) {
+    {
+        'Token':this.authService.UserInfo.Token
+    });
+    //this.Brand.CreateBy = this.authService.UserInfo.UserID;
+    this.httpClient.post(this.authService.baseURL + '/api/BrandModel', this.BrandModel,{headers: oHttpHeaders}).subscribe((res)=>{
+      if(res == true){
         this.isList = true;
         this.get();
         this.reset();
         this.showMessage('success', 'data added.');
-      } else {
+      }else{
         this.showMessage('error', 'error occurred.');
       }
     });
   }
-  edit(item:any){
-    this.Role ={
-      RoleId:item.RoleId,
-      RoleName:item.RoleName,
-      };
-      this.isList = false;
+
+  edit(item: any) {
+    this.BrandModel = {
+      "Id":item.Id,
+      "BrandId":item.BrandId,
+      "ModelCode":item.ModelCode,
+      "Remarks":item.Remarks,
+    };
+    this.isList = false;
   }
-  
+
   update() {
-    if(!this.validateForm()){
-      return;
-    }
     const oHttpHeaders = new HttpHeaders(
-      {
-          'Token':this.authService.UserInfo.Token
-      });
-    //this.Designation.UpdateBy = this.authService.UserInfo.UserID;
-    this.httpClient.put(this.authService.baseURL + '/api/Role', this.Role,{headers: oHttpHeaders}).subscribe((res)=>{
-      if(res == true){
+    {
+        'Token':this.authService.UserInfo.Token
+    });
+    //this.Job.CreateBy = this.authService.UserInfo.UserID;
+    this.httpClient.put(this.authService.baseURL + '/api/BrandModel', this.BrandModel,{headers: oHttpHeaders}).subscribe((res) => {
+      if (res == true) {
         this.isList = true;
         this.get();
         this.showMessage('success', 'data updated.');
-      }else{
+      } else {
         this.showMessage('error', 'error occurred.');
       }
     });
@@ -109,7 +112,7 @@ export class RoleComponent {
       {
           'Token':this.authService.UserInfo.Token
       });
-    this.httpClient.delete(this.authService.baseURL + '/api/Role/' + this.Role.RoleId,{headers: oHttpHeaders}).subscribe((res)=>{
+    this.httpClient.delete(this.authService.baseURL + '/api/BrandModel/' + this.BrandModel.Id,{headers: oHttpHeaders}).subscribe((res)=>{
       if(res == true){
         this.get();
         this.showMessage('success', 'data removed.');
@@ -118,22 +121,28 @@ export class RoleComponent {
       }
     });    
   }
-  
   reset() {
-    this.Role ={
-    RoleId:0,
-    RoleName:'',
+    this.BrandModel = {
+      Id: 0,
+      BrandId: 0,
+      ModelCode: '',
+      Remarks:'',
     };
   }
   search(){};
 
-  listRole:any=[];
-  Role:{  
-    RoleId:number,
-    RoleName:string,
+  listBrandModel:any =[];
+
+  BrandModel:{
+    "Id":number,
+    "BrandId":number,
+    "ModelCode":string,
+    "Remarks":string,
   }={
-    RoleId:0,
-    RoleName:'',
+    "Id":0,
+    "BrandId":0,
+    "ModelCode":'',
+    "Remarks":'',
   };
 
   //type: 'success', 'error', 'warning', 'info'
@@ -150,7 +159,6 @@ export class RoleComponent {
     };
     this.cs.showToast(this.toast);
   }
-
 
   //#region paging varible
   pageIndex: number = 0;

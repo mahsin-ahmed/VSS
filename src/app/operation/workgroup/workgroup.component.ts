@@ -5,14 +5,15 @@ import { AuthService } from 'src/app/auth/auth.service';
 import { CommonService, toastPayload } from 'src/app/services/common.service';
 
 @Component({
-  selector: 'app-role',
-  templateUrl: './role.component.html',
-  styleUrls: ['./role.component.css']
+  selector: 'app-workgroup',
+  templateUrl: './workgroup.component.html',
+  styleUrls: ['./workgroup.component.css']
 })
-export class RoleComponent { 
+export class WorkgroupComponent {
+  
   isList:boolean=true;
   isNew:boolean = true;
-  phone:string = '';  
+  phone:string = '';
   toast!: toastPayload;
 
   constructor(private cs:CommonService,
@@ -26,13 +27,13 @@ export class RoleComponent {
     {
         'Token':this.authService.UserInfo.Token
     });
-    this.httpClient.get(this.authService.baseURL + '/api/Role?pi='+this.pageIndex+'&ps='+this.pageSize+'&phone='+this.phone,{headers: oHttpHeaders}).subscribe((res)=>{
+    this.httpClient.get(this.authService.baseURL + '/api/WorkGroup?pi='+this.pageIndex+'&ps='+this.pageSize+'&phone='+this.phone,{headers: oHttpHeaders}).subscribe((res)=>{
       if(res){
-        this.listRole = res;
+        this.listWorkGroup = res;
         
       //#region paging
-      this.rowCount = this.listRole.length > 0 ? this.listRole[0].RowCount : 0;
-      this.totalRowsInList = this.listRole.length;
+      this.rowCount = this.listWorkGroup.length > 0 ? this.listWorkGroup[0].RowCount : 0;
+      this.totalRowsInList = this.listWorkGroup.length;
       this.pager.totalPages = Math.ceil(this.rowCount / this.pageSize);
       this.pager.pages = [];
       for(var i = 0; i<this.pager.totalPages; i++){
@@ -46,44 +47,52 @@ export class RoleComponent {
       }
     });
   }
-
+  
   validateForm():boolean{
     var isValid:boolean=true;
-    if(this.Role.RoleName==undefined||this.Role.RoleName==null||this.Role.RoleName==''){
+    if(this.WorkGroup.WgName==undefined||this.WorkGroup.WgName==null||this.WorkGroup.WgName==''){
       isValid = false;
-      this.showMessage('warning', 'Role name is required.');
+      this.showMessage('warning', 'WorkGroup Name is required.');
     }
-    return isValid;
+    return isValid
   }
-
-  add() {    
+  
+  add() {
     if(!this.validateForm()){
       return;
     }
     const oHttpHeaders = new HttpHeaders(
-      {
-          'Token':this.authService.UserInfo.Token
-      });
-    //this.Role.CreateBy = this.authService.UserInfo.UserID;
-    this.httpClient.post(this.authService.baseURL + '/api/Role', this.Role,{headers: oHttpHeaders}).subscribe((res) => {
-      if (res == true) {
+    {
+        'Token':this.authService.UserInfo.Token
+    });
+    //this.Brand.CreateBy = this.authService.UserInfo.UserID;
+    this.httpClient.post(this.authService.baseURL + '/api/WorkGroup', this.WorkGroup,{headers: oHttpHeaders}).subscribe((res)=>{
+      if(res == true){
         this.isList = true;
         this.get();
         this.reset();
         this.showMessage('success', 'data added.');
-      } else {
+      }else{
         this.showMessage('error', 'error occurred.');
       }
     });
   }
+  search(){};
+
+  reset() {
+    this.WorkGroup ={
+      WgId:0,
+    WgName:'',
+    };
+  }
   edit(item:any){
-    this.Role ={
-      RoleId:item.RoleId,
-      RoleName:item.RoleName,
+    this.WorkGroup ={
+      WgId:item.WgId,
+      WgName:item.WgName,
       };
       this.isList = false;
   }
-  
+
   update() {
     if(!this.validateForm()){
       return;
@@ -92,8 +101,8 @@ export class RoleComponent {
       {
           'Token':this.authService.UserInfo.Token
       });
-    //this.Designation.UpdateBy = this.authService.UserInfo.UserID;
-    this.httpClient.put(this.authService.baseURL + '/api/Role', this.Role,{headers: oHttpHeaders}).subscribe((res)=>{
+    //this.Brand.UpdateBy = this.authService.UserInfo.UserID;
+    this.httpClient.put(this.authService.baseURL + '/api/WorkGroup', this.WorkGroup,{headers: oHttpHeaders}).subscribe((res)=>{
       if(res == true){
         this.isList = true;
         this.get();
@@ -103,13 +112,13 @@ export class RoleComponent {
       }
     });
   }
-
+  
   remove(item:any){
     const oHttpHeaders = new HttpHeaders(
       {
           'Token':this.authService.UserInfo.Token
       });
-    this.httpClient.delete(this.authService.baseURL + '/api/Role/' + this.Role.RoleId,{headers: oHttpHeaders}).subscribe((res)=>{
+    this.httpClient.delete(this.authService.baseURL + '/api/WorkGroup/' + this.WorkGroup.WgId,{headers: oHttpHeaders}).subscribe((res)=>{
       if(res == true){
         this.get();
         this.showMessage('success', 'data removed.');
@@ -118,23 +127,16 @@ export class RoleComponent {
       }
     });    
   }
-  
-  reset() {
-    this.Role ={
-    RoleId:0,
-    RoleName:'',
-    };
-  }
-  search(){};
 
-  listRole:any=[];
-  Role:{  
-    RoleId:number,
-    RoleName:string,
+  listWorkGroup:any=[];
+  WorkGroup:{
+    WgId:number,
+    WgName:string,
   }={
-    RoleId:0,
-    RoleName:'',
+    WgId:0,
+    WgName:''
   };
+
 
   //type: 'success', 'error', 'warning', 'info'
   //message: '<span>Action in '+type+'</span>',
@@ -150,7 +152,6 @@ export class RoleComponent {
     };
     this.cs.showToast(this.toast);
   }
-
 
   //#region paging varible
   pageIndex: number = 0;
@@ -179,5 +180,4 @@ export class RoleComponent {
     this.get();
   }
   //#endregion
-
 }

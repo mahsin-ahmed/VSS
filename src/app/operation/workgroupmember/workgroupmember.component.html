@@ -13,7 +13,7 @@
             records
         </div>
         <div class="col-lg-4">
-            <h4 class="text-center">List of Users</h4>
+            <h4 class="text-center">List of Work Group Members</h4>
         </div>
         <div class="col-lg-4">
             <table>
@@ -29,33 +29,26 @@
     </div>
     <table class="table table-bordered">
         <tr class="table-secondary">
-            <th scope="col">User Code</th>
-            <th>User Name</th>
-            <th>Full Name</th>
-            <th>Email</th>
-            <th>Mobile</th>
-            <th>Phone</th>
+            <th scope="col">#</th>
+            <th>WorkGroup Name</th>
+            <th>Employee Name</th>
             <th>#</th>
             <th>#</th>
         </tr>
-        <tr *ngFor="let item of listUser">
-            <td>{{item.UserCode}}</td>
-            <td>{{item.UserName}}</td>
-            <td>{{item.FirstName}} {{item.MiddleName}} {{item.LastName}}</td>
-            <td>{{item.Email}}</td>
-            <td>{{item.MobileNo}}</td>
-            <td>{{item.PhoneNo}}</td>
-            
+        <tr *ngFor="let item of listWorkGroupMember">
+            <td>{{item.Id}}</td>
+            <td>{{item.WgName}}</td>
+            <td>{{item.FirstName}}{{" "}}{{item.MiddleName}}{{" "}}{{item.LastName}}</td>
             <td><button class="btn btn-sm btn-outline-primary" (click)="edit(item)"
                     *ngIf="authService.UserInfo.Menu.CanEdit">Edit</button></td>
             <td>
-                <button class="btn btn-sm btn-outline-danger" (click)="User=item" data-bs-toggle="modal"
+                <button class="btn btn-sm btn-outline-danger" (click)="WorkGroupMember=item" data-bs-toggle="modal"
                     data-bs-target="#confirmModal" *ngIf="authService.UserInfo.Menu.CanDelete">Remove</button>
             </td>
         </tr>
     </table>
     <!-- Start Pagination  -->
-    <div class="row" *ngIf="listUser.length>0">
+    <div class="row" *ngIf="listWorkGroupMember.length>0">
         <div class="col-lg-3">
             <div class="pull-left ">
                 <span class="well well-sm">Showing <span class="text-success"><b>{{pageStart}}</b></span> to <span
@@ -99,48 +92,26 @@
     <!-- End Pagination -->
 </div>
 <div *ngIf="!isList">
-    <h4 class="text-center">User Entry Form</h4>
+    <h4 class="text-center">WorkGroup Member Entry</h4>
     <div class="row g-3">
         <div class="col-md-4">
-            <label class="form-label" for="Name">User Code:</label>
-            <input type="text" id="Name" [(ngModel)]="User.UserCode" class="form-control" />
+            <label class="form-label" for="WgId">Work Group Name:</label>
+            <select id="WgId" class="form-control" [(ngModel)]="WorkGroupMember.WgId">
+                <option *ngFor="let item of listWorkGroup" value="{{item.WgId}}">{{item.WgName}}</option>
+            </select>
         </div>
         <div class="col-md-4">
-            <label class="form-label" for="UserName">UserName:</label>
-            <input type="text" id="UserName" [(ngModel)]="User.UserName" class="form-control" />
+            <label class="form-label" for="EmpId">Employee Name:</label>
+            <select id="EmpId" class="form-control" [(ngModel)]="WorkGroupMember.EmpId">
+                <option *ngFor="let item of listEmployee" value="{{item.EmployeeId}}">{{item.FirstName}}{{' '}}{{item.MiddleName}}{{' '}}{{item.LastName}}</option>
+            </select>
         </div>
-        <div class="col-md-4">
-            <label class="form-label" for="FirstName">FirstName:</label>
-            <input type="text" id="FirstName" [(ngModel)]="User.FirstName" class="form-control" />
-        </div>
-        <div class="col-md-4">
-            <label class="form-label" for="MiddleName">MiddleName:</label>
-            <input type="text" id="MiddleName" [(ngModel)]="User.MiddleName" class="form-control" />
-        </div>
-        <div class="col-md-4">
-            <label class="form-label" for="LastName">LastName:</label>
-            <input type="text" id="LastName" [(ngModel)]="User.LastName" class="form-control" />
-        </div>
-        <div class="col-md-4">
-            <label class="form-label" for="Email">Email:</label>
-            <input type="email" id="Email" [(ngModel)]="User.Email" class="form-control" />
-        </div>
-        <div class="col-md-4">
-            <label class="form-label" for="MobileNo">MobileNo:</label>
-            <input type="text" id="MobileNo" [(ngModel)]="User.MobileNo" class="form-control" />
-        </div>
-        <div class="col-md-4">
-            <label class="form-label" for="PhoneNo">PhoneNo:</label>
-            <input type="text" id="PhoneNo" [(ngModel)]="User.PhoneNo" class="form-control" />
-        </div>
-
         <div class="col-md-12 mt-5">
             <button type="button" class="btn btn-success"
-                *ngIf="User.UserID==0 && authService.UserInfo.Menu.CanCreate" (click)="add();">Add
-                User</button>
-            <button type="button" class="btn btn-success"
-                *ngIf="User.UserID>0 && authService.UserInfo.Menu.CanEdit"
-                (click)="update();">update User</button>
+                *ngIf="WorkGroupMember.Id==0 && authService.UserInfo.Menu.CanCreate" (click)="add();">Add Work
+                Group Member</button>
+            <button type="button" class="btn btn-success" *ngIf="WorkGroupMember.Id>0 && authService.UserInfo.Menu.CanEdit"
+                (click)="update();">Update Work Group Member</button>
         </div>
     </div>
 </div>
@@ -156,7 +127,7 @@
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"
                     (click)="reset();">No</button>/
                 <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal"
-                    (click)="remove(User)">Yes</button>
+                    (click)="remove(listWorkGroupMember)">Yes</button>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Close</button>

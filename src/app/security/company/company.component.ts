@@ -1,4 +1,8 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { IndividualConfig } from 'ngx-toastr';
+import { AuthService } from 'src/app/auth/auth.service';
+import { CommonService, toastPayload } from 'src/app/services/common.service';
 
 @Component({
   selector: 'app-company',
@@ -6,8 +10,107 @@ import { Component } from '@angular/core';
   styleUrls: ['./company.component.css']
 })
 export class CompanyComponent {
-  Company:{"CompanyId":number,"CompanyCode":string,"CompanyName":string,"Description":string,"DateFormat":string,"DecimalPlace":number,"Bay":number,"Vat":number,"Address":string,"Phone":string,"Email":string,"Website":string,"IsActive":boolean}={"CompanyId":1,"CompanyCode":"01","CompanyName":"Car Solution","Description":"Nearby Evercare hospital, Bashundhara R\/A","DateFormat":"dd-MMM-yy","DecimalPlace":2,"Bay":6,"Vat":10,"Address":"541-42, Ferajitola, Solmaith, Vatara, Dhaka-1212","Phone":"01755660906","Email":"vehiclesolutionbd@gmail.com","Website":"www.vehiclesolution.net","IsActive":true};
-    save():void{
+  isList:boolean=true;
+  isNew:boolean = true;
+  phone:string = '';  
+  toast!: toastPayload;
 
-    }
+  constructor(private cs:CommonService,
+    private httpClient: HttpClient,
+    public authService:AuthService) { 
+    this.get();
+  }
+
+  get(){
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.get(this.authService.baseURL + '/api/JobCard/GetCompany',{headers:oHttpHeaders}).subscribe((res)=>{
+        this.listCompany = res;
+        console.log(this.listCompany);
+    });
+  }
+
+  update(){};
+  reset(){};
+  search(){};
+  edit(item:any){};
+  add(){};
+  remove(Company:any){};
+
+
+  listCompany:any=[];
+  Company:{
+    "CompanyId":number,
+    "CompanyCode":string,
+    "CompanyName":string,
+    "Description":string,
+    "DateFormat":string,
+    "DecimalPlace":number,
+    "Bay":number,
+    "Vat":number,
+    "Address":string,
+    "Phone":string,
+    "Email":string,
+    "Website":string,
+    "IsActive":boolean}={
+      "CompanyId":1,
+      "CompanyCode":"01",
+      "CompanyName":"Car Solution",
+      "Description":"Nearby Evercare hospital, Bashundhara R\/A",
+      "DateFormat":"dd-MMM-yy",
+      "DecimalPlace":2,
+      "Bay":6,
+      "Vat":10,
+      "Address":"541-42, Ferajitola, Solmaith, Vatara, Dhaka-1212",
+      "Phone":"01755660906","Email":"vehiclesolutionbd@gmail.com",
+      "Website":"www.vehiclesolution.net",
+      "IsActive":true
+    };
+
+    //type: 'success', 'error', 'warning', 'info'
+  //message: '<span>Action in '+type+'</span>',
+  showMessage(type: string, message:string) {
+    this.toast = {
+      message:message,
+      title: type.toUpperCase(),
+      type: type,
+      ic: {
+        timeOut: 2500,
+        closeButton: true,
+      } as IndividualConfig,
+    };
+    this.cs.showToast(this.toast);
+  }
+
+
+  //#region paging varible
+  pageIndex: number = 0;
+  pageSize:number = 10;
+  rowCount:number = 0;
+  listPageSize:any = [5,10,20];
+  pageStart:number = 0;
+  pageEnd:number = 0;
+  totalRowsInList:number=0;
+  pagedItems:any = [];
+  pager:{
+    pages:any,
+    totalPages:number
+  } = {
+    pages:[],
+    totalPages:0
+  };  
+
+  changePageSize(){
+    this.pageIndex = 0;
+    this.get();
+  }
+
+  changePageNumber(pageIndex:number){
+    this.pageIndex = pageIndex;
+    this.get();
+  }
+  //#endregion
 }
+
