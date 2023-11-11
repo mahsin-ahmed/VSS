@@ -104,10 +104,42 @@ export class WorkgroupmemberComponent {
     });
   }
 
-  edit(item: any) { };
+  edit(item:any){
+    this.WorkGroupMember ={
+      Id:item.Id,
+      WgId:item.WgId,
+      WgName:item.WgName,
+      EmpId:item.EmpId,
+      FirstName:item.FirstName,
+      MiddleName:item.MiddleName,
+      LastName:item.LastName,
+      };
+      this.isList = false;
+  }
+
+  update() {
+    if(!this.validateForm()){
+      return;
+    }
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    //this.Brand.UpdateBy = this.authService.UserInfo.UserID;
+    this.httpClient.put(this.authService.baseURL + '/api/WorkGroupEmp', this.WorkGroupMember,{headers: oHttpHeaders}).subscribe((res)=>{
+      if(res == true){
+        this.isList = true;
+        this.get();
+        this.showMessage('success', 'data updated.');
+      }else{
+        this.showMessage('error', 'error occurred.');
+      }
+    });
+  }
 
   reset() {
     this.WorkGroupMember ={
+      Id:0,
       WgId:0,
       WgName:'',
       EmpId:0,
@@ -116,13 +148,13 @@ export class WorkgroupmemberComponent {
       LastName:'',
     };
   }
-  update() { };
   remove(item: any) { };
   search() { };
 
   listWorkGroupMember: any = [];
 
   WorkGroupMember: {
+    Id:number,
     WgId: number,
     WgName: string,
     EmpId: number,
@@ -130,6 +162,7 @@ export class WorkgroupmemberComponent {
     MiddleName: string,
     LastName: string,
   } = {
+      Id:0,
       WgId: 0,
       WgName: '',
       EmpId: 0,

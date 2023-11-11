@@ -108,9 +108,9 @@
         </div>
         <div class="col-md-12 mt-5">
             <button type="button" class="btn btn-success"
-                *ngIf="WorkGroup.WgId==0 && authService.UserInfo.Menu.CanCreate" (click)="add();">Add Work
+                *ngIf="WorkGroupMember.Id==0 && authService.UserInfo.Menu.CanCreate" (click)="add();">Add Work
                 Group Member</button>
-            <button type="button" class="btn btn-success" *ngIf="WorkGroup.WgId>0 && authService.UserInfo.Menu.CanEdit"
+            <button type="button" class="btn btn-success" *ngIf="WorkGroupMember.Id>0 && authService.UserInfo.Menu.CanEdit"
                 (click)="update();">Update Work Group Member</button>
         </div>
     </div>
