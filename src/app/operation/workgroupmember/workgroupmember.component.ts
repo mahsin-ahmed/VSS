@@ -137,6 +137,20 @@ export class WorkgroupmemberComponent {
     });
   }
 
+  remove(item:any){
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.delete(this.authService.baseURL + '/api/WorkGroupEmp/' + this.WorkGroupMember.Id,{headers: oHttpHeaders}).subscribe((res)=>{
+      if(res == true){
+        this.get();
+        this.showMessage('success', 'data removed.');
+      }else{
+        this.showMessage('error', 'error occurred.');
+      }
+    });    
+  }
   reset() {
     this.WorkGroupMember ={
       Id:0,
@@ -148,7 +162,6 @@ export class WorkgroupmemberComponent {
       LastName:'',
     };
   }
-  remove(item: any) { };
   search() { };
 
   listWorkGroupMember: any = [];

@@ -35,14 +35,14 @@
             <th>#</th>
             <th>#</th>
         </tr>
-        <tr *ngFor="let item of listWorkGroupMember; let i = index">
-            <td>{{i+1}}</td>
+        <tr *ngFor="let item of listWorkGroupMember">
+            <td>{{item.Id}}</td>
             <td>{{item.WgName}}</td>
             <td>{{item.FirstName}}{{" "}}{{item.MiddleName}}{{" "}}{{item.LastName}}</td>
             <td><button class="btn btn-sm btn-outline-primary" (click)="edit(item)"
                     *ngIf="authService.UserInfo.Menu.CanEdit">Edit</button></td>
             <td>
-                <button class="btn btn-sm btn-outline-danger" (click)="WorkGroup=item" data-bs-toggle="modal"
+                <button class="btn btn-sm btn-outline-danger" (click)="WorkGroupMember=item" data-bs-toggle="modal"
                     data-bs-target="#confirmModal" *ngIf="authService.UserInfo.Menu.CanDelete">Remove</button>
             </td>
         </tr>
