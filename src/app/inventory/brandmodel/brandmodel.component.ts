@@ -22,12 +22,13 @@ export class BrandmodelComponent {
     this.getBrnadName();
   }
 
+  brandId:number=0;
   get(){
     const oHttpHeaders = new HttpHeaders(
     {
         'Token':this.authService.UserInfo.Token
     });
-    this.httpClient.get(this.authService.baseURL + '/api/BrandModel?pi='+this.pageIndex+'&ps='+this.pageSize+'&phone='+this.phone,{headers: oHttpHeaders}).subscribe((res)=>{
+    this.httpClient.get(this.authService.baseURL + '/api/BrandModel?brandId='+this.brandId+'&pi='+this.pageIndex+'&ps='+this.pageSize,{headers: oHttpHeaders}).subscribe((res)=>{
       if(res){
         this.listBrandModel = res;       
       //#region paging
@@ -51,7 +52,7 @@ export class BrandmodelComponent {
     {
         'Token':this.authService.UserInfo.Token
     });
-    this.httpClient.get(this.authService.baseURL + '/api/Brand?pi='+this.pageIndex+'&ps='+this.pageSize+'&phone='+this.phone,{headers: oHttpHeaders}).subscribe((res)=>{
+    this.httpClient.get(this.authService.baseURL + '/api/Brand?pi='+this.pageIndex+'&ps='+this.pageSize,{headers: oHttpHeaders}).subscribe((res)=>{
       if(res){
         this.listBrand = res;
         
