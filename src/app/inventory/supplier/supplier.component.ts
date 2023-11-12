@@ -30,29 +30,45 @@ export class SupplierComponent {
   remove(Supplier:any){};
   listSupplier:any=[];
 
-  Supplier:{
-    Id:number,
-    Code:number,
+  Supplier :{
+    BpId:number,
     Name:string,
-    Country:string,
-    Remarks:string,
-    CreateBy:number,
+    Address:string,
+    Phone:string,
+    Email:string,
+    BpTypeId:number,
     IsActive:boolean,
     CreateDate:'',
+    CreateBy:number,
     UpdateDate:'',
     UpdateBy:number,
-  }={
-    Id:0,
-    Code:0,
+    IsDelete:boolean,
+    DeleteDate:'',
+    DeleteBy:number,
+    MembershipNo:string,
+    ContactPerson:string,
+    ContactPersonNo:string,
+    ClientInfo:string
+    }={
+    BpId:0,
     Name:'',
-    Country:'',
-    Remarks:'',
-    CreateBy:0,
+    Address:'',
+    Phone:'',
+    Email:'',
+    BpTypeId:0,
     IsActive:false,
     CreateDate:'',
+    CreateBy:0,
     UpdateDate:'',
     UpdateBy:0,
-  };
+    IsDelete:false,
+    DeleteDate:'' ,
+    DeleteBy:0,
+    MembershipNo :'',
+    ClientInfo:'',
+    ContactPerson:'',
+    ContactPersonNo:''
+    };
 
   toast!: toastPayload;
 
