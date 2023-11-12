@@ -12,7 +12,7 @@
         records
     </div>
     <div class="col-lg-4">
-      <h4 class="text-center">List of Brands</h4>
+      <h4 class="text-center">List of Suppliers</h4>
     </div>
     <div class="col-lg-4">
         <table>
@@ -26,28 +26,26 @@
         </table>
     </div>
 </div>
-  <table class="table table-bordered">
-    <tr class="table-secondary">
-        <th scope="col">#</th>
-        <th>Brand Code</th>
-        <th>Name</th>
-        <th>Country</th>
-        <th>Remarks</th>
-        <th>#</th>
-        <th>#</th>
-    </tr>
-    <tr *ngFor="let item of listSupplier; let i = index">
-        <td>{{i+1}}</td>
-        <td>{{item.Code}}</td>
-        <td>{{item.Name}}</td>
-        <td>{{item.Country}}</td>
-        <td>{{item.Remarks}}</td>
-        <td><button class="btn btn-sm btn-outline-primary" (click)="edit(item)" *ngIf="authService.UserInfo.Menu.CanEdit" >Edit</button></td>
-        <td>
-          <button class="btn btn-sm btn-outline-danger" (click)="Supplier=item" data-bs-toggle="modal" data-bs-target="#confirmModal"  *ngIf="authService.UserInfo.Menu.CanDelete">Remove</button>
-        </td>
-    </tr>
-  </table>
+<table class="table table-bordered">
+  <tr class="table-secondary">
+      <th scope="col">#</th>
+      <th>Name</th>
+      <th>Phone</th>
+      <th>Address</th>
+      <th>#</th>
+      <th>#</th>
+  </tr>
+  <tr *ngFor="let item of listSupplier; let i = index">
+      <td>{{i+1}}</td>
+      <td>{{item.Name}}</td>
+      <td>{{item.Phone}}</td>
+      <td>{{item.Address}}</td>
+      <td><button class="btn btn-sm btn-outline-primary" (click)="edit(item)" *ngIf="authService.UserInfo.Menu.CanEdit" >Edit</button></td>
+      <td>
+        <button class="btn btn-sm btn-outline-danger" (click)="Supplier=item" data-bs-toggle="modal" data-bs-target="#confirmModal"  *ngIf="authService.UserInfo.Menu.CanDelete">Remove</button>
+      </td>
+  </tr>
+</table>
 <!-- Start Pagination  -->
 <div class="row" *ngIf="listSupplier.length>0">
   <div class="col-lg-3">
@@ -80,29 +78,44 @@
 <!-- End Pagination -->
 </div>
 <div *ngIf="!isList">
-  <h4 class="text-center">Brand Entry</h4>
+  <h4 class="text-center">Supplier Entry</h4>
   <div class="row g-3">
     <div class="col-md-4">
-        <label class="form-label" for="brandCode">Brand Code:</label>
-        <input type="text" id="brandCode" [(ngModel)]="Supplier.Code" class="form-control" />
-    </div>
-    <div class="col-md-4">
-      <label class="form-label" for="brandName">Brand Name:</label>
-      <input type="text" id="brandName" [(ngModel)]="Supplier.Name" class="form-control" />
-    </div>
-    <div class="col-md-4">
-      <label class="form-label" for="country">Country:</label>
-      <input type="text" id="country" [(ngModel)]="Supplier.Country"  class="form-control" />
-    </div>
-    
-    <div class="col-md-4">
-      <label class="form-label" for="remarks">Remarks:</label>
-      <input type="text" id="remarks" [(ngModel)]="Supplier.Remarks"  class="form-control" />
-    </div>
-    <div class="col-md-12 mt-5">
-      <button type="button" class="btn btn-success" *ngIf="Supplier.Id==0 && authService.UserInfo.Menu.CanCreate" (click)="add();">Add</button>
-      <button type="button" class="btn btn-success" *ngIf="Supplier.Id>0 && authService.UserInfo.Menu.CanEdit" (click)="update();">update</button>
-    </div>
+      <label class="form-label" for="SupplierName">Supplier Name:</label>
+      <input type="text" id="SupplierName" [(ngModel)]="Supplier.Name" class="form-control" />
+  </div>
+  <div class="col-md-4">
+    <label class="form-label" for="MembershipNo">Membership Card Number:</label>
+    <input type="text" id="MembershipNo" [(ngModel)]="Supplier.MembershipNo" class="form-control" />
+  </div>
+  <div class="col-md-4">
+    <label class="form-label" for="Phone">Phone:</label>
+    <input type="text" id="Phone" [(ngModel)]="Supplier.Phone"  class="form-control" />
+  </div>
+  <div class="col-md-4">
+    <label class="form-label" for="Email">Email:</label>
+    <input type="email" id="Email" [(ngModel)]="Supplier.Email"  class="form-control" />
+  </div>
+  <div class="col-md-12">
+    <label class="form-label" for="Address">Address:</label>
+      <input type="text" id="Address" [(ngModel)]="Supplier.Address" class="form-control " />
+  </div>
+  <div class="col-md-4">
+    <label class="form-label" for="ContactPerson">Contact Person:</label>
+    <input type="text" id="ContactPerson" [(ngModel)]="Supplier.ContactPerson"  class="form-control" />
+  </div>
+  <div class="col-md-4">
+    <label class="form-label" for="ContactPersonNo">Contact Person Phone:</label>
+    <input type="text" id="ContactPersonNo" [(ngModel)]="Supplier.ContactPersonNo"  class="form-control" />
+  </div>
+  <div class="col-md-12">
+    <label class="form-label" for="ClientInfo">Remarks:</label>
+      <input type="text" id="ClientInfo" [(ngModel)]="Supplier.ClientInfo" class="form-control " />
+  </div>
+  <div class="col-md-12 mt-5">
+    <button type="button" class="btn btn-success" *ngIf="Supplier.BpId==0 && authService.UserInfo.Menu.CanCreate" (click)="add();">Add Supplier</button>
+    <button type="button" class="btn btn-success" *ngIf="Supplier.BpId>0 && authService.UserInfo.Menu.CanEdit" (click)="update();">update Supplier</button>
+  </div>
   </div>
 </div>
 
