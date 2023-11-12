@@ -1,1 +1,128 @@
-<p>saleprice works!</p>
+<a href="javascript:void(0)" *ngIf="!isList;" (click)="isList=true;reset()">List</a>
+<a href="javascript:void(0)" *ngIf="isList && authService.UserInfo.Menu.CanCreate" (click)="isList=false;reset();get()">New</a>
+<div *ngIf="isList">
+  <div class="row">
+    <div class="col-lg-4">
+        Show
+        <select style="width: 50px;height: 32px;" [(ngModel)]="pageSize" (change)="search()">
+            <option *ngFor="let item of listPageSize" value={{item}}>
+                {{item}}
+            </option>
+        </select> 
+        records
+    </div>
+    <div class="col-lg-4">
+      <h4 class="text-center">List of Sales Price</h4>
+    </div>
+    <div class="col-lg-4">
+        <table>
+            <tr>
+                <td>Phone: </td>
+                <td>
+                    <input type="text" [(ngModel)]="partNo" placeholder="part-no old/new" />
+                    <button type="button" (click)="search()"><i class="fa fa-search"></i></button>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+  <table class="table table-bordered">
+    <tr class="table-secondary">
+        <th scope="col">#</th>
+        <th>Part-Name</th>
+        <th>Sales Price</th>
+        <th>Date</th>
+        <th>#</th>
+    </tr>
+    <tr *ngFor="let item of listSalePrice; let i = index">
+        <td>{{i+1}}</td>
+        <td>{{item.ItemName}}</td>
+        <td>{{item.SalePrice}}</td>
+        <td>{{item.CreateDate}}</td>
+        <td><button class="btn btn-sm btn-outline-primary" (click)="toAdd(item)" *ngIf="authService.UserInfo.Menu.CanEdit" >Edit</button></td>
+    </tr>
+  </table>
+</div>
+<div *ngIf="!isList">
+  <h4 class="text-center">Sales Price Entry</h4>
+  <div class="row g-3">
+    <div class="col-md-4">
+        <label class="form-label" for="ItemName">Spare Parts Name: <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#searchItemNoModal">Search</a></label>
+        <input type="text" id="ItemName" [(ngModel)]="oSalesPrice.ItemName" class="form-control" readonly />
+    </div>
+    <div class="col-md-4">
+      <label class="form-label" for="SalePrice">Sales Price:</label>
+      <input type="number" id="SalePrice" [(ngModel)]="oSalesPrice.SalePrice" class="form-control" style="text-align: right;" />
+    </div>
+    <div class="col-md-4">
+      <label class="form-label" for="MinPurchasePrice">Min Purchase Price:</label>
+      <input type="number" id="MinPurchasePrice" [(ngModel)]="oSalesPrice.MinPurchasePrice"  class="form-control" style="text-align: right;" readonly />
+    </div>
+    <div class="col-md-4">
+        <label class="form-label" for="AvgPurchasePrice">Avg Purchase Price:</label>
+        <input type="number" id="AvgPurchasePrice" [(ngModel)]="oSalesPrice.AvgPurchasePrice"  class="form-control" style="text-align: right;" readonly />
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label" for="MaxPurchasePrice">Max Purchase Price:</label>
+        <input type="number" id="MaxPurchasePrice" [(ngModel)]="oSalesPrice.MaxPurchasePrice"  class="form-control" style="text-align: right;" readonly />
+      </div>
+    <div class="col-md-12">
+        <label class="form-label" for="Remarks">Remarks:</label>
+        <input type="text" id="Remarks" [(ngModel)]="oSalesPrice.Remarks" class="form-control " />
+    </div>
+    <div class="col-md-12 mt-5">
+      <button type="button" class="btn btn-success" *ngIf="oSalesPrice.Id==0 && authService.UserInfo.Menu.CanCreate" (click)="add();">Add</button>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="searchItemNoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title text-primary">Search A Spare Parts</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="row g-3">
+              <div class="col-md-4">
+                <label class="form-label" for="itemValue">Part No:</label>
+                <input type="text" id="itemValue" [(ngModel)]="partNo"  class="form-control" />
+              </div>
+              <div class="col-md-4 mt-5">
+                <button type="button" class="btn btn-secondary" (click)="searchItem();">Search</button> 
+              </div>
+              <div class="col-md-12">
+                <table class="table table-bordered">
+                  <tr class="table-secondary">
+                      <th scope="col">#</th>
+                      <th>Code</th>
+                      <th>Part No Old</th>
+                      <th>Part No New</th>
+                      <th>Item</th>
+                      <th>Brand</th>
+                      <th>Sale Price</th>
+                      <th>#</th>
+                  </tr>
+                  <tr *ngFor="let item of listItemS; let i = index">
+                      <td>{{i+1}}</td>
+                      <td>{{item.ItemCode}}</td>
+                      <td>{{item.PartNoOld}}</td>
+                      <td>{{item.PartNoNew}}</td>
+                      <td>{{item.ItemName}}</td>
+                      <td>{{item.BrandName}}</td>
+                      <td>{{item.SalePrice}}</td>
+                      <td><button class="btn btn-sm btn-primary" (click)="selectItem(item);" data-bs-dismiss="modal">Select</button></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>

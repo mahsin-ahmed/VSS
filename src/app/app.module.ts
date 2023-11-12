@@ -47,6 +47,7 @@ import { SupplierComponent } from './inventory/supplier/supplier.component';
 import { WorkgroupComponent } from './operation/workgroup/workgroup.component';
 import { WorkgroupmemberComponent } from './operation/workgroupmember/workgroupmember.component';
 import { StorereqrecComponent } from './inventory/storereqrec/storereqrec.component';
+import { StockComponent } from './inventory/stock/stock.component';
 
 //StorereqrecComponent
 
@@ -90,7 +91,8 @@ import { StorereqrecComponent } from './inventory/storereqrec/storereqrec.compon
     SupplierComponent,
     WorkgroupComponent,
     WorkgroupmemberComponent,
-    StorereqrecComponent
+    StorereqrecComponent,
+    StockComponent
   ],
   imports: [
     BrowserModule,

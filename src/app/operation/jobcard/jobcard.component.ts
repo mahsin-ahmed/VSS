@@ -582,9 +582,14 @@ export class JobcardComponent {
     }
     return isValid
   }
+  stockQty:number= 0;
   listJcSpare:any=[];
   addSpare() : void {
     if(!this.validateJcSp()){
+      return;
+    }
+    if(this.JcSpare.Quantity > this.stockQty){
+      this.showMessage('warning', 'Stock is insufficient.');
       return;
     }
     this.JcSpare.SpareAmount = this.JcSpare.Quantity * this.JcSpare.SalePrice;
@@ -614,6 +619,10 @@ export class JobcardComponent {
 
   updateSpare() : void {
     if(!this.validateJcSp()){
+      return;
+    }
+    if(this.JcSpare.Quantity > this.stockQty){
+      this.showMessage('warning', 'Stock is insufficient.');
       return;
     }
     this.JcSpare.SpareAmount = this.JcSpare.Quantity * this.JcSpare.SalePrice;
@@ -789,7 +798,7 @@ export class JobcardComponent {
               +'<td style="border:1px solid gray">'+this.JobCard.JcSpares[0].ItemName+'</td>'
               +'<td style="border:1px solid gray">'+this.JobCard.JcSpares[0].BrandName+'</td>'
               +'<td style="border:1px solid gray">'+this.JobCard.JcSpares[0].SalePrice+'</td>'
-              +'<td style="border:1px solid gray">'+this.JobCard.JcSpares[0].Quantity+'</td>'
+              +'<td style="border:1px solid gray">'+this.JobCard.JcSpares[0].Qty+'</td>'
               +'<td style="border:1px solid gray">'+this.JobCard.JcSpares[0].SpareAmount+'</td>'
               +'<td style="border:1px solid gray">'+this.JobCard.JcSpares[0].ItemStatusName+'</td>'
             +'</tr>';
@@ -1107,21 +1116,21 @@ export class JobcardComponent {
   }
 
   selectItem(item:any){
-    this.JcSpare.ItemId=item.Id;
-    this.JcSpare.Barcode=item.Barcode;
-    this.JcSpare.BrandId=item.BrandId;
-    this.JcSpare.BrandName=item.BrandName;
-    this.JcSpare.CategoryName=item.CategoryName;
-    this.JcSpare.ItemCategoryId=item.ItemCategoryId;
-    this.JcSpare.ItemCode=item.ItemCode;
-    this.JcSpare.ItemName=item.ItemName;
-    this.JcSpare.ItemStatus=item.ItemStatus;
-    this.JcSpare.Model=item.Model;
-    this.JcSpare.PartNoNew=item.PartNoNew;
-    this.JcSpare.PartNoOld=item.PartNoOld;
-    this.JcSpare.Quantity=item.Quantity;
-    this.JcSpare.SalePrice=item.SalePrice;
-    this.JcSpare.SpareAmount=item.SpareAmount;
+      this.JcSpare.ItemId=item.Id;
+      this.JcSpare.Barcode=item.Barcode;
+      this.JcSpare.BrandId=item.BrandId;
+      this.JcSpare.BrandName=item.BrandName;
+      this.JcSpare.CategoryName=item.CategoryName;
+      this.JcSpare.ItemCategoryId=item.ItemCategoryId;
+      this.JcSpare.ItemCode=item.ItemCode;
+      this.JcSpare.ItemName=item.ItemName;
+      this.JcSpare.ItemStatus=item.ItemStatus;
+      this.JcSpare.Model=item.Model;
+      this.JcSpare.PartNoNew=item.PartNoNew;
+      this.JcSpare.PartNoOld=item.PartNoOld;
+      this.JcSpare.SalePrice=item.SalePrice;
+      this.JcSpare.SpareAmount=item.SpareAmount;
+      this.stockQty = item.Qty;
   }
 
   phone:string = '';

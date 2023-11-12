@@ -17,6 +17,8 @@ import { ManufacturerComponent } from './inventory/manufacturer/manufacturer.com
 import { SizeComponent } from './inventory/size/size.component';
 import { UnitComponent } from './inventory/unit/unit.component';
 import { WarehouseComponent } from './inventory/warehouse/warehouse.component';
+import { SalepriceComponent } from './inventory/saleprice/saleprice.component';
+
 import { CompanyComponent } from './security/company/company.component';
 import { MenuComponent } from './security/menu/menu.component';
 import { MenupermissionComponent } from './security/menupermission/menupermission.component';
@@ -39,6 +41,7 @@ import { BrandmodelComponent } from './inventory/brandmodel/brandmodel.component
 import { SupplierComponent } from './inventory/supplier/supplier.component';
 import { WorkgroupComponent } from './operation/workgroup/workgroup.component';
 import { WorkgroupmemberComponent } from './operation/workgroupmember/workgroupmember.component';
+import { StockComponent } from './inventory/stock/stock.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -69,6 +72,8 @@ const routes: Routes = [
   { path:'store-req-rec', component:StorereqrecComponent, canActivate:[authGuard] },
   { path:'store-ret', component:StoreretComponent, canActivate:[authGuard] },
   { path:'store-ret-rec', component:StoreretrecComponent, canActivate:[authGuard] },
+  {path:'sales-price', component:SalepriceComponent, canActivate:[authGuard]},
+  {path:'stock', component:StockComponent, canActivate:[authGuard]},
 
   { path: 'job-card', component: JobcardComponent, canActivate:[authGuard] },
   { path: 'client-vehicle', component: ClientvehicleComponent, canActivate:[authGuard] },
