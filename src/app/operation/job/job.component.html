@@ -19,9 +19,18 @@
         <div class="col-lg-4">
             <table>
                 <tr>
+                    <td>Job-Group: </td>
+                    <td>
+                        <select id="JobGroupId" [(ngModel)]="jobGroupId" (change)="search()" style="width: 188px;">
+                            <option *ngFor="let item of listJobGroup" value="{{item.GroupId}}">{{item.Name}}
+                            </option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
                     <td>Description: </td>
                     <td>
-                        <input type="text" [(ngModel)]="phone" placeholder="Description" />
+                        <input type="text" [(ngModel)]="jobDescription" placeholder="Description" />
                         <button type="button" (click)="search()"><i class="fa fa-search"></i></button>
                     </td>
                 </tr>
