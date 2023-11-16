@@ -8,7 +8,7 @@ import { IndividualConfig } from 'ngx-toastr';
   styleUrls: ['./warehouse.component.css']
 })
 export class WarehouseComponent {
-  listWH:any=[{"Id":1,"Code":"01","Name":"Central WH","ParentId":0}];
+  listWH:any=[{"Id":1,"Name":"Front-Warehouse"},{"Id":2,"Name":"Back-Warehouse"},{"Id":3,"Name":"Home-Warehouse"}];
   isList:boolean=true;
   toast!: toastPayload;
   constructor(private cs:CommonService) { 

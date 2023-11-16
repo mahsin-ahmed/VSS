@@ -122,9 +122,9 @@
                             <label for="ClientId">Client Name</label>
                         </div>
                         <div class="col-auto  mb-2">
-                            <button type="button" class="btn btn-success mb-3" *ngIf="ClientVehicle.Id==0"
+                            <button type="button" class="btn btn-success mb-3" *ngIf="ClientVehicle.Id==0 && authService.UserInfo.Menu.CanCreate"
                                 (click)="add()">Add Client Vehicle</button>
-                            <button type="button" class="btn btn-success mb-3" *ngIf="ClientVehicle.Id>0"
+                            <button type="button" class="btn btn-success mb-3" *ngIf="ClientVehicle.Id>0 && authService.UserInfo.Menu.CanEdit"
                                 (click)="update()">Update Client Vehicle</button>
                         </div>
                     </div>

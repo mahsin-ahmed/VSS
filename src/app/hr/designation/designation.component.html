@@ -1,6 +1,5 @@
-<a href="javascript:void(0)" *ngIf="!isList;" (click)="isList=true;reset()">List</a>
-<a href="javascript:void(0)" *ngIf="isList && authService.UserInfo.Menu.CanCreate"
-    (click)="isList=false;reset();get()">New</a>
+<a href="javascript:void(0)" *ngIf="!isList && authService.UserInfo.Menu.CanView" (click)="isList=true;reset()">List</a>
+<a href="javascript:void(0)" *ngIf="isList && authService.UserInfo.Menu.CanCreate" (click)="isList=false;reset();get()">New</a>
 <div *ngIf="isList">
     <div class="row">
         <div class="col-lg-4">
@@ -51,9 +50,9 @@
     <div class="row" *ngIf="listDesignation.length>0">
         <div class="col-lg-3">
             <div class="pull-left ">
-                <span class="well well-sm">Showing <span class="text-success"><b>{{pageStart}}</b></span> to <span
-                        class="text-success"><b>{{pageEnd}}</b></span> of <span
-                        class="text-success"><b>{{rowCount}}</b></span> records</span>
+            <span class="well well-sm">Showing <span class="text-success"><b>{{pageStart}}</b> to</span> 
+                <span class="text-success"><b>{{pageEnd}}</b>  of </span><span class="text-success"><b>{{rowCount}}</b></span> records
+            </span>
             </div>
         </div>
         <div class="col-lg-9">

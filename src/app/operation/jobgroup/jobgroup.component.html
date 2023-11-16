@@ -1,5 +1,5 @@
-<a href="javascript:void(0)" *ngIf="!isList" (click)="switchView('list')">Go to List</a>
-<a href="javascript:void(0)" *ngIf="isList" (click)="switchView('form')">Go to Entry</a>
+<a href="javascript:void(0)" *ngIf="!isList && authService.UserInfo.Menu.CanView" (click)="switchView('list')">Go to List</a>
+<a href="javascript:void(0)" *ngIf="isList && authService.UserInfo.Menu.CanCreate" (click)="switchView('form')">Go to Entry</a>
 <div *ngIf="isList">
     <div class="row">
         <div class="col-lg-4">
@@ -27,8 +27,8 @@
             <td>{{i + 1}}</td>
             <td>{{item.GroupId}}</td>
             <td>{{item.Name}}</td>
-            <td class="text-center"><button class="btn btn-sm btn-outline-primary" (click)="edit(item)">Edit</button></td>
-            <td class="text-center"><button class="btn btn-sm btn-outline-danger" (click)="JobGroup=item" data-bs-toggle="modal" data-bs-target="#confirmModal">Remove</button></td>
+            <td class="text-center"><button class="btn btn-sm btn-outline-primary" (click)="edit(item)" *ngIf="authService.UserInfo.Menu.CanEdit">Edit</button></td>
+            <td class="text-center"><button class="btn btn-sm btn-outline-danger" (click)="JobGroup=item" data-bs-toggle="modal" data-bs-target="#confirmModal" *ngIf="authService.UserInfo.Menu.CanDelete">Remove</button></td>
         </tr>
     </table>
     <div class="row" *ngIf="listJobGroup.length>0">
@@ -72,9 +72,9 @@
                             <label for="Name">Job Group Name</label>
                         </div>
                         <div class="col-auto  mb-2">
-                            <button type="button" class="btn btn-success mb-3" *ngIf="JobGroup.GroupId==0"
-                                (click)="add()">Add Job Group</button>
-                            <button type="button" class="btn btn-success mb-3" *ngIf="JobGroup.GroupId>0"
+                            <button type="button" class="btn btn-success mb-3" *ngIf="JobGroup.GroupId==0 && authService.UserInfo.Menu.CanCreate"
+                                (click)="add()">Add</button>
+                            <button type="button" class="btn btn-success mb-3" *ngIf="JobGroup.GroupId>0 && authService.UserInfo.Menu.CanEdit"
                                 (click)="update()">Update</button>
                         </div>
                     </div>

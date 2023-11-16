@@ -32,7 +32,6 @@ export class WorkgroupmemberComponent {
     this.httpClient.get(this.authService.baseURL + '/api/WorkGroupEmp?pi=' + this.pageIndex + '&ps=' + this.pageSize + '&phone=' + this.phone, { headers: oHttpHeaders }).subscribe((res) => {
       if (res) {
         this.listWorkGroupMember = res;
-
         //#region paging
         this.rowCount = this.listWorkGroupMember.length > 0 ? this.listWorkGroupMember[0].RowCount : 0;
         this.totalRowsInList = this.listWorkGroupMember.length;

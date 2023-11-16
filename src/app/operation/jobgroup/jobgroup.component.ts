@@ -12,7 +12,7 @@ import { AuthService } from 'src/app/auth/auth.service';
 export class JobgroupComponent {
   constructor(private cs: CommonService, 
     private httpClient: HttpClient,
-    private authService:AuthService) {
+    public authService:AuthService) {
     this.get();
   }
   isList: boolean = true;
@@ -55,18 +55,22 @@ export class JobgroupComponent {
           'Token':this.authService.UserInfo.Token
       });
     this.httpClient.get(this.authService.baseURL + '/api/JobGroup?pi='+this.pageIndex+'&ps='+this.pageSize,{headers: oHttpHeaders}).subscribe((res) => {
-      this.listJobGroup = res;
-      //#region paging
-      this.rowCount = this.listJobGroup.length > 0 ? this.listJobGroup[0].RowCount : 0;
-      this.totalRowsInList = this.listJobGroup.length;
-      this.pager.totalPages = Math.ceil(this.rowCount / this.pageSize);
-      this.pager.pages = [];
-      for(var i = 0; i<this.pager.totalPages; i++){
-        this.pager.pages.push(i+1);
+      if(res){
+        this.listJobGroup = res;
+        //#region paging
+        this.rowCount = this.listJobGroup.length > 0 ? this.listJobGroup[0].RowCount : 0;
+        this.totalRowsInList = this.listJobGroup.length;
+        this.pager.totalPages = Math.ceil(this.rowCount / this.pageSize);
+        this.pager.pages = [];
+        for(var i = 0; i<this.pager.totalPages; i++){
+          this.pager.pages.push(i+1);
+        }
+        this.pageStart = (this.pageIndex * this.pageSize) + 1;
+        this.pageEnd = (this.pageStart - 1) + this.totalRowsInList;
+        //#endregion
+      }else{
+        this.showMessage('warning', 'Session expired, please login.');
       }
-      this.pageStart = (this.pageIndex * this.pageSize) + 1;
-      this.pageEnd = (this.pageStart - 1) + this.totalRowsInList;
-      //#endregion
     });
   }
 

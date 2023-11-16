@@ -81,8 +81,8 @@
       <input type="text" id="WgName" [(ngModel)]="WorkGroup.WgName" class="form-control" />
     </div>
     <div class="col-md-12 mt-5">
-      <button type="button" class="btn btn-success" *ngIf="WorkGroup.WgId==0 && authService.UserInfo.Menu.CanCreate" (click)="add();">Add Work Group</button>
-      <button type="button" class="btn btn-success" *ngIf="WorkGroup.WgId>0 && authService.UserInfo.Menu.CanEdit" (click)="update();">Update Work Group</button>
+      <button type="button" class="btn btn-success" *ngIf="WorkGroup.WgId==0 && authService.UserInfo.Menu.CanCreate" (click)="add();">Add</button>
+      <button type="button" class="btn btn-success" *ngIf="WorkGroup.WgId>0 && authService.UserInfo.Menu.CanEdit" (click)="update();">Update</button>
     </div>
   </div>
 </div>

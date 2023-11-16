@@ -29,7 +29,6 @@ export class UserComponent {
     this.httpClient.get(this.authService.baseURL + '/api/User?pi=' + this.pageIndex + '&ps=' + this.pageSize + '&phone=' + this.phone, { headers: oHttpHeaders }).subscribe((res) => {
       if (res) {
         this.listUser = res;
-
         //#region paging
         this.rowCount = this.listUser.length > 0 ? this.listUser[0].RowCount : 0;
         this.totalRowsInList = this.listUser.length;

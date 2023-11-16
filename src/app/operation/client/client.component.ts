@@ -126,12 +126,12 @@ export class ClientComponent {
     });
     this.Client.CreateBy = this.authService.UserInfo.UserID;
     this.httpClient.post(this.authService.baseURL + '/api/Client', this.Client,{headers: oHttpHeaders}).subscribe((res)=>{
-      if(res == true){
+      if(res == true) {
         this.isList = true;
         this.get();
         this.reset();
         this.showMessage('success', 'data added.');
-      }else{
+      } else {
         this.showMessage('error', 'error occurred.');
       }
     });

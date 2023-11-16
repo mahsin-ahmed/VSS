@@ -1,4 +1,4 @@
-<a href="javascript:void(0)" *ngIf="!isList" (click)="switchView('list')">Go to List</a>
+<a href="javascript:void(0)" *ngIf="!isList && authService.UserInfo.Menu.CanView" (click)="switchView('list')">Go to List</a>
 <!-- <a href="javascript:void(0)" *ngIf="isList" (click)="switchView('form')">Go to Entry</a> -->
 <div *ngIf="isList">
     <h4 class="text-center">List of Payment Transaction</h4>
@@ -17,7 +17,7 @@
             <th>#</th>
         </tr>
         <tr *ngFor="let item of listJobCard; let i = index">
-            <td><a href="javascript:void(0)" (click)="openWin(item)">Bill Copy</a></td>
+            <td><a href="javascript:void(0)" (click)="openWin(item)" *ngIf="authService.UserInfo.Menu.CanView">Bill Copy</a></td>
             <td>{{i+1}}</td>
             <td>{{item.JcNo}}</td>
             <td>{{item.VehicleNo}}</td>
@@ -28,7 +28,7 @@
             <td>{{item.IsPaid == true ? 'Paid' : 'Due'}}</td>
             <td>{{item.JcStatus == 1 ? 'Close' : 'Open'}}</td>
             <td>
-                <button class="btn btn-sm btn-primary" (click)="detailBill(item)">Details</button>
+                <button class="btn btn-sm btn-primary" (click)="detailBill(item)" *ngIf="authService.UserInfo.Menu.CanEdit">Details</button>
             </td>
         </tr>
     </table>

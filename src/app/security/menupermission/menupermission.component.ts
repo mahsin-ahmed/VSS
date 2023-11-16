@@ -34,9 +34,10 @@ export class MenupermissionComponent {
     });
   };
 
+  oRole:any=null;
   setRole(item:any):void{
     this.getMenuPermission(item.RoleId);
-    this.listRole = item;
+    this.oRole = item;
     this.isList = false;
   }
 

@@ -1,5 +1,5 @@
 <a href="javascript:void(0)" *ngIf="!isList" (click)="switchView('list')">List</a>
-<a href="javascript:void(0)" *ngIf="isList" (click)="switchView('form')">New</a>
+<a href="javascript:void(0)" *ngIf="isList && authService.UserInfo.Menu.CanCreate" (click)="switchView('form')">New</a>
 
 <div *ngIf="isList">
   <div class="row">
@@ -45,7 +45,7 @@
         <td>{{item.EstiCostTotal}}</td>
         <td>{{item.IsPaid == true ? 'Paid' : 'Due'}}</td>
         <td>{{item.JcStatus==1?'Close':'Open'}}</td>
-        <td><button class="btn btn-sm btn-primary" (click)="edit(item)">Edit</button></td>
+        <td><button class="btn btn-sm btn-primary" (click)="edit(item)" *ngIf="authService.UserInfo.Menu.CanEdit">Edit</button></td>
     </tr>
   </table>
   <div class="row" *ngIf="listJobCard.length>0">
@@ -374,8 +374,8 @@
   </div>
   <div class="row g-3 mt-1">
     <div class="col-md-6">
-      <button type="button" *ngIf="JobCard.Id == 0" class="btn btn-success" (click)="add()"><i class="fa fa-plus"></i> Add</button>
-      <button type="button" *ngIf="JobCard.Id > 0" class="btn btn-primary" (click)="update()"><i class="fa fa-save"></i> Update</button>
+      <button type="button" *ngIf="JobCard.Id == 0 && authService.UserInfo.Menu.CanCreate" class="btn btn-success" (click)="add()"><i class="fa fa-plus"></i> Add</button>
+      <button type="button" *ngIf="JobCard.Id > 0 && authService.UserInfo.Menu.CanEdit" class="btn btn-primary" (click)="update()"><i class="fa fa-save"></i> Update</button>
     </div>
   </div>
 </div>

@@ -34,7 +34,7 @@
             <td>{{item.FirstName +" "+ item.MiddleName +" "+ item.LastName}}</td>
             <td>{{item.Email}}</td>
             <td>{{item.MobileNo}}</td>
-            <td><button class="btn btn-sm btn-outline-primary" (click)="setRole(item)">Set Role</button></td>
+            <td><button class="btn btn-sm btn-outline-primary" (click)="setRole(item)" *ngIf="authService.UserInfo.Menu.CanEdit">Set Role</button></td>
           </tr>
         </table>
       </div>
@@ -63,7 +63,7 @@
                 </li>
               </ul>
               <div class="row">
-                <button type="submit" class="btn btn-primary btn-sm" (click)="add()">Save</button>
+                <button type="submit" class="btn btn-primary btn-sm" (click)="add()" *ngIf="authService.UserInfo.Menu.CanCreate">Save</button>
               </div>
             </td>
           </tbody>

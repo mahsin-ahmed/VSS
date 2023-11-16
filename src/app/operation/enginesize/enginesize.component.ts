@@ -12,7 +12,7 @@ import { AuthService } from 'src/app/auth/auth.service';
 export class EnginesizeComponent {
   constructor(private cs:CommonService,
     private httpClient: HttpClient,
-    private authService:AuthService) { 
+    public authService:AuthService) { 
     this.getEngineList();
   }
 
@@ -42,7 +42,11 @@ getEngineList(){
         'Token':this.authService.UserInfo.Token
     });
   this.httpClient.get(this.authService.baseURL + '/api/enginesize',{headers: oHttpHeaders}).subscribe((res)=>{
-      this.listEngine = res;
+      if(res){
+        this.listEngine = res;
+      }else{
+        this.showMessage('warning', 'Session expired, please login.');
+      }
   });
 }
 addEngine() {
@@ -51,12 +55,12 @@ addEngine() {
       'Token':this.authService.UserInfo.Token
   });
   this.httpClient.post(this.authService.baseURL + '/api/EngineSize', this.Engines,{headers: oHttpHeaders}).subscribe((res)=>{
-    if(res == true){
+    if(res == true) {
       this.isList = true;
       this.getEngineList();
       this.reset();
       this.showMessage('success', 'data added.');
-    }else{
+    } else {
       this.showMessage('error', 'error occurred.');
     }
   });

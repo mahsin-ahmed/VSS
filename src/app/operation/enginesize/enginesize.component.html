@@ -1,5 +1,5 @@
-<a href="javascript:void(0)" *ngIf="!isList" (click)="switchView('list')">Go to List</a>
-<a href="javascript:void(0)" *ngIf="isList" (click)="switchView('form')">Go to Entry</a>
+<a href="javascript:void(0)" *ngIf="!isList && authService.UserInfo.Menu.CanView" (click)="switchView('list')">Go to List</a>
+<a href="javascript:void(0)" *ngIf="isList && authService.UserInfo.Menu.CanCreate" (click)="switchView('form')">Go to Entry</a>
 
 <div *ngIf="isList">
     <h4 class="text-center">List of Engine Size</h4>
@@ -16,9 +16,9 @@
             <td>{{item.Code}}</td>
             <td>{{item.Description}}</td>
             <td>{{item.CC}}</td>
-            <td><button class="btn btn-sm btn-outline-primary" (click)="edit(item)">Edit</button></td>
+            <td><button class="btn btn-sm btn-outline-primary" (click)="edit(item)" *ngIf="authService.UserInfo.Menu.CanEdit">Edit</button></td>
             <td><button class="btn btn-sm btn-outline-danger"  (click)="Engines=item" data-bs-toggle="modal"
-                    data-bs-target="#confirmModal">Remove</button></td>
+                    data-bs-target="#confirmModal" *ngIf="authService.UserInfo.Menu.CanDelete">Remove</button></td>
         </tr>
     </table>
 </div>
@@ -44,8 +44,8 @@
                         <label for="Engine CC">Engine CC</label>
                         </div>
                         <div class="col-auto  mb-2">
-                        <button type="button" class="btn btn-success mb-3" *ngIf="Engines.EngineSizeId==0" (click)="addEngine()">Add</button>
-                        <button type="button" class="btn btn-success mb-3" *ngIf="Engines.EngineSizeId>0" (click)="updateEngine()">Update</button>
+                        <button type="button" class="btn btn-success mb-3" *ngIf="Engines.EngineSizeId==0 && authService.UserInfo.Menu.CanCreate" (click)="addEngine()">Add</button>
+                        <button type="button" class="btn btn-success mb-3" *ngIf="Engines.EngineSizeId>0 && authService.UserInfo.Menu.CanEdit" (click)="updateEngine()">Update</button>
                         </div>                          
                     </div>
                 </div>

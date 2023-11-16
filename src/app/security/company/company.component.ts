@@ -27,7 +27,11 @@ export class CompanyComponent {
           'Token':this.authService.UserInfo.Token
       });
     this.httpClient.get(this.authService.baseURL + '/api/Company/GetCompany',{headers:oHttpHeaders}).subscribe((res)=>{
-        this.listCompany = res;
+        if(res){
+          this.listCompany = res;
+        }else{
+          this.showMessage('warning', 'Session expired, please login.');
+        }
     });
   }
 

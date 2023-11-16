@@ -1,5 +1,5 @@
-<a href="javascript:void(0)" *ngIf="!isList" (click)="switchView('list')">List</a>
-<a href="javascript:void(0)" *ngIf="isList" (click)="switchView('form')">New</a>
+<a href="javascript:void(0)" *ngIf="!isList && authService.UserInfo.Menu.CanView" (click)="switchView('list')">List</a>
+<a href="javascript:void(0)" *ngIf="isList && authService.UserInfo.Menu.CanCreate" (click)="switchView('form')">New</a>
 
 <div *ngIf="isList">
     <!-- Start Select Page size Section -->
@@ -62,9 +62,9 @@
             <td>{{item.DurationA}}</td>
             <td>{{item.DurationB}}</td>
             <td>{{item.DurationC}}</td>
-            <td><button class="btn btn-sm btn-outline-primary" (click)="editJob(item)">Edit</button></td>
+            <td><button class="btn btn-sm btn-outline-primary" (click)="editJob(item)" *ngIf="authService.UserInfo.Menu.CanEdit">Edit</button></td>
             <td><button class="btn btn-sm btn-outline-danger" (click)="Job=item" data-bs-toggle="modal"
-                    data-bs-target="#confirmModal">Remove</button></td>
+                    data-bs-target="#confirmModal" *ngIf="authService.UserInfo.Menu.CanDelete">Remove</button></td>
         </tr>
     </table>
     <!-- Start Pagination  -->
@@ -179,9 +179,9 @@
                         </div>
                     </div>
                     <div class="col-auto  mb-2">
-                        <button type="button" class="btn btn-success mb-3" *ngIf="Job.JobId==0" (click)="addJob()">Add
+                        <button type="button" class="btn btn-success mb-3" *ngIf="Job.JobId==0 && authService.UserInfo.Menu.CanCreate" (click)="addJob()">Add
                             Job</button>
-                        <button type="button" class="btn btn-success mb-3" *ngIf="Job.JobId>0"
+                        <button type="button" class="btn btn-success mb-3" *ngIf="Job.JobId>0 && authService.UserInfo.Menu.CanEdit"
                             (click)="updateJob()">Update Job</button>
                     </div>
                 </div>

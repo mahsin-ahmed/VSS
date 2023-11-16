@@ -15,7 +15,7 @@ export class JobcardComponent {
   
   constructor(private cs:CommonService,
     private httpClient: HttpClient,
-    private authService:AuthService) {
+    public authService:AuthService) {
     this.get();
     this.getJobGroup();
     this.getJob();
@@ -68,7 +68,7 @@ export class JobcardComponent {
       {
           'Token':this.authService.UserInfo.Token
       });
-    this.httpClient.get(this.authService.baseURL + '/api/JobCard/GetWorkGroupById?workGroupId=1',{headers: oHttpHeaders}).subscribe((res)=>{
+    this.httpClient.get(this.authService.baseURL + '/api/JobCard/GetWorkGroupById?workGroupId=3',{headers: oHttpHeaders}).subscribe((res)=>{
         this.listReceiveBy = res;
     });
   }
@@ -77,7 +77,7 @@ export class JobcardComponent {
       {
           'Token':this.authService.UserInfo.Token
       });
-    this.httpClient.get(this.authService.baseURL + '/api/JobCard/GetWorkGroupById?workGroupId=2',{headers:oHttpHeaders}).subscribe((res)=>{
+    this.httpClient.get(this.authService.baseURL + '/api/JobCard/GetWorkGroupById?workGroupId=1',{headers:oHttpHeaders}).subscribe((res)=>{
         this.listMechanic = res;
     });
   }
@@ -795,12 +795,12 @@ export class JobcardComponent {
         var sl = i + 1;
         htmlSpare+='<tr style="border:1px solid gray">'
               +'<td style="border:1px solid gray">'+sl+'</td>'
-              +'<td style="border:1px solid gray">'+this.JobCard.JcSpares[0].ItemName+'</td>'
-              +'<td style="border:1px solid gray">'+this.JobCard.JcSpares[0].BrandName+'</td>'
-              +'<td style="border:1px solid gray">'+this.JobCard.JcSpares[0].SalePrice+'</td>'
-              +'<td style="border:1px solid gray">'+this.JobCard.JcSpares[0].Qty+'</td>'
-              +'<td style="border:1px solid gray">'+this.JobCard.JcSpares[0].SpareAmount+'</td>'
-              +'<td style="border:1px solid gray">'+this.JobCard.JcSpares[0].ItemStatusName+'</td>'
+              +'<td style="border:1px solid gray">'+this.JobCard.JcSpares[i].ItemName+'</td>'
+              +'<td style="border:1px solid gray">'+this.JobCard.JcSpares[i].BrandName+'</td>'
+              +'<td style="border:1px solid gray;text-align:right">'+this.JobCard.JcSpares[i].SalePrice+'</td>'
+              +'<td style="border:1px solid gray;text-align:right">'+this.JobCard.JcSpares[i].Quantity+'</td>'
+              +'<td style="border:1px solid gray;text-align:right">'+this.JobCard.JcSpares[i].SpareAmount+'</td>'
+              +'<td style="border:1px solid gray">'+this.JobCard.JcSpares[i].ItemStatusName+'</td>'
             +'</tr>';
       }
       const myWindow: Window | null = window.open("", "", "width=793,height=1123");
@@ -926,7 +926,7 @@ export class JobcardComponent {
             +'<th align="right" style="border:1px solid gray">Price</th>'
             +'<th align="right" style="border:1px solid gray">Quantity</th>'
             +'<th align="right" style="border:1px solid gray">Amount</th>'
-            +'<th align="right" style="border:1px solid gray">Status</th>'
+            +'<th style="border:1px solid gray">Status</th>'
           +'</tr>'
           +htmlSpare
         +'</table>'
@@ -1046,18 +1046,22 @@ export class JobcardComponent {
         'Token':this.authService.UserInfo.Token
     });
     this.httpClient.get(this.authService.baseURL + '/api/JobCard?pi='+this.pageIndex+'&ps='+this.pageSize+'&jcStatus='+this.jcStatus,{headers: oHttpHeaders}).subscribe((res)=>{
-      this.listJobCard = res;
-      //#region paging
-      this.rowCount = this.listJobCard.length > 0 ? this.listJobCard[0].RowCount : 0;
-      this.totalRowsInList = this.listJobCard.length;
-      this.pager.totalPages = Math.ceil(this.rowCount / this.pageSize);
-      this.pager.pages = [];
-      for(var i = 0; i<this.pager.totalPages; i++){
-        this.pager.pages.push(i+1);
+      if(res){
+        this.listJobCard = res;
+        //#region paging
+        this.rowCount = this.listJobCard.length > 0 ? this.listJobCard[0].RowCount : 0;
+        this.totalRowsInList = this.listJobCard.length;
+        this.pager.totalPages = Math.ceil(this.rowCount / this.pageSize);
+        this.pager.pages = [];
+        for(var i = 0; i<this.pager.totalPages; i++){
+          this.pager.pages.push(i+1);
+        }
+        this.pageStart = (this.pageIndex * this.pageSize) + 1;
+        this.pageEnd = (this.pageStart - 1) + this.totalRowsInList;
+        //#endregion
+      }else{
+        this.showMessage('warning', 'Session expired, please login.');
       }
-      this.pageStart = (this.pageIndex * this.pageSize) + 1;
-      this.pageEnd = (this.pageStart - 1) + this.totalRowsInList;
-      //#endregion
     });
   }
 

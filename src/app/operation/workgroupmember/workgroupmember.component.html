@@ -35,8 +35,8 @@
             <th>#</th>
             <th>#</th>
         </tr>
-        <tr *ngFor="let item of listWorkGroupMember">
-            <td>{{item.Id}}</td>
+        <tr *ngFor="let item of listWorkGroupMember; let i = index">
+            <td>{{i+1}}</td>
             <td>{{item.WgName}}</td>
             <td>{{item.FirstName}}{{" "}}{{item.MiddleName}}{{" "}}{{item.LastName}}</td>
             <td><button class="btn btn-sm btn-outline-primary" (click)="edit(item)"
@@ -108,10 +108,9 @@
         </div>
         <div class="col-md-12 mt-5">
             <button type="button" class="btn btn-success"
-                *ngIf="WorkGroupMember.Id==0 && authService.UserInfo.Menu.CanCreate" (click)="add();">Add Work
-                Group Member</button>
+                *ngIf="WorkGroupMember.Id==0 && authService.UserInfo.Menu.CanCreate" (click)="add();">Add</button>
             <button type="button" class="btn btn-success" *ngIf="WorkGroupMember.Id>0 && authService.UserInfo.Menu.CanEdit"
-                (click)="update();">Update Work Group Member</button>
+                (click)="update();">Update</button>
         </div>
     </div>
 </div>

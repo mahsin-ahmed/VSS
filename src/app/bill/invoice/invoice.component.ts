@@ -34,7 +34,7 @@ export class InvoiceComponent {
 
   constructor(private cs:CommonService,
     private httpClient: HttpClient,
-    private authService:AuthService) {
+    public authService:AuthService) {
     this.get();
     this.getCompany();
   }
@@ -56,7 +56,11 @@ export class InvoiceComponent {
           'Token':this.authService.UserInfo.Token
       });
     this.httpClient.get(this.authService.baseURL + '/api/Invoice?pi='+this.pageIndex+'&ps='+this.pageSize+'&jcStatus=1&IsPaid=false',{headers:oHttpHeaders}).subscribe((res)=>{
-      this.listJobCard = res;
+      if(res){
+        this.listJobCard = res;
+      }else{
+        this.showMessage('warning', 'Session expired, please login.');
+      }
       //#region paging
       this.rowCount = this.listJobCard.length > 0 ? this.listJobCard[0].RowCount : 0;
       this.totalRowsInList = this.listJobCard.length;

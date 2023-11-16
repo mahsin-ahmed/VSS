@@ -34,7 +34,7 @@ export class PaytranComponent {
 
   constructor(private cs:CommonService,
     private httpClient: HttpClient,
-    private authService:AuthService) {
+    public authService:AuthService) {
     this.get();
     this.getCompany();
   }
@@ -54,7 +54,11 @@ export class PaytranComponent {
           'Token':this.authService.UserInfo.Token
       });
     this.httpClient.get(this.authService.baseURL + '/api/Invoice?pi='+this.pageIndex+'&ps='+this.pageSize+'&jcStatus=1&isPaid=true',{headers:oHttpHeaders}).subscribe((res)=>{
-      this.listJobCard = res;
+      if(res){
+        this.listJobCard = res;
+      }else{
+        this.showMessage('warning', 'Session expired, please login.');
+      }
       //#region paging
       this.rowCount = this.listJobCard.length > 0 ? this.listJobCard[0].RowCount : 0;
       this.totalRowsInList = this.listJobCard.length;
@@ -278,6 +282,21 @@ export class PaytranComponent {
           this.listBay.push(i+1);
         }
     });
+  }
+
+  //type: 'success', 'error', 'warning', 'info'
+  //message: '<span>Action in '+type+'</span>',
+  showMessage(type: string, message:string) {
+    this.toast = {
+      message:message,
+      title: type.toUpperCase(),
+      type: type,
+      ic: {
+        timeOut: 2500,
+        closeButton: true,
+      } as IndividualConfig,
+    };
+    this.cs.showToast(this.toast);
   }
 }
 

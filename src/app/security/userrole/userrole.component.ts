@@ -13,7 +13,7 @@ export class UserroleComponent {
 
   constructor(private cs: CommonService, 
     private httpClient: HttpClient,
-    private authService:AuthService) {
+    public authService:AuthService) {
     this.get();
   }
 
@@ -25,11 +25,15 @@ export class UserroleComponent {
 
   get() {
     const oHttpHeaders = new HttpHeaders(
-      {
-          'Token':this.authService.UserInfo.Token
-      });
+    {
+        'Token':this.authService.UserInfo.Token
+    });
     this.httpClient.get(this.authService.baseURL + '/api/User',{headers: oHttpHeaders}).subscribe((res) => {
-      this.listUser = res;
+      if(res){
+        this.listUser = res;
+      }else{
+        this.showMessage('warning', 'Session expired, please login.');
+      }
     });
   }
 
