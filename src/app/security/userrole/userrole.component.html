@@ -23,15 +23,15 @@
       <div class="col-md-12">
         <table class="table table-bordered">
           <tr class="table-secondary">
-            <th>User ID</th>
+            <th>#</th>
             <th>User Name</th>
             <th>Email</th>
             <th>Phone</th>
             <th colspan="2">Action</th>
           </tr>
-          <tr *ngFor="let item of listUser">
-            <td>{{item.UserID}}</td>
-            <td>{{item.FirstName +" "+ item.MiddleName +" "+ item.LastName}}</td>
+          <tr *ngFor="let item of listUser; let i = index">
+            <td>{{i+1}}</td>
+            <td>{{item.UserName}}</td>
             <td>{{item.Email}}</td>
             <td>{{item.MobileNo}}</td>
             <td><button class="btn btn-sm btn-outline-primary" (click)="setRole(item)" *ngIf="authService.UserInfo.Menu.CanEdit">Set Role</button></td>

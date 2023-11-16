@@ -45,7 +45,7 @@
             <td>{{item.Email}}</td>
             <td>{{item.MobileNo}}</td>
             <td>{{item.PhoneNo}}</td>
-            
+
             <td><button class="btn btn-sm btn-outline-primary" (click)="edit(item)"
                     *ngIf="authService.UserInfo.Menu.CanEdit">Edit</button></td>
             <td>
@@ -110,6 +110,10 @@
             <input type="text" id="UserName" [(ngModel)]="User.UserName" class="form-control" />
         </div>
         <div class="col-md-4">
+            <label class="form-label" for="UserPass">Password:</label>
+            <input type="password" id="UserPass" [(ngModel)]="User.UserPass" class="form-control" />
+        </div>
+        <div class="col-md-4">
             <label class="form-label" for="FirstName">FirstName:</label>
             <input type="text" id="FirstName" [(ngModel)]="User.FirstName" class="form-control" />
         </div>
@@ -133,13 +137,18 @@
             <label class="form-label" for="PhoneNo">PhoneNo:</label>
             <input type="text" id="PhoneNo" [(ngModel)]="User.PhoneNo" class="form-control" />
         </div>
+        <div class="col-md-4 form-check">
+            <input class="form-check-input"  [(ngModel)]="User.IsActive" type="checkbox" value="True" id="IsActive">
+            <label class="form-check-label" for="IsActive">
+                Active User
+            </label>
+        </div>
 
         <div class="col-md-12 mt-5">
-            <button type="button" class="btn btn-success"
-                *ngIf="User.UserID==0 && authService.UserInfo.Menu.CanCreate" (click)="add();">Add
+            <button type="button" class="btn btn-success" *ngIf="User.UserID==0 && authService.UserInfo.Menu.CanCreate"
+                (click)="add();">Add
                 User</button>
-            <button type="button" class="btn btn-success"
-                *ngIf="User.UserID>0 && authService.UserInfo.Menu.CanEdit"
+            <button type="button" class="btn btn-success" *ngIf="User.UserID>0 && authService.UserInfo.Menu.CanEdit"
                 (click)="update();">update User</button>
         </div>
     </div>

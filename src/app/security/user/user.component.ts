@@ -56,6 +56,10 @@ export class UserComponent {
       isValid = false;
       this.showMessage('warning', 'User code is required.');
     }
+    if (this.User.UserPass == undefined || this.User.UserPass == null || this.User.UserPass == '') {
+      isValid = false;
+      this.showMessage('warning', 'User password is required.');
+    }
     return isValid;
   }
 
@@ -85,12 +89,14 @@ export class UserComponent {
       UserID: item.UserID,
       UserCode:  item.UserCode,
       UserName:  item.UserName,
+      UserPass: item.UserPass,
       FirstName:  item.FirstName,
       MiddleName: item.MiddleName,
       LastName:  item.LastName,
       Email:  item.Email,
       MobileNo:  item.MobileNo,
       PhoneNo:  item.PhoneNo,
+      IsActive:item.IsActive,
       CreateBy:  0,
       UpdateBy:0,
     };
@@ -140,24 +146,28 @@ export class UserComponent {
     UserID: number,
     UserCode: string,
     UserName: string,
+    UserPass:string,
     FirstName: string,
     MiddleName: string,
     LastName: string,
     Email: string,
     MobileNo: string,
     PhoneNo: string,
+    IsActive:boolean,
     CreateBy: number,
     UpdateBy:number,
   } = {
       UserID: 0,
       UserCode: '',
       UserName: '',
+      UserPass: '',
       FirstName: '',
       MiddleName: '',
       LastName: '',
       Email: '',
       MobileNo: '',
       PhoneNo: '',
+      IsActive:true,
       CreateBy: 0,
       UpdateBy:0,
     };
@@ -166,12 +176,14 @@ export class UserComponent {
       UserID: 0,
       UserCode: '',
       UserName: '',
+      UserPass: '',
       FirstName: '',
       MiddleName: '',
       LastName: '',
       Email: '',
       MobileNo: '',
       PhoneNo: '',
+      IsActive:true,
       CreateBy: 0,
       UpdateBy:0
     };
