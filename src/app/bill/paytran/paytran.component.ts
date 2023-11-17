@@ -117,12 +117,13 @@ export class PaytranComponent {
         +'</tr>'
       }
       var htmlPayment = '';
-      for(var i = 0; i < this.oBill.PaySettles.length; i++){
+      for(var i = 0; i < this.oBill.PaySettles.length; i++) {
         var sl = i + 1;
+        var PayDate = this.oBill.PaySettles[i].PayDate.substr(0,16);
         htmlPayment+='<tr style="border:1px solid gray">'
             +'<td style="border:1px solid gray">'+sl+'</td>'
             +'<td style="border:1px solid gray">'+this.oBill.PaySettles[i].PayMethodName+'</td>'
-            +'<td style="border:1px solid gray">'+this.oBill.PaySettles[i].PayDate+'</td>'
+            +'<td style="border:1px solid gray">'+PayDate+'</td>'
             +'<td style="border:1px solid gray;text-align: right;">'+this.oBill.PaySettles[i].Amount+'</td>'
             +'</tr>'
       }
