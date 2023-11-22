@@ -42,6 +42,7 @@ import { SupplierComponent } from './inventory/supplier/supplier.component';
 import { WorkgroupComponent } from './operation/workgroup/workgroup.component';
 import { WorkgroupmemberComponent } from './operation/workgroupmember/workgroupmember.component';
 import { StockComponent } from './inventory/stock/stock.component';
+import { JcReqComponent } from './inventory/jc-req/jc-req.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -74,6 +75,7 @@ const routes: Routes = [
   { path:'store-ret-rec', component:StoreretrecComponent, canActivate:[authGuard] },
   {path:'sales-price', component:SalepriceComponent, canActivate:[authGuard]},
   {path:'stock', component:StockComponent, canActivate:[authGuard]},
+  {path:'jc-req', component:JcReqComponent, canActivate:[authGuard]},
 
   { path: 'job-card', component: JobcardComponent, canActivate:[authGuard] },
   { path: 'client-vehicle', component: ClientvehicleComponent, canActivate:[authGuard] },

@@ -8,7 +8,20 @@
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 
 <style>
-  
+  .blink {
+    animation: blink-animation 1s steps(5, start) infinite;
+    -webkit-animation: blink-animation 1s steps(5, start) infinite;
+  }
+  @keyframes blink-animation {
+    to {
+      visibility: hidden;
+    }
+  }
+  @-webkit-keyframes blink-animation {
+    to {
+      visibility: hidden;
+    }
+  }
 </style>
 
 
@@ -44,8 +57,9 @@
         </li>
       </ul>
       <form class="d-flex">
-        <a class="btn btn-sm btn-outline-danger" href="javascript:void(0)" *ngIf="authService.UserInfo.IsLogIn">Welcome! {{authService.UserInfo.UserName}}</a>
-        <button class="btn btn-sm btn-outline-danger" type="button" (click)="logout()" *ngIf="authService.UserInfo.IsLogIn">Logout</button>
+        <a class="btn btn-sm btn-outline-danger blink" href="javascript:void(0)" routerLink="/jc-req" *ngIf="authService.UserInfo.IsLogIn && authService.UserInfo.nNotify > 0"><i class="fa fa-bell" aria-hidden="true"></i> JC Req: {{authService.UserInfo.nNotify}}</a>
+        <a class="btn btn-sm btn-outline-primary" href="javascript:void(0)" *ngIf="authService.UserInfo.IsLogIn">Welcome! {{authService.UserInfo.UserName}}</a>
+        <button class="btn btn-sm btn-outline-info" type="button" (click)="logout()" *ngIf="authService.UserInfo.IsLogIn">Logout</button>
         <button class="btn btn-sm btn-outline-success" type="button" (click)="login()" *ngIf="!authService.UserInfo.IsLogIn">Login</button>
       </form>
     </div>

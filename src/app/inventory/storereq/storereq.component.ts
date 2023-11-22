@@ -159,7 +159,8 @@ export class StorereqComponent {
       Qty:item.Qty,
       ReqStatus:item.ReqStatus,
       StoreTranTypeId:item.StoreTranTypeId,
-      ReqUrgentType:item.ReqUrgentType
+      ReqUrgentType:item.ReqUrgentType,
+      DeliveryTime:item.DeliveryTime
     };
     this.isList = false;
     this.searchItem();
@@ -235,7 +236,8 @@ export class StorereqComponent {
     ReqStatus:1,
     CreateBy:0,
     StoreTranTypeId:1,
-    ReqUrgentType:3
+    ReqUrgentType:3,
+    DeliveryTime:0
   };
   reset() {
     this.oStoreReq = {
@@ -248,7 +250,8 @@ export class StorereqComponent {
       ReqStatus:1,
       CreateBy:0,
       StoreTranTypeId:1,
-      ReqUrgentType:3
+      ReqUrgentType:3,
+      DeliveryTime:0
     };
     this.PartNo = '';
   }
@@ -282,5 +285,6 @@ export interface StoreReq{
   ReqStatus:number,
   CreateBy:number,
   StoreTranTypeId:number,
-  ReqUrgentType:number
+  ReqUrgentType:number,
+  DeliveryTime:number
 }

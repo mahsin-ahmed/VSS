@@ -431,8 +431,8 @@
             </div>
             <div class="col-md-4 mt-5">
               <button type="button" class="btn btn-secondary" (click)="searchItem();">Search</button>&nbsp;
-              <!-- <a routerLink="/store-req" data-bs-dismiss="modal" target="_blank">Requisition</a>  -->
-              <a routerLink="/store-req" routerLinkActive="active" target="_blank" rel="bookmark">Requisition</a>
+              <!-- <a routerLink="/store-req" routerLinkActive="active" target="_blank" rel="bookmark">Requisition</a> -->
+              <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#jcReqModal" class="btn btn-primary" (click)="jcReq.PartNo=itemValue;jcReq.JcNo=JobCard.JcNo">Spare Requisition from Job-Card</a>
             </div>
             <div class="col-md-12">
               <table class="table table-bordered">
@@ -460,6 +460,52 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal" id="jcReqModal" data-backdrop="static">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Job Card Requisitionh</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label class="form-label" for="jcReqJcNo">JcNo:</label>
+            <input type="text" id="jcReqJcNo" [(ngModel)]="jcReq.JcNo" readonly class="form-control" />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label" for="jcReqBrand">Brand:</label>
+            <input type="text" id="jcReqBrand" [(ngModel)]="jcReq.Brand" class="form-control" />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label" for="jcReqBrand">Brand-Model:</label>
+            <input type="text" id="jcReqBrandModel" [(ngModel)]="jcReq.BrandModel" class="form-control" />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label" for="jcReqPartName">Part Name:</label>
+            <input type="text" id="jcReqPartName" [(ngModel)]="jcReq.PartName" class="form-control" />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label" for="jcReqPartNo">PartNo:</label>
+            <input type="text" id="jcReqPartNo" [(ngModel)]="jcReq.PartNo" class="form-control" />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label" for="jcReqQty">Quantity:</label>
+            <input type="number" id="jcReqQty" [(ngModel)]="jcReq.Qty" class="form-control" style="text-align:right;" />
+          </div>
+          <div class="col-md-8">
+            <label class="form-label" for="jcReqRemark">Remark:</label>
+            <input type="text" id="jcReqRemark" [(ngModel)]="jcReq.Remark" class="form-control" />
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <a href="javascript:void(0)" data-bs-dismiss="modal" class="btn">Close</a>
+        <button type="button" class="btn btn-success" (click)="addJcReq();">Add Requisition</button>
       </div>
     </div>
   </div>

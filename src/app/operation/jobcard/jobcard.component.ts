@@ -65,9 +65,9 @@ export class JobcardComponent {
   listReceiveBy:any=[];
   getVehicleReceiver(){
     const oHttpHeaders = new HttpHeaders(
-      {
-          'Token':this.authService.UserInfo.Token
-      });
+    {
+        'Token':this.authService.UserInfo.Token
+    });
     this.httpClient.get(this.authService.baseURL + '/api/JobCard/GetWorkGroupById?workGroupId=3',{headers: oHttpHeaders}).subscribe((res)=>{
         this.listReceiveBy = res;
     });
@@ -803,16 +803,17 @@ export class JobcardComponent {
               +'<td style="border:1px solid gray">'+this.JobCard.JcSpares[i].ItemStatusName+'</td>'
             +'</tr>';
       }
+      var Job_Card_Logo = location.origin + this.Job_Card_Logo;
       const myWindow: Window | null = window.open("", "", "width=793,height=1123");
       if(myWindow !=undefined){
         var jcForTem = '<!DOCTYPE html><html lang="en"><head><title>Job-Card</title></head><body>'
         +'<div style="margin-left:12px;margin-right:12px;margin-bottom:12px;margin-top:12px;">' 
           +'<table style="width:100%;border-collapse: collapse;">'
             +'<tr>'
-              +'<td style="width:25%"><img style="width:180px" title="company_logo" style="width:102px" src="'+this.Job_Card_Logo+'" /></td>'
+              +'<td style="width:25%"><img style="width:180px" title="company_logo" style="width:102px" src="'+Job_Card_Logo+'" /></td>'
               +'<td style="width:50%">'
                 +'<div style="text-align:center;font-size:larger">'
-                +'<strong>'+this.company.CompanyName+'</strong>'
+                +'<strong style="color:red">'+this.company.CompanyName+'</strong>'
                 +'</div>'  
                 +'<div style="text-align:center">'
                 +this.company.Address
@@ -829,7 +830,7 @@ export class JobcardComponent {
           +'<table style="width:100%;border-collapse: collapse;">'
             +'<tr>'
               +'<th style="border:1px solid gray">JC No: '+this.JobCard.JcNo+'</th>'
-              +'<th style="border:1px solid gray">Job Date: '+this.JobCard.ReceiveDate+'</th>'
+              +'<th style="border:1px solid gray">Job Date: '+this.JobCard.ReceiveDate.substring(0,16)+'</th>'
               +'<th style="border:1px solid gray">Created: '+this.JobCard.CreateByName+'</th>'
               +'<th style="border:1px solid gray">JC Last Status: '+jcStatus+'</th>'
             +'</tr>'
@@ -853,17 +854,17 @@ export class JobcardComponent {
                           +'</tr>'
                           +'<tr>'
                             +'<td style="border:1px solid gray" align="left">Receive Time:</td>'
-                            +'<td style="border:1px solid gray" align="left">'+this.JobCard.ReceiveDate+'</td>'
+                            +'<td style="border:1px solid gray" align="left">'+this.JobCard.ReceiveDate.substring(0,16)+'</td>'
                             +'<td style="border:1px solid gray" align="left"></td>'
                           +'</tr>'
                           +'<tr>'
                             +'<td style="border:1px solid gray" align="left">JC Started:</td>'
-                            +'<td style="border:1px solid gray" align="left">'+this.JobCard.ReceiveDate+'</td>'
+                            +'<td style="border:1px solid gray" align="left">'+this.JobCard.ReceiveDate.substring(0,16)+'</td>'
                             +'<td style="border:1px solid gray" align="left"></td>'
                           +'</tr>'
                           +'<tr>'
                             +'<td style="border:1px solid gray" align="left">JC Completed:</td>'
-                            +'<td style="border:1px solid gray" align="left">'+this.JobCard.UpdateDate+'</td>'
+                            +'<td style="border:1px solid gray" align="left"></td>'
                             +'<td style="border:1px solid gray" align="left"></td>'
                           +'</tr>'
                       +'</table>'
@@ -1179,7 +1180,7 @@ export class JobcardComponent {
     }
     return isValid
   }
-  add(){
+  add():void{
     if(!this.validateForm()){
       return;
     }
@@ -1208,7 +1209,7 @@ export class JobcardComponent {
     });
   }
 
-  update(){
+  update():void{
     if(!this.validateForm()){
       return;
     }
@@ -1236,9 +1237,89 @@ export class JobcardComponent {
       }
     });
   }
+
+  validateJcReq():boolean{
+    var isValid:boolean=true;
+    if(this.jcReq.JcNo==undefined||this.jcReq.JcNo==null||this.jcReq.JcNo==''){
+      isValid = false;
+      this.showMessage('warning', 'Jc No is required.');
+    }
+    if(this.jcReq.Brand==undefined||this.jcReq.Brand==null||this.jcReq.Brand==''){
+      isValid = false;
+      this.showMessage('warning', 'Brand is required.');
+    }
+    if(this.jcReq.BrandModel==undefined||this.jcReq.BrandModel==null||this.jcReq.BrandModel==''){
+      isValid = false;
+      this.showMessage('warning', 'Brand-Model is required.');
+    }
+    if(this.jcReq.PartNo==undefined||this.jcReq.PartNo==null||this.jcReq.PartNo==''){
+      isValid = false;
+      this.showMessage('warning', 'Part-No is required.');
+    }
+    if(this.jcReq.Qty==undefined||this.jcReq.Qty==null||this.jcReq.Qty==0){
+      isValid = false;
+      this.showMessage('warning', 'Qty is required.');
+    }
+    if(this.jcReq.Remark==undefined||this.jcReq.Remark==null||this.jcReq.Remark==''){
+      isValid = false;
+      this.showMessage('warning', 'Remark is required.');
+    }
+    return isValid
+  }
+
+  addJcReq():void{
+    if(!this.validateJcReq()){
+      return;
+    }
+    const oHttpHeaders = new HttpHeaders(
+    {
+        'Token':this.authService.UserInfo.Token
+    });
+    this.jcReq.CreateBy = this.authService.UserInfo.UserID;
+    this.httpClient.post(this.authService.baseURL + '/api/JobCard/AddJcReq', this.jcReq,{headers:oHttpHeaders}).subscribe((res) => {
+      if (res == true) {
+        this.resetJcReq();
+        this.showMessage('success', 'data added.');
+      } else {
+        this.showMessage('error', 'error occurred.');
+      }
+    });
+  }
+
+  resetJcReq():void{
+    this.jcReq={
+      Id:0,
+      JcNo:'',
+      Brand:'',
+      BrandModel:'',
+      PartName:'',
+      PartNo:'',
+      Qty:0,
+      Remark:'',
+      CreateDate:'',
+      CreateBy:0,
+      IsRead:false,
+      ReadBy:0
+    }
+  }
+
+  jcReq:JcReq={
+    Id:0,
+    JcNo:'',
+    Brand:'',
+    BrandModel:'',
+    PartName:'',
+    PartNo:'',
+    Qty:0,
+    Remark:'',
+    CreateDate:'',
+    CreateBy:0,
+    IsRead:false,
+    ReadBy:0
+  }
 }
 
-export interface Company{
+export interface Company {
   CompanyId:number,
   CompanyCode:string,
   CompanyName:string,
@@ -1253,4 +1334,19 @@ export interface Company{
   Website:string,
   IsActive:boolean,
   Logos:[]
+}
+
+export interface JcReq {
+  Id:number,
+  JcNo:string,
+  Brand:string,
+  BrandModel:string,
+  PartName:string,
+  PartNo:string,
+  Qty:number,
+  Remark:string,
+  CreateDate:string,
+  CreateBy:number,
+  IsRead:boolean,
+  ReadBy:number
 }
