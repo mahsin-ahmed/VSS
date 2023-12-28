@@ -50,8 +50,6 @@ import { StorereqrecComponent } from './inventory/storereqrec/storereqrec.compon
 import { StockComponent } from './inventory/stock/stock.component';
 import { JcReqComponent } from './inventory/jc-req/jc-req.component';
 
-//StorereqrecComponent
-
 @NgModule({
   declarations: [
     AppComponent,
