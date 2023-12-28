@@ -1184,7 +1184,10 @@ export class JobcardComponent {
     }
     return isValid
   }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 35eb68b46f5d0036afb2aceaacd4fc55b42236f3
   add():void{
     if(!this.validateForm()){
       return;
@@ -1243,11 +1246,14 @@ export class JobcardComponent {
     });
   }
 
+<<<<<<< HEAD
   closeJc():void{
     this.JobCard.JcStatus = 1;
     this.update();
   }
 
+=======
+>>>>>>> 35eb68b46f5d0036afb2aceaacd4fc55b42236f3
   validateJcReq():boolean{
     var isValid:boolean=true;
     if(this.jcReq.JcNo==undefined||this.jcReq.JcNo==null||this.jcReq.JcNo==''){
