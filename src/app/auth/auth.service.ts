@@ -14,6 +14,7 @@ export class AuthService {
     Permissions:any,
     RedirectURL:string,
     ModuleMenus:any,
+    nNotify:number,
     Menu:{
       CanCreate: boolean,
       CanDelete: boolean,
@@ -43,6 +44,7 @@ export class AuthService {
     Permissions:[],
     RedirectURL:'',
     ModuleMenus:[],
+    nNotify:0,
     Menu:{
       CanCreate: false,
       CanDelete: false,
@@ -100,6 +102,7 @@ export class AuthService {
 
   // store the URL so we can redirect after logging in
   baseURL:string='http://localhost:56297';
+  //baseURL:string='http://akash.com.bd:86';
   //redirectUrl: string | null = null;
   login(userInfo:any, isLogIn:boolean):Observable<boolean> {
     this.reset();
@@ -110,6 +113,7 @@ export class AuthService {
       this.UserInfo.UserID = userInfo.UserID;
       this.UserInfo.Permissions = userInfo.Permissions;
       this.UserInfo.RedirectURL = '/dashboard';
+      this.UserInfo.nNotify = userInfo.nNotify;
       var modules = this.UserInfo.Permissions.map((x:any) => x.ModuleId).filter((value:any, index:any, self:any) => self.indexOf(value) === index);
       var listModule:any =[];
       for(var i = 0; i < modules.length; i++){
@@ -141,6 +145,7 @@ export class AuthService {
     this.UserInfo.Token = '';
     this.UserInfo.UserID = 0;
     this.UserInfo.RedirectURL = '/login';
+    this.UserInfo.nNotify = 0;
     this.UserInfo.Menu = this.resetMenu();
     this.UserInfo.ModuleMenus = [],
     this.UserInfo.Permissions = []

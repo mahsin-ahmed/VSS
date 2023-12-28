@@ -48,8 +48,7 @@ import { WorkgroupComponent } from './operation/workgroup/workgroup.component';
 import { WorkgroupmemberComponent } from './operation/workgroupmember/workgroupmember.component';
 import { StorereqrecComponent } from './inventory/storereqrec/storereqrec.component';
 import { StockComponent } from './inventory/stock/stock.component';
-
-//StorereqrecComponent
+import { JcReqComponent } from './inventory/jc-req/jc-req.component';
 
 @NgModule({
   declarations: [
@@ -92,7 +91,8 @@ import { StockComponent } from './inventory/stock/stock.component';
     WorkgroupComponent,
     WorkgroupmemberComponent,
     StorereqrecComponent,
-    StockComponent
+    StockComponent,
+    JcReqComponent
   ],
   imports: [
     BrowserModule,

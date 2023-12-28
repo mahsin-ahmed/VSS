@@ -117,25 +117,27 @@ export class PaytranComponent {
         +'</tr>'
       }
       var htmlPayment = '';
-      for(var i = 0; i < this.oBill.PaySettles.length; i++){
+      for(var i = 0; i < this.oBill.PaySettles.length; i++) {
         var sl = i + 1;
+        var PayDate = this.oBill.PaySettles[i].PayDate.substr(0,16);
         htmlPayment+='<tr style="border:1px solid gray">'
             +'<td style="border:1px solid gray">'+sl+'</td>'
             +'<td style="border:1px solid gray">'+this.oBill.PaySettles[i].PayMethodName+'</td>'
-            +'<td style="border:1px solid gray">'+this.oBill.PaySettles[i].PayDate+'</td>'
+            +'<td style="border:1px solid gray">'+PayDate+'</td>'
             +'<td style="border:1px solid gray;text-align: right;">'+this.oBill.PaySettles[i].Amount+'</td>'
             +'</tr>'
       }
+      var Bill_Logo = location.origin + this.Bill_Logo;
       const myWindow: Window | null = window.open("", "", "width=793,height=1123");
       if(myWindow !=undefined) {
         var htmlPrint = '<!DOCTYPE html><html lang="en"><head><title>Bill-Copy</title></head><body>'
         +'<div style="margin-left:12px;margin-right:12px;margin-bottom:12px;margin-top:12px;">' 
           +'<table style="width:100%;border-collapse: collapse;">'
             +'<tr>'
-              +'<td style="width:25%"><img style="width:180px" title="company_logo" style="width:102px" src="'+this.Bill_Logo+'" /></td>'
+              +'<td style="width:25%"><img style="width:180px" title="company_logo" style="width:102px" src="'+Bill_Logo+'" /></td>'
               +'<td style="width:50%">'
                 +'<div style="text-align:center;font-size:larger">'
-                +'<strong>'+this.company.CompanyName+'</strong>'
+                +'<strong style="color:red">'+this.company.CompanyName+'</strong>'
                 +'</div>'
                 +'<div style="text-align:center">'
                 +this.company.Address
@@ -184,13 +186,7 @@ export class PaytranComponent {
           +'</tr>'
           +htmlInvoice
           +'<tr>'
-            +'<th></th>'
-            +'<th></th>'
-            +'<th></th>'
-            +'<th></th>'
-            +'<th></th>'
-            +'<th></th>'
-            +'<th></th>'
+            +'<td colspan="7">In word: '+this.oBill.GrandTotalWord+'</td>'
             +'<th style="text-align: right;">Grand Total:</th>'
             +'<th style="text-align: right;">'+this.oBill.GrandTotal+'</th>'
           +'</tr>'
@@ -224,6 +220,7 @@ export class PaytranComponent {
     JcId:number,
     JcNo:string,
     GrandTotal:number,
+    GrandTotalWord:string
     InvoiceItems:any,
     IsInvoice:number,
     BalanceAmount:number,
@@ -240,6 +237,7 @@ export class PaytranComponent {
     JcId:0,
     JcNo:'',
     GrandTotal:0,
+    GrandTotalWord:'',
     InvoiceItems:[],
     IsInvoice:0,
     BalanceAmount:0,
@@ -270,9 +268,9 @@ export class PaytranComponent {
   Bill_Logo:string='';
   getCompany(){
     const oHttpHeaders = new HttpHeaders(
-      {
-          'Token':this.authService.UserInfo.Token
-      });
+    {
+        'Token':this.authService.UserInfo.Token
+    });
     this.httpClient.get<Company>(this.authService.baseURL + '/api/JobCard/GetCompany',{headers:oHttpHeaders}).subscribe((res)=>{
         this.company = res;
         var oLogo:any = this.company.Logos.filter((x:any)=>x.Name=='Bill Logo')[0];

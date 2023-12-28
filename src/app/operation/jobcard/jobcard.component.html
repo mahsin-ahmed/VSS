@@ -25,7 +25,7 @@
   <table class="table table-bordered">
     <tr class="table-secondary">
         <th>#</th>
-        <th scope="col">SL No.</th>
+        <th>SL No.</th>
         <th>Job Card No.</th>
         <th>Vehicle Reg.</th>
         <th>Bay</th>
@@ -44,8 +44,8 @@
         <td>{{item.ReceiveDate | date:'dd-MMM-yy HH:mm a'}}</td>
         <td>{{item.EstiCostTotal}}</td>
         <td>{{item.IsPaid == true ? 'Paid' : 'Due'}}</td>
-        <td>{{item.JcStatus==1?'Close':'Open'}}</td>
-        <td><button class="btn btn-sm btn-primary" (click)="edit(item)" *ngIf="authService.UserInfo.Menu.CanEdit">Edit</button></td>
+        <td>{{item.JcStatus==1?'Close':item.JcStatus==2?'Open' : 'Undefined'}}</td>
+        <td><button class="btn btn-sm btn-primary" (click)="edit(item)" *ngIf="authService.UserInfo.Menu.CanCreate && item.JcStatus != 1">Edit</button></td>
     </tr>
   </table>
   <div class="row" *ngIf="listJobCard.length>0">
@@ -178,9 +178,10 @@
               </select>
             </div>
             <div class="col-md-4">
-              <label for="JcStatus" class="form-label">JC Status:</label>
+              <label for="JcStatus" class="form-label">Job-Card Status:</label>
               <select id="JcStatus" class="form-control" [(ngModel)]="JobCard.JcStatus">
-                <option *ngFor="let item of listJcStatus" value="{{item.Id}}">{{item.Name}}</option>
+                <!-- <option *ngFor="let item of listJcStatus" value="{{item.Id}}">{{item.Name}}</option> -->
+                <option value="2">Open</option>
               </select>
             </div>
             <div class="col-md-4">
@@ -236,7 +237,7 @@
               <input type="text" id="Duration" [(ngModel)]="JcJob.Duration" class="form-control" placeholder="" readonly  style="text-align: right;" />
             </div>
             <div class="col-md-4">
-              <label for="JobStatus" class="form-label">Status</label>
+              <label for="JobStatus" class="form-label">Job Status</label>
               <select id="JobStatus" class="form-control" [(ngModel)]="JcJob.JobStatus">
                 <option *ngFor="let item of listJobStatus" value="{{item.Id}}">{{item.Name}}</option>
               </select>
@@ -375,7 +376,8 @@
   <div class="row g-3 mt-1">
     <div class="col-md-6">
       <button type="button" *ngIf="JobCard.Id == 0 && authService.UserInfo.Menu.CanCreate" class="btn btn-success" (click)="add()"><i class="fa fa-plus"></i> Add</button>
-      <button type="button" *ngIf="JobCard.Id > 0 && authService.UserInfo.Menu.CanEdit" class="btn btn-primary" (click)="update()"><i class="fa fa-save"></i> Update</button>
+      <button type="button" *ngIf="JobCard.Id > 0 && authService.UserInfo.Menu.CanCreate" class="btn btn-primary" (click)="update()"><i class="fa fa-save"></i> Update</button>
+      <button type="button" *ngIf="JobCard.Id > 0 && authService.UserInfo.Menu.CanEdit && JobCard.JcStatus == 2" class="btn btn-danger" (click)="closeJc()"><i class="fa fa-save"></i> Close Job-Card</button>
     </div>
   </div>
 </div>
@@ -431,8 +433,8 @@
             </div>
             <div class="col-md-4 mt-5">
               <button type="button" class="btn btn-secondary" (click)="searchItem();">Search</button>&nbsp;
-              <!-- <a routerLink="/store-req" data-bs-dismiss="modal" target="_blank">Requisition</a>  -->
-              <a routerLink="/store-req" routerLinkActive="active" target="_blank" rel="bookmark">Requisition</a>
+              <!-- <a routerLink="/store-req" routerLinkActive="active" target="_blank" rel="bookmark">Requisition</a> -->
+              <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#jcReqModal" class="btn btn-primary" (click)="jcReq.PartNo=itemValue;jcReq.JcNo=JobCard.JcNo">Spare Requisition from Job-Card</a>
             </div>
             <div class="col-md-12">
               <table class="table table-bordered">
@@ -460,6 +462,53 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="jcReqModal" data-backdrop="static">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Job Card Requisitionh</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label class="form-label" for="jcReqJcNo">JcNo:</label>
+            <input type="text" id="jcReqJcNo" [(ngModel)]="jcReq.JcNo" readonly class="form-control" />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label" for="jcReqBrand">Brand:</label>
+            <input type="text" id="jcReqBrand" [(ngModel)]="jcReq.Brand" class="form-control" />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label" for="jcReqBrand">Brand-Model:</label>
+            <input type="text" id="jcReqBrandModel" [(ngModel)]="jcReq.BrandModel" class="form-control" />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label" for="jcReqPartName">Part Name:</label>
+            <input type="text" id="jcReqPartName" [(ngModel)]="jcReq.PartName" class="form-control" />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label" for="jcReqPartNo">PartNo:</label>
+            <input type="text" id="jcReqPartNo" [(ngModel)]="jcReq.PartNo" class="form-control" />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label" for="jcReqQty">Quantity:</label>
+            <input type="number" id="jcReqQty" [(ngModel)]="jcReq.Qty" class="form-control" style="text-align:right;" />
+          </div>
+          <div class="col-md-8">
+            <label class="form-label" for="jcReqRemark">Remark:</label>
+            <input type="text" id="jcReqRemark" [(ngModel)]="jcReq.Remark" class="form-control" />
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <a href="javascript:void(0)" data-bs-dismiss="modal" class="btn">Close</a>
+        <button type="button" class="btn btn-success" (click)="addJcReq();">Add Requisition</button>
       </div>
     </div>
   </div>

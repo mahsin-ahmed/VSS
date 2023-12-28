@@ -64,10 +64,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "AutomobileWorkshop:build:production"
+              "buildTarget": "AutomobileWorkshop:build:production"
             },
             "development": {
-              "browserTarget": "AutomobileWorkshop:build:development"
+              "buildTarget": "AutomobileWorkshop:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -75,7 +75,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "AutomobileWorkshop:build"
+            "buildTarget": "AutomobileWorkshop:build"
           }
         },
         "test": {

@@ -10,7 +10,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
   styleUrls: ['./brand.component.css']
 })
 export class BrandComponent {
-  
   isList:boolean=true;
   isNew:boolean = true;
   phone:string = '';
@@ -22,7 +21,6 @@ export class BrandComponent {
     this.get();
   }
 
-
   get(){
     const oHttpHeaders = new HttpHeaders(
     {
@@ -31,18 +29,17 @@ export class BrandComponent {
     this.httpClient.get(this.authService.baseURL + '/api/Brand?pi='+this.pageIndex+'&ps='+this.pageSize+'&phone='+this.phone,{headers: oHttpHeaders}).subscribe((res)=>{
       if(res){
         this.listBrand = res;
-        
-      //#region paging
-      this.rowCount = this.listBrand.length > 0 ? this.listBrand[0].RowCount : 0;
-      this.totalRowsInList = this.listBrand.length;
-      this.pager.totalPages = Math.ceil(this.rowCount / this.pageSize);
-      this.pager.pages = [];
-      for(var i = 0; i<this.pager.totalPages; i++){
-        this.pager.pages.push(i+1);
-      }
-      this.pageStart = (this.pageIndex * this.pageSize) + 1;
-      this.pageEnd = (this.pageStart - 1) + this.totalRowsInList;
-      //#endregion
+        //#region paging
+        this.rowCount = this.listBrand.length > 0 ? this.listBrand[0].RowCount : 0;
+        this.totalRowsInList = this.listBrand.length;
+        this.pager.totalPages = Math.ceil(this.rowCount / this.pageSize);
+        this.pager.pages = [];
+        for(var i = 0; i<this.pager.totalPages; i++){
+          this.pager.pages.push(i+1);
+        }
+        this.pageStart = (this.pageIndex * this.pageSize) + 1;
+        this.pageEnd = (this.pageStart - 1) + this.totalRowsInList;
+        //#endregion
       }else{
         this.showMessage('warning', 'Session expired, please login.');
       }
@@ -175,15 +172,7 @@ export class BrandComponent {
     UpdateDate:'',
     UpdateBy:0,
   };
-  listBrand:any =[
-    {
-      "Id":1,
-      "Code":"001",
-      "Name":"Toyota",
-    },{
-      "Id":2,
-      "Code":"002",
-      "Name":"BMW"}];
+  listBrand:any =[];
   
 
   //type: 'success', 'error', 'warning', 'info'
