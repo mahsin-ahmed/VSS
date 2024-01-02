@@ -68,7 +68,7 @@ export class JobcardComponent {
     {
         'Token':this.authService.UserInfo.Token
     });
-    this.httpClient.get(this.authService.baseURL + '/api/JobCard/GetWorkGroupById?workGroupId=3',{headers: oHttpHeaders}).subscribe((res)=>{
+    this.httpClient.get(this.authService.baseURL + '/api/JobCard/GetReceiver',{headers: oHttpHeaders}).subscribe((res)=>{
         this.listReceiveBy = res;
     });
   }
@@ -77,7 +77,7 @@ export class JobcardComponent {
       {
           'Token':this.authService.UserInfo.Token
       });
-    this.httpClient.get(this.authService.baseURL + '/api/JobCard/GetWorkGroupById?workGroupId=1',{headers:oHttpHeaders}).subscribe((res)=>{
+    this.httpClient.get(this.authService.baseURL + '/api/JobCard/GetManPower',{headers:oHttpHeaders}).subscribe((res)=>{
         this.listMechanic = res;
     });
   }

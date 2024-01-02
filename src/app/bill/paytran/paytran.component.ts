@@ -127,7 +127,8 @@ export class PaytranComponent {
             +'<td style="border:1px solid gray;text-align: right;">'+this.oBill.PaySettles[i].Amount+'</td>'
             +'</tr>'
       }
-      var Bill_Logo = location.origin + this.Bill_Logo;
+      //var Bill_Logo = location.origin + this.Bill_Logo;
+      var Bill_Logo = this.Bill_Logo;
       const myWindow: Window | null = window.open("", "", "width=793,height=1123");
       if(myWindow !=undefined) {
         var htmlPrint = '<!DOCTYPE html><html lang="en"><head><title>Bill-Copy</title></head><body>'

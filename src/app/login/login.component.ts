@@ -17,7 +17,14 @@ export class LoginComponent {
   private cs:CommonService,
   private httpClient: HttpClient,
   private app:AppComponent) {}
-  User:{UserName:string,UserPass:string}={UserName:'',UserPass:''};
+
+  User:{
+    UserName:string,
+    UserPass:string
+  }={
+    UserName:'',
+    UserPass:''
+  };
   login(): void {
     this.showMessage('info', 'Your are logging, please wait....');
     this.httpClient.post(this.authService.baseURL + '/api/Login', this.User).subscribe((res) => {

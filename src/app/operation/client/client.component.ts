@@ -116,7 +116,9 @@ export class ClientComponent {
     return isValid
   }
 
+  isDisable:boolean = false;
   add() {
+    this.isDisable = true;
     if(!this.validateForm()){
       return;
     }
@@ -178,6 +180,7 @@ export class ClientComponent {
     ContactPerson:'',
     ContactPersonNo:''
     };
+    this.isDisable = false;
   }
 
   edit(item:any){
