@@ -1,5 +1,6 @@
-<a href="javascript:void(0)" *ngIf="!isList && authService.UserInfo.Menu.CanView" (click)="switchView('list')">Go to List</a>
-<a href="javascript:void(0)" *ngIf="isList && authService.UserInfo.Menu.CanCreate" (click)="switchView('form')">Go to Entry</a>
+<br />
+<a href="javascript:void(0)" *ngIf="!isList && authService.UserInfo.Menu.CanView" (click)="switchView('list')">List</a>
+<a href="javascript:void(0)" *ngIf="isList && authService.UserInfo.Menu.CanCreate" (click)="switchView('form')">New</a>
 
 <div *ngIf="isList">
     <h4 class="text-center">List of Engine Size</h4>
@@ -33,15 +34,15 @@
                     <div class="row">
                         <div class="form-floating mb-2">
                         <input type="text"  [(ngModel)]="Engines.Code" class="form-control" id="Code" placeholder="">
-                        <label for="Code">Engine Code</label>
+                        <label for="Code" class="required">Engine Code <span style="font-size: 14px;"><sub>(No more than 2 characters or digits)</sub></span></label>
                         </div>
                         <div class="form-floating mb-2">
                         <input type="text" [(ngModel)]="Engines.Description" class="form-control" id="Description" placeholder="">
-                        <label for="Description">Engine Description</label>
+                        <label for="Description" class="required">Engine Description</label>
                         </div>
                         <div class="form-floating mb-2">
                         <input type="text" [(ngModel)]="Engines.CC" class="form-control" id="Engine CC" placeholder="">
-                        <label for="Engine CC">Engine CC</label>
+                        <label for="Engine CC" class="required">Engine CC</label>
                         </div>
                         <div class="col-auto  mb-2">
                         <button type="button" class="btn btn-success mb-3" *ngIf="Engines.EngineSizeId==0 && authService.UserInfo.Menu.CanCreate" (click)="addEngine()">Add</button>

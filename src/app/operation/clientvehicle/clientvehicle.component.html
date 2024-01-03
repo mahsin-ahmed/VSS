@@ -1,11 +1,10 @@
+<br />
+<a href="javascript:void(0)" *ngIf="!isList" (click)="switchView('list')">List</a>
+<a href="javascript:void(0)" *ngIf="isList && authService.UserInfo.Menu.CanCreate" (click)="switchView('form')">New</a>
 
-<div>
-    <a href="javascript:void(0)" *ngIf="!isList" (click)="switchView('list')">List</a>
-    <a href="javascript:void(0)" *ngIf="isList && authService.UserInfo.Menu.CanCreate" (click)="switchView('form')">New</a>
-</div>
 <div *ngIf="isList">
     <div class="row">
-        <div class="col-lg-4">
+        <div class="col-lg-4"><br />
             Show
             <select style="width: 50px;height: 32px;" [(ngModel)]="pageSize" (change)="search()">
                 <option *ngFor="let item of listPageSize" value={{item}}>
@@ -103,7 +102,7 @@
                         <div class="form-floating mb-2">
                             <input type="text" [(ngModel)]="ClientVehicle.VehicleNo" class="form-control" id="VehicleNo"
                                 placeholder="">
-                            <label for="Name">Registration Number</label>
+                            <label for="Name" class="required">Registration Number</label>
                         </div>
                         <div class="form-floating mb-2">
                             <input type="text" [(ngModel)]="ClientVehicle.Model" class="form-control" id="Model"
@@ -119,7 +118,7 @@
                             <select id="ClientId" class="form-control" [(ngModel)]="ClientVehicle.ClientId">
                                 <option *ngFor="let item of listClient" value="{{item.BpId}}">{{item.Name}}</option>
                             </select> 
-                            <label for="ClientId">Client Name</label>
+                            <label for="ClientId" class="required">Client Name<sup><span style="color:red">*</span></sup></label>
                         </div>
                         <div class="col-auto  mb-2">
                             <button type="button" class="btn btn-success mb-3" *ngIf="ClientVehicle.Id==0 && authService.UserInfo.Menu.CanCreate"

@@ -1,9 +1,10 @@
+<br />
 <a href="javascript:void(0)" *ngIf="!isList;" (click)="isList=true;reset()">List</a>
 <a href="javascript:void(0)" *ngIf="isList && authService.UserInfo.Menu.CanCreate"
     (click)="isList=false;reset();get()">New</a>
 <div *ngIf="isList">
     <div class="row">
-        <div class="col-lg-4">
+        <div class="col-lg-4"><br />
             Show
             <select style="width: 50px;height: 32px;" [(ngModel)]="pageSize" (change)="search()">
                 <option *ngFor="let item of listPageSize" value={{item}}>
@@ -95,13 +96,13 @@
     <h4 class="text-center">WorkGroup Member Entry</h4>
     <div class="row g-3">
         <div class="col-md-4">
-            <label class="form-label" for="WgId">Work Group Name:</label>
+            <label class="form-label required" for="WgId">Work Group Name:</label>
             <select id="WgId" class="form-control" [(ngModel)]="WorkGroupMember.WgId">
                 <option *ngFor="let item of listWorkGroup" value="{{item.WgId}}">{{item.WgName}}</option>
             </select>
         </div>
         <div class="col-md-4">
-            <label class="form-label" for="EmpId">Employee Name:</label>
+            <label class="form-label required" for="EmpId">Employee Name:</label>
             <select id="EmpId" class="form-control" [(ngModel)]="WorkGroupMember.EmpId">
                 <option *ngFor="let item of listEmployee" value="{{item.EmployeeId}}">{{item.FirstName}}{{' '}}{{item.MiddleName}}{{' '}}{{item.LastName}}</option>
             </select>

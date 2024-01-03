@@ -77,7 +77,11 @@ export class StorereqComponent {
     var isValid:boolean=true;
     if(this.oStoreReq.WhId==undefined||this.oStoreReq.WhId==null||this.oStoreReq.WhId==0){
       isValid = false;
-      this.showMessage('warning', 'Item Name is required.');
+      this.showMessage('warning', 'Warehouse Name is required.');
+    }
+    if(this.oStoreReq.Qty==undefined||this.oStoreReq.Qty==null||this.oStoreReq.Qty==0){
+      isValid = false;
+      this.showMessage('warning', 'Warehouse Name is required.');
     }
     if(this.oStoreReq.ItemId==undefined||this.oStoreReq.ItemId==null||this.oStoreReq.ItemId==0){
       isValid = false;
@@ -85,7 +89,7 @@ export class StorereqComponent {
     }
     if(this.oStoreReq.SupplierId==undefined||this.oStoreReq.SupplierId==null||this.oStoreReq.SupplierId==0){
       isValid = false;
-      this.showMessage('warning', 'Supplier is required.');
+      this.showMessage('warning', 'Supplier Name is required.');
     }
     return isValid
   }

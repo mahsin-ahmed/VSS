@@ -2,7 +2,7 @@
 <img title="" src="/assets/invoice_sample.png" class="img-fluid" /> -->
 <a href="javascript:void(0)" *ngIf="!isList && authService.UserInfo.Menu.CanCreate" (click)="isList=true;get();">Go to List</a>
 <!-- <a href="javascript:void(0)" *ngIf="isList" (click)="isList=false">Go to Entry</a> -->
-<div *ngIf="isList">
+<div *ngIf="isList"><br />
     <h4 class="text-center">Bill Create</h4>
     <h5 class="text-center">(from job-card)</h5>
     <table class="table table-bordered">

@@ -2,7 +2,7 @@
 <!-- <a href="javascript:void(0)" *ngIf="isList && authService.UserInfo.Menu.CanCreate" (click)="isList=false;reset();get()">New</a> -->
 <div *ngIf="isList">
   <div class="row">
-    <div class="col-lg-4">
+    <div class="col-lg-4"><br />
         Show
         <select style="width: 50px;height: 32px;" [(ngModel)]="pageSize" (change)="search()">
             <option *ngFor="let item of listPageSize" value={{item}}>
@@ -11,7 +11,7 @@
         </select> 
         records
     </div>
-    <div class="col-lg-4">
+    <div class="col-lg-4"><br />
       <h4 class="text-center">List of Job-Card Requisition</h4>
     </div>
     <div class="col-lg-4">

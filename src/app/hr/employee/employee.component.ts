@@ -51,24 +51,28 @@ export class EmployeeComponent {
 
   validateForm():boolean{
     var isValid:boolean=true;
-    if(this.Employee.FirstName==undefined||this.Employee.FirstName==null||this.Employee.FirstName==''){
-      isValid = false;
-      this.showMessage('warning', 'First name is required.');
-    }
-    if(this.Employee.MiddleName==undefined||this.Employee.MiddleName==null||this.Employee.MiddleName==''){
-      isValid = false;
-      this.showMessage('warning', 'Middle name is required.');
-    }
-    if(this.Employee.LastName==undefined||this.Employee.LastName==null||this.Employee.LastName==''){
-      isValid = false;
-      this.showMessage('warning', 'Last name is required.');
-    }
+
     if(this.Employee.DesignateId==undefined||this.Employee.DesignateId==null||this.Employee.DesignateId==0){
       isValid = false;
       this.showMessage('warning', 'Designation is required.');
     }
+    
+    if(this.Employee.FirstName==undefined||this.Employee.FirstName==null||this.Employee.FirstName==''){
+      isValid = false;
+      this.showMessage('warning', 'First name is required.');
+    }
+    // if(this.Employee.MiddleName==undefined||this.Employee.MiddleName==null||this.Employee.MiddleName==''){
+    //   isValid = false;
+    //   this.showMessage('warning', 'Middle name is required.');
+    // }
+    // if(this.Employee.LastName==undefined||this.Employee.LastName==null||this.Employee.LastName==''){
+    //   isValid = false;
+    //   this.showMessage('warning', 'Last name is required.');
+    // }
+   
     return isValid;
   }
+
   add() {      
     if(!this.validateForm()){
       return;

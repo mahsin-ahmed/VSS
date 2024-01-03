@@ -90,26 +90,28 @@ export class ItemComponent {
 
   validateForm():boolean{
     var isValid:boolean=true;
-    if(this.oItem.ItemName==undefined||this.oItem.ItemName==null||this.oItem.ItemName==''){
+    
+    if(this.oItem.PartNoNew==undefined||this.oItem.PartNoNew==null||this.oItem.PartNoNew==''){
       isValid = false;
-      this.showMessage('warning', 'Item Name is required.');
-    }
-    if(this.oItem.BrandId==undefined||this.oItem.BrandId==null||this.oItem.BrandId==0){
-      isValid = false;
-      this.showMessage('warning', 'Brand is required.');
-    }
-    if(this.oItem.ModelId==undefined||this.oItem.ModelId==null||this.oItem.ModelId==0){
-      isValid = false;
-      this.showMessage('warning', 'Model is required.');
+      this.showMessage('warning', 'PartNo New is required.');
     }
     if(this.oItem.PartNoOld==undefined||this.oItem.PartNoOld==null||this.oItem.PartNoOld==''){
       isValid = false;
       this.showMessage('warning', 'PartNo Old is required.');
     }
-    if(this.oItem.PartNoNew==undefined||this.oItem.PartNoNew==null||this.oItem.PartNoNew==''){
+    if(this.oItem.ModelId==undefined||this.oItem.ModelId==null||this.oItem.ModelId==0){
       isValid = false;
-      this.showMessage('warning', 'PartNo New is required.');
+      this.showMessage('warning', 'Model is required.');
     }
+    if(this.oItem.BrandId==undefined||this.oItem.BrandId==null||this.oItem.BrandId==0){
+      isValid = false;
+      this.showMessage('warning', 'Brand name is required.');
+    }
+    if(this.oItem.ItemName==undefined||this.oItem.ItemName==null||this.oItem.ItemName==''){
+      isValid = false;
+      this.showMessage('warning', 'Item Name is required.');
+    }
+   
     return isValid
   }
 

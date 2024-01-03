@@ -99,7 +99,7 @@
   <h4 class="text-center">Employee Entry Form</h4>
   <div class="row g-3">
     <div class="col-md-4">
-      <label class="form-label" for="FirstName">First Name:</label>
+      <label class="form-label required" for="FirstName">First Name:</label>
       <input type="text" id="FirstName" [(ngModel)]="Employee.FirstName" class="form-control" />
     </div>
     <div class="col-md-4">
@@ -124,7 +124,7 @@
       <input type="text" id="NID" [(ngModel)]="Employee.NID" class="form-control" />
     </div>
     <div class="col-md-4">
-      <label class="form-label" for="DesignateId">Designation:</label>
+      <label class="form-label required" for="DesignateId">Designation:</label>
       <select id="ReceiveBy" class="form-control" [(ngModel)]="Employee.DesignateId">
         <option *ngFor="let item of listDesignation" value="{{item.DesignateId}}">{{item.Name}}</option>
       </select>

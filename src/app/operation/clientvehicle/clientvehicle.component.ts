@@ -64,9 +64,14 @@ export class ClientvehicleComponent {
 
   validateForm():boolean{
     var isValid:boolean=true;
+
+    if(this.ClientVehicle.VehicleNo==undefined||this.ClientVehicle.VehicleNo==null||this.ClientVehicle.VehicleNo==""){
+      isValid = false;
+      this.showMessage('warning', 'Vehicle registration No. is required.');
+    }
     if(this.ClientVehicle.ClientId==undefined||this.ClientVehicle.ClientId==null||this.ClientVehicle.ClientId==0){
       isValid = false;
-      this.showMessage('warning', 'Client is required.');
+      this.showMessage('warning', 'Client name is required.');
     }
     return isValid
   }

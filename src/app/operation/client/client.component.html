@@ -1,8 +1,10 @@
+<br />
 <a href="javascript:void(0)" *ngIf="!isList;" (click)="isList=true;reset()">List</a>
 <a href="javascript:void(0)" *ngIf="isList && authService.UserInfo.Menu.CanCreate" (click)="isList=false;reset();get()">New</a>
+
 <div *ngIf="isList">
   <div class="row">
-    <div class="col-lg-4">
+    <div class="col-lg-4"><br />
         Show
         <select style="width: 50px;height: 32px;" [(ngModel)]="pageSize" (change)="search()">
             <option *ngFor="let item of listPageSize" value={{item}}>
@@ -51,7 +53,7 @@
   <h4 class="text-center">Client Entry</h4>
   <div class="row g-3">
     <div class="col-md-4">
-        <label class="form-label" for="clientName">Client Name:</label>
+        <label class="form-label required" for="clientName">Car Owner (Client Name):</label>
         <input type="text" id="clientName" [(ngModel)]="Client.Name" class="form-control" />
     </div>
     <div class="col-md-4">
@@ -59,7 +61,7 @@
       <input type="text" id="MembershipNo" [(ngModel)]="Client.MembershipNo" class="form-control" />
     </div>
     <div class="col-md-4">
-      <label class="form-label" for="Phone">Phone:</label>
+      <label class="form-label required" for="Phone">Phone (Car Owner):</label>
       <input type="text" id="Phone" [(ngModel)]="Client.Phone"  class="form-control" />
     </div>
     <div class="col-md-4">
@@ -71,11 +73,11 @@
         <input type="text" id="Address" [(ngModel)]="Client.Address" class="form-control " />
     </div>
     <div class="col-md-4">
-      <label class="form-label" for="ContactPerson">Contact Person:</label>
+      <label class="form-label" for="ContactPerson">Contact Person (Driver):</label>
       <input type="text" id="ContactPerson" [(ngModel)]="Client.ContactPerson"  class="form-control" />
     </div>
     <div class="col-md-4">
-      <label class="form-label" for="ContactPersonNo">Contact Person Phone:</label>
+      <label class="form-label" for="ContactPersonNo">Contact Person Phone (Driver):</label>
       <input type="text" id="ContactPersonNo" [(ngModel)]="Client.ContactPersonNo"  class="form-control" />
     </div>
     <div class="col-md-12">

@@ -48,17 +48,18 @@ export class BrandComponent {
 
   validateForm():boolean{
     var isValid:boolean=true;
-    if(this.Brand.Code==undefined||this.Brand.Code==null||this.Brand.Code==0){
+    
+    if(this.Brand.Country==undefined||this.Brand.Country==null||this.Brand.Country==''){
       isValid = false;
-      this.showMessage('warning', 'Brand code is required.');
+      this.showMessage('warning', 'Brand Country is required.');
     }
     if(this.Brand.Name==undefined||this.Brand.Name==null||this.Brand.Name==''){
       isValid = false;
       this.showMessage('warning', 'Brand name is required.');
     }
-    if(this.Brand.Country==undefined||this.Brand.Country==null||this.Brand.Country==''){
+    if(this.Brand.Code==undefined||this.Brand.Code==null||this.Brand.Code==0){
       isValid = false;
-      this.showMessage('warning', 'Brand Country is required.');
+      this.showMessage('warning', 'Brand code is required.');
     }
     return isValid
   }

@@ -1,9 +1,10 @@
+<br />
 <a href="javascript:void(0)" *ngIf="!isList" (click)="switchView('list')">List</a>
 <a href="javascript:void(0)" *ngIf="isList && authService.UserInfo.Menu.CanCreate" (click)="switchView('form')">New</a>
 
 <div *ngIf="isList">
   <div class="row">
-    <div class="col-lg-4">
+    <div class="col-lg-4"><br />
       Show
       <select style="width: 50px;height: 32px;" [(ngModel)]="pageSize" (change)="changePageSize()">
           <option *ngFor="let item of listPageSize" value={{item}}>
@@ -363,7 +364,7 @@
               <div style="max-height: 120px;" class="table-responsive">
                 <ol>
                   <li *ngFor="let item of listMechanic">
-                    <input type="checkbox" name="Resource" [(ngModel)]="item.IsSelect" /> {{item.FullName}} ( {{item.WgName}} )
+                    <input type="checkbox" name="Resource" id="Resource" [(ngModel)]="item.IsSelect" /> {{ item.FullName}}
                   </li>
                 </ol>
               </div>

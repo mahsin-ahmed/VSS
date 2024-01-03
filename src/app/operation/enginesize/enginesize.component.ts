@@ -49,7 +49,27 @@ getEngineList(){
       }
   });
 }
+
+validateForm():boolean{
+  var isValid:boolean=true;
+  if(this.Engines.Code==undefined||this.Engines.Code==null||this.Engines.Code==""){
+    isValid = false;
+    this.showMessage('warning', 'Engine code is required.');
+  }
+  if(this.Engines.Description==undefined||this.Engines.Description==null||this.Engines.Description==""){
+    isValid = false;
+    this.showMessage('warning', 'Engine description is required.');
+  }
+  if(this.Engines.CC==undefined||this.Engines.CC==null||this.Engines.CC==""){
+    isValid = false;
+    this.showMessage('warning', 'Engine CC is required.');
+  }
+  return isValid
+}
 addEngine() {
+  if(!this.validateForm()){
+    return;
+  }
   const oHttpHeaders = new HttpHeaders(
   {
       'Token':this.authService.UserInfo.Token

@@ -48,13 +48,14 @@ export class DesignationComponent {
   
   validateForm():boolean{
     var isValid:boolean=true;
-    if(this.Designation.Name==undefined||this.Designation.Name==null||this.Designation.Name==''){
-      isValid = false;
-      this.showMessage('warning', 'name is required.');
-    }
+    
     if(this.Designation.Short==undefined||this.Designation.Short==null||this.Designation.Short==''){
       isValid = false;
       this.showMessage('warning', 'Short form is required.');
+    }
+    if(this.Designation.Name==undefined||this.Designation.Name==null||this.Designation.Name==''){
+      isValid = false;
+      this.showMessage('warning', 'Name is required.');
     }
     return isValid;
   }

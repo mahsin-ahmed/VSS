@@ -1,5 +1,5 @@
-<a href="javascript:void(0)" *ngIf="!isList" (click)="isList=true">Go to List</a>
-<a href="javascript:void(0)" *ngIf="isList" (click)="isList=false;">Go to Entry</a>
+<a href="javascript:void(0)" *ngIf="!isList" (click)="isList=true">List</a>
+<a href="javascript:void(0)" *ngIf="isList" (click)="isList=false;">New</a>
 <div *ngIf="isList">
     <h4 class="text-center">List of Warehouse</h4>
     <table class="table table-bordered">

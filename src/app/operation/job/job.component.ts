@@ -79,7 +79,22 @@ export class JobComponent {
     });
   }
 
+  validateForm():boolean{
+    var isValid:boolean=true;
+    if(this.Job.Description==undefined||this.Job.Description==null||this.Job.Description==""){
+      isValid = false;
+      this.showMessage('warning', 'Job Description is required.');
+    }
+    if(this.Job.JobGroupId==undefined||this.Job.JobGroupId==null||this.Job.JobGroupId==0){
+      isValid = false;
+      this.showMessage('warning', 'Job Group is required.');
+    }
+    return isValid
+  }
   addJob() {
+    if(!this.validateForm()){
+      return;
+    }
     const oHttpHeaders = new HttpHeaders(
       {
           'Token':this.authService.UserInfo.Token

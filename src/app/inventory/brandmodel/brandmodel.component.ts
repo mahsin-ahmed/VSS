@@ -74,13 +74,14 @@ export class BrandmodelComponent {
   }
   validateForm():boolean{
     var isValid:boolean=true;
-    if(this.BrandModel.BrandId==undefined||this.BrandModel.BrandId==null||this.BrandModel.BrandId==0){
-      isValid = false;
-      this.showMessage('warning', 'Brand model ID is required.');
-    }
+    
     if(this.BrandModel.ModelCode==undefined||this.BrandModel.ModelCode==null||this.BrandModel.ModelCode==''){
       isValid = false;
-      this.showMessage('warning', 'Brand model code is required.');
+      this.showMessage('warning', 'Model code is required.');
+    }
+    if(this.BrandModel.BrandId==undefined||this.BrandModel.BrandId==null||this.BrandModel.BrandId==0){
+      isValid = false;
+      this.showMessage('warning', 'Brand name ID is required.');
     }
     return isValid
   }

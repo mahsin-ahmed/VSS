@@ -1,8 +1,9 @@
-<a href="javascript:void(0)" *ngIf="!isList && authService.UserInfo.Menu.CanView" (click)="switchView('list')">Go to List</a>
-<a href="javascript:void(0)" *ngIf="isList && authService.UserInfo.Menu.CanCreate" (click)="switchView('form')">Go to Entry</a>
+<br />
+<a href="javascript:void(0)" *ngIf="!isList && authService.UserInfo.Menu.CanView" (click)="switchView('list')">List</a>
+<a href="javascript:void(0)" *ngIf="isList && authService.UserInfo.Menu.CanCreate" (click)="switchView('form')">New</a>
 <div *ngIf="isList">
     <div class="row">
-        <div class="col-lg-4">
+        <div class="col-lg-4"><br />
             Show
             <select style="width: 50px;height: 32px;" [(ngModel)]="pageSize" (change)="changePageSize()">
                 <option *ngFor="let item of listPageSize" value={{item}}>
@@ -69,7 +70,7 @@
                         <div class="form-floating mb-2">
                             <input type="text" [(ngModel)]="JobGroup.Name" class="form-control" id="Name"
                                 placeholder="">
-                            <label for="Name">Job Group Name</label>
+                            <label for="Name" class="required">Job Group Name</label>
                         </div>
                         <div class="col-auto  mb-2">
                             <button type="button" class="btn btn-success mb-3" *ngIf="JobGroup.GroupId==0 && authService.UserInfo.Menu.CanCreate"

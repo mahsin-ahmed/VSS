@@ -74,7 +74,19 @@ export class JobgroupComponent {
     });
   }
 
+  validateForm():boolean{
+    var isValid:boolean=true;
+    if(this.JobGroup.GroupId==undefined||this.JobGroup.GroupId==null||this.JobGroup.GroupId==0){
+      isValid = false;
+      this.showMessage('warning', 'Job Group Name is required.');
+    }
+    return isValid
+  }
+
   add() {
+    if(!this.validateForm()){
+      return;
+    }
     const oHttpHeaders = new HttpHeaders(
       {
           'Token':this.authService.UserInfo.Token

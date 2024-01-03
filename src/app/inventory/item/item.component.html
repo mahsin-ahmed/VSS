@@ -65,27 +65,27 @@
       <input type="text" class="form-control" id="itemCode" [(ngModel)]="oItem.ItemCode">
     </div> -->
     <div class="col-md-4">
-      <label for="itemName" class="form-label">Parts Name</label>
+      <label for="itemName" class="form-label required">Parts Name</label>
       <input type="text" class="form-control" id="itemName" [(ngModel)]="oItem.ItemName">
     </div>
     <div class="col-md-4">
       <label for="BrandName" class="form-label">Brand Name</label>
-      <select class="form-control" id="BrandName" aria-label="Default select example" [(ngModel)]="oItem.BrandId" (change)="changeBrand();">
+      <select class="form-control required" id="BrandName" aria-label="Default select example" [(ngModel)]="oItem.BrandId" (change)="changeBrand();">
         <option *ngFor="let x of listBrand" value="{{x.Id}}">{{x.Name}}</option>
       </select>
     </div>
     <div class="col-md-4">
       <label for="ModelId" class="form-label">Brand-Model</label>
-      <select class="form-control" id="ModelId" [(ngModel)]="oItem.ModelId">
+      <select class="form-control required" id="ModelId" [(ngModel)]="oItem.ModelId">
         <option *ngFor="let x of listBrandModel" value="{{x.Id}}">{{x.ModelCode}}</option>
       </select>
     </div>
     <div class="col-md-4">
-      <label for="partNoOld" class="form-label">Part-Number (Old)</label>
+      <label for="partNoOld" class="form-label required">Part-Number (Old)</label>
       <input type="text" class="form-control" id="partNoOld" [(ngModel)]="oItem.PartNoOld">
     </div>
     <div class="col-md-4">
-      <label for="partNoNew" class="form-label">Part-Number (New)</label>
+      <label for="partNoNew" class="form-label required">Part-Number (New)</label>
       <input type="text" class="form-control" id="partNoNew" [(ngModel)]="oItem.PartNoNew">
     </div>
     <div class="col-md-12">

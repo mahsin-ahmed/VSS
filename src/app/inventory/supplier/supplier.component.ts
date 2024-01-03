@@ -37,13 +37,15 @@ export class SupplierComponent {
 
   validateForm():boolean{
     var isValid:boolean=true;
-    if(this.Supplier.Name==undefined||this.Supplier.Name==null||this.Supplier.Name==''){
-      isValid = false;
-      this.showMessage('warning', 'Supplier Name is required.');
-    }
+
+    
     if(this.Supplier.Phone==undefined||this.Supplier.Phone==null||this.Supplier.Phone==''){
       isValid = false;
       this.showMessage('warning', 'Supplier Phone is required.');
+    }
+    if(this.Supplier.Name==undefined||this.Supplier.Name==null||this.Supplier.Name==''){
+      isValid = false;
+      this.showMessage('warning', 'Supplier Name is required.');
     }
     return isValid
   }
