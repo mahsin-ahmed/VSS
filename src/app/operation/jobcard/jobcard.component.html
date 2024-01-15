@@ -91,8 +91,8 @@
         <div class="accordion-body">
           <div class="row g-3">
             <div class="col-md-4">
-              <label class="form-label" for="ClientName">
-                Client Name:
+              <label class="form-label required" for="ClientName">
+                Client Name(Car Owner):
                 <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#searchClientModal">Search</a>  
               </label>
               <input type="text" id="ClientName" [(ngModel)]="JobCard.ClientName" placeholder="Client Name" class="form-control" />
@@ -102,7 +102,7 @@
               <input type="text" id="MembershipId" [(ngModel)]="JobCard.MembershipNo" placeholder="Membership Card Number" class="form-control" />
             </div>
             <div class="col-md-4">
-              <label class="form-label">Phone:</label>
+              <label class="form-label required">Phone(Car Owner):</label>
               <input type="text" id="Phone" [(ngModel)]="JobCard.ClientPhone" placeholder="Phone"  class="form-control" />
             </div>
             <div class="col-md-4">
@@ -110,11 +110,11 @@
               <input type="text" id="Email" [(ngModel)]="JobCard.ClientEmail" placeholder="Email"  class="form-control" />
             </div>
             <div class="col-md-4">
-              <label class="form-label">Contact Person:</label>
+              <label class="form-label">Contact Person(Driver):</label>
               <input type="text" id="ContactPerson" [(ngModel)]="JobCard.ContactPerson"  placeholder="Contact Person" class="form-control" />
             </div>
             <div class="col-md-4">
-              <label class="form-label">Contact Person No:</label>
+              <label class="form-label">Contact Person No(Driver):</label>
               <input type="text" id="ContactPersonNo" [(ngModel)]="JobCard.ContactPersonNo" placeholder="Contact Person No" class="form-control" />
             </div>
             <div class="col-md-12">
@@ -212,19 +212,19 @@
         <div class="accordion-body">
           <div class="row g-3">
             <div class="col-md-4">
-              <label for="JobGroupId" class="form-label">Job Group</label>
+              <label for="JobGroupId" class="form-label required">Job Group</label>
               <select id="JobGroupId" class="form-control" [(ngModel)]="JcJob.JobGroupId" (change)="changeJG()">
                 <option *ngFor="let item of listJobGroup" value="{{item.GroupId}}">{{item.Name}}</option>
               </select>
             </div>
             <div class="col-md-4">
-              <label for="JobId" class="form-label">Job</label>
+              <label for="JobId" class="form-label required">Job</label>
               <select id="JobId" class="form-control" [(ngModel)]="JcJob.JobId">
                 <option *ngFor="let item of listJob" value="{{item.JobId}}">{{item.Description}}</option>
               </select>
             </div>
             <div class="col-md-4">
-              <label for="EngineSizeId" class="form-label">Engine Size</label>
+              <label for="EngineSizeId" class="form-label required">Engine Size</label>
               <select id="EngineSizeId" class="form-control" [(ngModel)]="JcJob.EngineSizeId" (change)="changeEngine()">
                 <option *ngFor="let item of listEngine" value="{{item.EngineSizeId}}">{{item.Code}} {{item.CC}}</option>
               </select>
@@ -238,15 +238,17 @@
               <input type="text" id="Duration" [(ngModel)]="JcJob.Duration" class="form-control" placeholder="" readonly  style="text-align: right;" />
             </div>
             <div class="col-md-4">
-              <label for="JobStatus" class="form-label">Job Status</label>
+              <label for="JobStatus" class="form-label required">Job Status</label>
               <select id="JobStatus" class="form-control" [(ngModel)]="JcJob.JobStatus">
                 <option *ngFor="let item of listJobStatus" value="{{item.Id}}">{{item.Name}}</option>
               </select>
             </div>
             <div class="col-md-4 mt-5">
-                <button class="btn btn-sm btn-success" *ngIf="JcJob.Id == 0" (click)="addJob();"><i class="fa fa-plus"></i> Add</button>
-                <button class="btn btn-sm btn-success" *ngIf="JcJob.Id > 0" (click)="updateJob();"><i class="fa fa-save"></i> Update</button>
+                <button class="btn btn-sm btn-success" *ngIf="JcJob.Id == 0" (click)="addJob();"><i class="fa fa-plus"></i> Add Job</button>
+                <button class="btn btn-sm btn-success" *ngIf="JcJob.Id > 0" (click)="updateJob();"><i class="fa fa-edit"></i> Update Job</button>
+           
             </div>
+               <br>
           </div>
           <table class="table table-bordered">
               <tr class="table-secondary">
@@ -360,7 +362,7 @@
         <div class="accordion-body">
           <div class="row g-3">
             <div class="col-md-4">
-              <label for="Resources" class="form-label">Resource</label>
+              <label for="Resources" class="form-label">Resources:</label>
               <div style="max-height: 120px;" class="table-responsive">
                 <ol>
                   <li *ngFor="let item of listMechanic">
@@ -376,9 +378,10 @@
   </div>
   <div class="row g-3 mt-1">
     <div class="col-md-6">
-      <button type="button" *ngIf="JobCard.Id == 0 && authService.UserInfo.Menu.CanCreate" class="btn btn-success" (click)="add()"><i class="fa fa-plus"></i> Add</button>
-      <button type="button" *ngIf="JobCard.Id > 0 && authService.UserInfo.Menu.CanCreate" class="btn btn-primary" (click)="update()"><i class="fa fa-save"></i> Update</button>
+      <button type="button" *ngIf="JobCard.Id == 0 && authService.UserInfo.Menu.CanCreate" class="btn btn-success" (click)="add()"><i class="fa fa-plus"></i> Add Job-Card</button>
+      <button type="button" *ngIf="JobCard.Id > 0 && authService.UserInfo.Menu.CanCreate" class="btn btn-primary" (click)="update()"><i class="fa fa-save"></i> Update Job-Card</button>
       <button type="button" *ngIf="JobCard.Id > 0 && authService.UserInfo.Menu.CanEdit && JobCard.JcStatus == 2" class="btn btn-danger" (click)="closeJc()"><i class="fa fa-save"></i> Close Job-Card</button>
+      <br />
     </div>
   </div>
 </div>

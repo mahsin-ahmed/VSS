@@ -1,6 +1,6 @@
 <!-- <p>invoice</p>
 <img title="" src="/assets/invoice_sample.png" class="img-fluid" /> -->
-<a href="javascript:void(0)" *ngIf="!isList && authService.UserInfo.Menu.CanCreate" (click)="isList=true;get();">Go to List</a>
+<a href="javascript:void(0)" *ngIf="!isList && authService.UserInfo.Menu.CanCreate" (click)="isList=true;get();">List</a>
 <!-- <a href="javascript:void(0)" *ngIf="isList" (click)="isList=false">Go to Entry</a> -->
 <div *ngIf="isList"><br />
     <h4 class="text-center">Bill Create</h4>
@@ -110,7 +110,7 @@
         <div class="modal-body">
             <div class="row g-3">
               <div class="col-md-6">
-                <label for="PayMethodId" class="form-label">Pay Type:</label>
+                <label for="PayMethodId" class="form-label required">Payment Mode:</label>
                 <select id="PayMethodId" class="form-control" [(ngModel)]="PayTran.PayMethodId">
                   <option *ngFor="let item of PayMethod" value="{{item.MethodId}}">{{item.Name}}</option>
                 </select>

@@ -118,7 +118,7 @@
                             <select id="ClientId" class="form-control" [(ngModel)]="ClientVehicle.ClientId">
                                 <option *ngFor="let item of listClient" value="{{item.BpId}}">{{item.Name}}</option>
                             </select> 
-                            <label for="ClientId" class="required">Client Name<sup><span style="color:red">*</span></sup></label>
+                            <label for="ClientId" class="required">Car Owner Name<sup><span style="color:red">*</span></sup></label>
                         </div>
                         <div class="col-auto  mb-2">
                             <button type="button" class="btn btn-success mb-3" *ngIf="ClientVehicle.Id==0 && authService.UserInfo.Menu.CanCreate"

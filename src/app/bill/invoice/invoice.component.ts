@@ -403,7 +403,18 @@ export class InvoiceComponent {
   }
 
   PayMethod:any=[
-    {MethodId:1,Name:'Cash'}
+    {MethodId:1,Name:'Cash'},
+    {MethodId:2,Name:'bKash'},
+    {MethodId:3,Name:'Rocket'},
+    {MethodId:4,Name:'Nagad'},
+    {MethodId:5,Name:'SureCash'},
+    {MethodId:6,Name:'MyCash'},
+    {MethodId:7,Name:'mCash'},
+    {MethodId:8,Name:'Upay'},
+    {MethodId:9,Name:'MyCash'},
+    {MethodId:10,Name:'CellFin'},
+    {MethodId:11,Name:'General Banking'},
+    {MethodId:12,Name:'Others'}
   ]
 
   PayTran:{
@@ -557,8 +568,19 @@ export class InvoiceComponent {
       }
     });
   }
+  validatePay():boolean{
+    var isValid:boolean=true;
+    if(this.PayTran.PayMethodId==0 || this.PayTran.PayMethodId == null || this.PayTran.PayMethodId == undefined){
+      isValid = false;
+      this.showMessage('warning', 'Payment mode is required.');
+    }
+    return isValid
+  }
 
   pay():void{
+    if(!this.validatePay()){
+      return;
+    }
     var isConfirm = confirm('Are sure to pay?');
     if(isConfirm){
       const oHttpHeaders = new HttpHeaders(

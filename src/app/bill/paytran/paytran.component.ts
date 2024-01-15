@@ -168,7 +168,15 @@ export class PaytranComponent {
                 +'<strong>Address: </strong>'+this.oBill.ClientAddress
               +'</td>'
               +'<td>'
-                +'<strong>Balance: </strong>'+this.oBill.BalanceAmount
+                +'<strong>Invoice No.: </strong>'+this.oBill.Id
+              +'</td>'
+            +'</tr>'
+            +'<tr>'
+              +'<td>'
+                +'<strong>Phone: </strong>'+this.oBill.ClientPhone
+              +'</td>'
+              +'<td>'
+              +'<strong>Balance: </strong>'+this.oBill.BalanceAmount
               +'</td>'
             +'</tr>'
           +'</table>'
@@ -202,6 +210,14 @@ export class PaytranComponent {
             +'</tr>'
             +htmlPayment
             +'</table>'
+            +'<br>'
+            +'<table style="width:100%">'
+            +'<tr>'
+              +'<td>Customer Signature<br/>Name:....................</td>'
+              +'<td>Floor Supervisor<br/>Name:....................</td>'
+              +'<td>Service Advisor Signature<br/>Name:....................</td>'
+            +'</tr>'
+          +'</table>'  
             +'</div>';
         myWindow.document.write(htmlPrint);
       }
@@ -225,7 +241,8 @@ export class PaytranComponent {
     InvoiceItems:any,
     IsInvoice:number,
     BalanceAmount:number,
-    PaySettles:any
+    PaySettles:any,
+    ClientPhone:string
   }={
     Id:0,
     ClientId:0,
@@ -242,7 +259,8 @@ export class PaytranComponent {
     InvoiceItems:[],
     IsInvoice:0,
     BalanceAmount:0,
-    PaySettles:[]
+    PaySettles:[],
+    ClientPhone:''
   };
   listBillItem:any =[];
 
