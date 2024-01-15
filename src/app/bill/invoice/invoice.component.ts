@@ -404,16 +404,16 @@ export class InvoiceComponent {
 
   PayMethod:any=[
     {MethodId:1,Name:'Cash'},
-    {MethodId:2,Name:'bKash'},
-    {MethodId:3,Name:'Rocket'},
-    {MethodId:4,Name:'Nagad'},
-    {MethodId:5,Name:'SureCash'},
-    {MethodId:6,Name:'MyCash'},
-    {MethodId:7,Name:'mCash'},
-    {MethodId:8,Name:'Upay'},
-    {MethodId:9,Name:'MyCash'},
-    {MethodId:10,Name:'CellFin'},
-    {MethodId:11,Name:'General Banking'},
+    {MethodId:2,Name:'Bank Deposit'},
+    {MethodId:3,Name:'Cheque'},
+    {MethodId:4,Name:'bKash'},
+    {MethodId:5,Name:'Nagad'},
+    {MethodId:6,Name:'Upay'},
+    {MethodId:7,Name:'Rocket'},
+    {MethodId:8,Name:'mCash'},
+    {MethodId:9,Name:'SureCash'},
+    {MethodId:10,Name:'MyCash'},
+    {MethodId:11,Name:'CellFin'},
     {MethodId:12,Name:'Others'}
   ]
 

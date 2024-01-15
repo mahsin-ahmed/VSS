@@ -159,16 +159,15 @@ export class PaytranComponent {
                 +'<strong>Client Name: </strong>'+this.oBill.ClientName
               +'</td>'
               +'<td>'
-                +'<strong>Job Card Number: </strong>'+this.oBill.JcNo
-              +'</td>'
+              +'<strong>Invoice No: </strong>'+this.oBill.Id
               +'</td>'
             +'</tr>'
             +'<tr>'
+            +'<td>'
+              +'<strong>Membership No.: </strong>'+this.oBill.MembershipNo
+            +'</td>'
               +'<td>'
-                +'<strong>Address: </strong>'+this.oBill.ClientAddress
-              +'</td>'
-              +'<td>'
-                +'<strong>Invoice No.: </strong>'+this.oBill.Id
+                +'<strong>JC No.: </strong>'+this.oBill.JcNo
               +'</td>'
             +'</tr>'
             +'<tr>'
@@ -177,6 +176,30 @@ export class PaytranComponent {
               +'</td>'
               +'<td>'
               +'<strong>Balance: </strong>'+this.oBill.BalanceAmount
+              +'</td>'
+            +'</tr>'
+            +'<tr>'
+              +'<td>'
+                +'<strong>Email: </strong>'+this.oBill.ClientEmail
+              +'</td>'
+              +'<td>'
+              +'<strong>Car Reg.: </strong>'+this.oBill.VehicleNo
+              +'</td>'
+            +'</tr>'
+            +'<tr>'
+              +'<td>'
+              +'<strong>Address: </strong>'+this.oBill.ClientAddress
+              +'</td>'
+              +'<td>'
+              +'<strong>Vin: </strong>'+this.oBill.Vin
+              +'</td>'
+            +'</tr>'
+            +'<tr>'
+              +'<td>'
+              +'<strong>Driver: </strong>'+this.oBill.ContactPerson
+              +'</td>'
+              +'<td>'
+              +'<strong>Driver Contact: </strong>'+this.oBill.ContactPersonNo
               +'</td>'
             +'</tr>'
           +'</table>'
@@ -231,6 +254,7 @@ export class PaytranComponent {
     ClientName:string,
     ClientMobile:string,
     ClientAddress:string,
+    MembershipNo:string,
     CreateDate:string,
     CreateBy:number,
     IsPaid:boolean,
@@ -242,13 +266,19 @@ export class PaytranComponent {
     IsInvoice:number,
     BalanceAmount:number,
     PaySettles:any,
-    ClientPhone:string
+    ClientPhone:string,
+    ClientEmail:string,
+    VehicleNo:string,
+    Vin:string,
+    ContactPerson:string,
+    ContactPersonNo:string,
   }={
     Id:0,
     ClientId:0,
     ClientName:'',
     ClientMobile:'',
     ClientAddress:'',
+    MembershipNo:'',
     CreateDate:'',
     CreateBy:0,
     IsPaid:false,
@@ -260,7 +290,12 @@ export class PaytranComponent {
     IsInvoice:0,
     BalanceAmount:0,
     PaySettles:[],
-    ClientPhone:''
+    ClientPhone:'',
+    ClientEmail:'',
+    VehicleNo:'',
+    Vin:'',
+    ContactPerson:'',
+    ContactPersonNo:'',
   };
   listBillItem:any =[];
 
