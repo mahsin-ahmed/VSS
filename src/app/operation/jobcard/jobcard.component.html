@@ -155,8 +155,8 @@
               <input type="text" id="Model" [(ngModel)]="JobCard.Model" class="form-control" placeholder="model number" />
             </div>
             <div class="col-md-4">
-              <label for="Vin" class="form-label" title="">VIN/Frame:</label>
-              <input type="text" id="Vin" [(ngModel)]="JobCard.Vin" class="form-control" placeholder="vin or frame number" />
+              <label for="Vin" class="form-label" title="">Chassis No./VIN/Frame:</label>
+              <input type="text" id="Vin" [(ngModel)]="JobCard.Vin" class="form-control" placeholder="vin between 11 to 17 digit" />
             </div>
             <div class="col-md-4">
               <label for="Mileage" class="form-label" title="">Milage(KM):</label>
@@ -167,7 +167,7 @@
               <input type="datetime-local" id="ReceiveDate" [(ngModel)]="JobCard.ReceiveDate" class="form-control" placeholder="Receive Date" />
             </div>
             <div class="col-md-4">
-              <label for="ReceiveBy" class="form-label">Receive By:</label>
+              <label for="ReceiveBy" class="form-label">Supervisor:</label>
               <select id="ReceiveBy" class="form-control" [(ngModel)]="JobCard.ReceiveBy">
                 <option *ngFor="let item of listReceiveBy" value="{{item.EmployeeId}}">{{item.FullName}}</option>
               </select>

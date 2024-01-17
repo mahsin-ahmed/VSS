@@ -106,7 +106,7 @@ export class PaytranComponent {
         var itemType = this.listBillItem[i].ItemType == 1 ? 'Job':this.listBillItem[i].ItemType == 2?'SP':'N/A';
         htmlInvoice+='<tr style="border:1px solid gray">'
         +'<td style="border:1px solid gray;">'+sl+'</td>'
-        +'<td style="border:1px solid gray;">'+itemType+'</td>'
+        +'<td style="border:1px solid gray;">'+this.listBillItem[i].ItemName+' ('+itemType+')</td>'
         +'<td style="border:1px solid gray;text-align: right;">'+this.listBillItem[i].Qty+'</td>'
         +'<td style="border:1px solid gray;text-align: right;">'+this.listBillItem[i].UnitPrice+'</td>'
         +'<td style="border:1px solid gray;text-align: right;">'+this.listBillItem[i].TotalPrice+'</td>'
@@ -207,7 +207,7 @@ export class PaytranComponent {
           +'<table style="width:100%;border-collapse: collapse;">'
           +'<tr style="border:1px solid gray">'
             +'<th style="border:1px solid gray">#</th>'
-            +'<th style="border:1px solid gray">Item Type</th>'
+            +'<th style="border:1px solid gray">Item</th>'
             +'<th style="border:1px solid gray;text-align: right;">Qty</th>'
             +'<th style="border:1px solid gray;text-align: right;">Price</th>'
             +'<th style="border:1px solid gray;text-align: right;">Total Price</th>'
@@ -272,6 +272,7 @@ export class PaytranComponent {
     Vin:string,
     ContactPerson:string,
     ContactPersonNo:string,
+    ItemName:string
   }={
     Id:0,
     ClientId:0,
@@ -296,6 +297,7 @@ export class PaytranComponent {
     Vin:'',
     ContactPerson:'',
     ContactPersonNo:'',
+    ItemName:''
   };
   listBillItem:any =[];
 
