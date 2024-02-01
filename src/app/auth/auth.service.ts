@@ -101,8 +101,8 @@ export class AuthService {
   }
 
   // store the URL so we can redirect after logging in
-  baseURL:string='http://localhost:56297';
-  //baseURL:string='http://akash.com.bd:86';
+ //baseURL:string='http://localhost:56297';
+  baseURL:string='http://akash.com.bd:86';
   //redirectUrl: string | null = null;
   login(userInfo:any, isLogIn:boolean):Observable<boolean> {
     this.reset();
