@@ -95,19 +95,54 @@
     <h4>Client's Vehicle Entry Form</h4>
     <div class="col-md 12">
         <div class="row">
-            <div class="col-md-2"></div>
-            <div class="col-md-8">
+            <div class="col-md-6">
+                <div class="entryForm">
+                    <div class="row">
+                        <div class="form-floating mb-2">
+                            <input list="Manufacturers" name="Manufacturer" id="Manufacturer" [(ngModel)]="ClientVehicle.Manufacturer" class="form-control" (keyup)="getManufacturer();" (change)="getModel();" autocomplete="off">
+                            <datalist id="Manufacturers">
+                                <option value="{{item.Manufacturer}}" *ngFor="let item of listManufacturer">
+                            </datalist>
+                            <label for="Manufacturer">Manufacturer</label>
+                        </div>
+                        <div class="form-floating mb-2">
+                            <input list="Models" name="Model" id="Model" [(ngModel)]="ClientVehicle.Model" class="form-control" (keyup)="getModel();" (change)="getSubModel();" autocomplete="off">
+                            <datalist id="Models">
+                                <option value="{{item.Model}}" *ngFor="let item of listModel">
+                            </datalist>
+                            <label for="Model">Model</label>
+                        </div>
+                        <div class="form-floating mb-2">
+                            <input list="SubModels" name="SubModel" id="SubModel" [(ngModel)]="ClientVehicle.SubModel" class="form-control" (keyup)="getSubModel();" (change)="getFrom();" autocomplete="off">
+                            <datalist id="SubModels">
+                                <option value="{{item.SubModel}}" *ngFor="let item of listSubModel">
+                            </datalist>
+                            <label for="SubModel">Sub-Model</label>
+                        </div>
+                        <div class="form-floating mb-2">
+                            <input list="Froms" name="From" id="From" [(ngModel)]="ClientVehicle.From" class="form-control" (keyup)="getFrom();" (change)="getTo();" autocomplete="off">
+                            <datalist id="Froms">
+                                <option value="{{item.From}}" *ngFor="let item of listFrom">
+                            </datalist>
+                            <label for="From">From</label>
+                        </div>
+                        <div class="form-floating mb-2">
+                            <input list="Tos" name="To" id="To" [(ngModel)]="ClientVehicle.To" class="form-control" (keyup)="getTo();" autocomplete="off">
+                            <datalist id="Tos">
+                                <option value="{{item.To}}" *ngFor="let item of listTo">
+                            </datalist>
+                            <label for="To">To</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
                 <div class="entryForm">
                     <div class="row">
                         <div class="form-floating mb-2">
                             <input type="text" [(ngModel)]="ClientVehicle.VehicleNo" class="form-control" id="VehicleNo"
                                 placeholder="">
                             <label for="Name" class="required">Registration Number</label>
-                        </div>
-                        <div class="form-floating mb-2">
-                            <input type="text" [(ngModel)]="ClientVehicle.Model" class="form-control" id="Model"
-                                placeholder="">
-                            <label for="Name">Model</label>
                         </div>
                         <div class="form-floating mb-2">
                             <input type="text" [(ngModel)]="ClientVehicle.Vin" class="form-control" id="Vin"
@@ -129,9 +164,8 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-2"></div>
         </div>
     </div>
 </div>
 
-    <!-- End Form Client Vehicle Section -->
+<!-- End Form Client Vehicle Section -->
