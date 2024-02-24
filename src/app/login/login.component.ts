@@ -16,7 +16,13 @@ export class LoginComponent {
   private router: Router, 
   private cs:CommonService,
   private httpClient: HttpClient,
-  private app:AppComponent) {}
+  private app:AppComponent) {
+    if(localStorage.getItem('UserInfo')){
+      this.router.navigate(['/dashboard']);
+    }else{
+      this.router.navigate(['/login']);
+    }
+  }
 
   User:{
     UserName:string,
