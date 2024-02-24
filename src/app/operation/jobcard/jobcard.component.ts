@@ -404,7 +404,11 @@ export class JobcardComponent {
   listJcStatusFitler:any=[{Id:0, Name:'All'},{Id:1,Name:'Close'},{Id:2,Name:'Open'}];
   listJcStatus:any=[{Id:1,Name:'Close'},{Id:2,Name:'Open'}];
   JobStatus:number = 2;
-  listJobStatus:any=[{Id:1,Name:'Close'},{Id:2,Name:'Open'}];
+  listJobStatus:any=[
+    {Id:0,Name:''},
+    {Id:1,Name:'Start'},
+    {Id:2,Name:'Finished'}
+  ];
   listJcJob:any=[];
 
   validateJcJob():boolean{
@@ -421,6 +425,10 @@ export class JobcardComponent {
       isValid = false;
       this.showMessage('warning', 'Price is required.');
     }
+    if(this.JcJob.JobStatus ==undefined || this.JcJob.JobStatus==null || this.JcJob.JobStatus==0){
+      isValid = false;
+      this.showMessage('warning', 'Job status is required.');
+    }
     return isValid
   }
 
@@ -428,9 +436,13 @@ export class JobcardComponent {
     if(!this.validateJcJob()){
       return;
     }
+    // var JobName = this.listAllJob.filter((x:any)=>x.JobId==this.JcJob.JobId)[0] ==undefined ? '' : this.listAllJob.filter((x:any)=>x.JobId==this.JcJob.JobId)[0].Description;
+    // var JobGroupName = this.listJobGroup.filter((x:any)=>x.GroupId==this.JcJob.JobGroupId)[0] ==undefined ? '' : this.listJobGroup.filter((x:any)=>x.GroupId==this.JcJob.JobGroupId)[0].Name;
+    // var EngineSizeName = this.listEngine.filter((x:any)=>x.EngineSizeId==this.JcJob.EngineSizeId)[0] ==undefined ? '' : this.listEngine.filter((x:any)=>x.EngineSizeId==this.JcJob.EngineSizeId)[0].Code + ' ' + this.listEngine.filter((x:any)=>x.EngineSizeId==this.JcJob.EngineSizeId)[0].CC;
     var JobName = this.listAllJob.filter((x:any)=>x.JobId==this.JcJob.JobId)[0] ==undefined ? '' : this.listAllJob.filter((x:any)=>x.JobId==this.JcJob.JobId)[0].Description;
     var JobGroupName = this.listJobGroup.filter((x:any)=>x.GroupId==this.JcJob.JobGroupId)[0] ==undefined ? '' : this.listJobGroup.filter((x:any)=>x.GroupId==this.JcJob.JobGroupId)[0].Name;
     var EngineSizeName = this.listEngine.filter((x:any)=>x.EngineSizeId==this.JcJob.EngineSizeId)[0] ==undefined ? '' : this.listEngine.filter((x:any)=>x.EngineSizeId==this.JcJob.EngineSizeId)[0].Code + ' ' + this.listEngine.filter((x:any)=>x.EngineSizeId==this.JcJob.EngineSizeId)[0].CC;
+    var JobStatusName=this.JcJob.JobStatus == 1 ? 'Start' : this.JcJob.JobStatus == 2 ? 'Finished' : '';
     this.JobCard.JobDetails.push({
       Id:this.genId(),
       JobGroupId:this.JcJob.JobGroupId,
@@ -444,7 +456,7 @@ export class JobcardComponent {
       JobGroupName:JobGroupName,
       JobName:JobName,
       EngineSizeName:EngineSizeName,
-      JobStatusName:EngineSizeName
+      JobStatusName:JobStatusName
     });
     this.calculateEstiCost();
     this.resetJob();
@@ -457,12 +469,12 @@ export class JobcardComponent {
     var JobName = this.listAllJob.filter((x:any)=>x.JobId==this.JcJob.JobId)[0] ==undefined ? '' : this.listAllJob.filter((x:any)=>x.JobId==this.JcJob.JobId)[0].Description;
     var JobGroupName = this.listJobGroup.filter((x:any)=>x.GroupId==this.JcJob.JobGroupId)[0] ==undefined ? '' : this.listJobGroup.filter((x:any)=>x.GroupId==this.JcJob.JobGroupId)[0].Name;
     var EngineSizeName = this.listEngine.filter((x:any)=>x.EngineSizeId==this.JcJob.EngineSizeId)[0] ==undefined ? '' : this.listEngine.filter((x:any)=>x.EngineSizeId==this.JcJob.EngineSizeId)[0].Code + ' ' + this.listEngine.filter((x:any)=>x.EngineSizeId==this.JcJob.EngineSizeId)[0].CC;
-    var Resources:any =[];
-    for(var i =0; i< this.listMechanic.length; i++){
-      if(this.listMechanic[i].IsSelect){
-        Resources.push({EmployeeId:this.listMechanic[i].EmployeeId, FullName:this.listMechanic[i].FullName, JcJobId:this.JcJob.Id, JcId:this.JcJob.JcId}); 
-      }
-    }
+    // var Resources:any =[];
+    // for(var i =0; i< this.listMechanic.length; i++){
+    //   if(this.listMechanic[i].IsSelect){
+    //     Resources.push({EmployeeId:this.listMechanic[i].EmployeeId, FullName:this.listMechanic[i].FullName, JcJobId:this.JcJob.Id, JcId:this.JcJob.JcId}); 
+    //   }
+    // }
     var oJcJob = this.JobCard.JobDetails.filter((x:any)=>x.Id == this.JcJob.Id)[0];
     if(oJcJob!==undefined) {
       oJcJob.JobGroupId=this.JcJob.JobGroupId;
@@ -472,14 +484,16 @@ export class JobcardComponent {
       oJcJob.Duration=this.JcJob.Duration;
       oJcJob.JobStatus=this.JcJob.JobStatus;
       //oJcSpare.Resources=this.JcJob.Resources;
-      oJcJob.Resources=Resources;
+      //oJcJob.Resources=Resources;
       oJcJob.JobGroupName=JobGroupName;
       oJcJob.JobName=JobName;
       oJcJob.EngineSizeName=EngineSizeName;
-      oJcJob.JobStatusName=oJcJob.JobStatus == 1 ? 'Close' : oJcJob.JobStatus == 2 ? 'Open' : '';
+      oJcJob.JobStatusName=oJcJob.JobStatus == 1 ? 'Start' : oJcJob.JobStatus == 2 ? 'Finished' : '';
     }
     this.calculateEstiCost();
+    this.resetJob();
   }
+
 
   JcSpare:{
     Id:number,
@@ -840,8 +854,8 @@ export class JobcardComponent {
               +'<td style="border:1px solid gray">'
                 +'<table style="width:100%;height:100%;border-collapse: collapse">'
                   +'<tr style="border:1px solid gray">'+'<td>Owner Name: '+this.JobCard.ClientName+'</td>'+'</tr>'
-                  +'<tr style="border:1px solid gray">'+'<td>Contact Person: '+this.JobCard.ContactPerson+'</td>'+'</tr>'
-                  +'<tr style="border:1px solid gray">'+'<td>Cont Person No.: '+this.JobCard.ContactPersonNo+'</td>'+'</tr>'
+                  +'<tr style="border:1px solid gray">'+'<td>Contact Person(Driver): '+this.JobCard.ContactPerson+'</td>'+'</tr>'
+                  +'<tr style="border:1px solid gray">'+'<td>Cont Person No.(Driver): '+this.JobCard.ContactPersonNo+'</td>'+'</tr>'
                   +'<tr style="border:1px solid gray">'+'<td>Membership ID: '+this.JobCard.MembershipNo+'</td>'+'</tr>'
                   +'<tr style="border:1px solid gray">'+'<td>Address: '+this.JobCard.ClientAddress+'</td>'+'</tr>'
                   +'<tr style="border:1px solid gray">'
@@ -886,13 +900,13 @@ export class JobcardComponent {
                           +'<tr style="border:1px solid gray">'
                             +'<th align="left">Cost</th>'
                             +'<th align="right">Job</th>'
-                            +'<th align="right">Spare Parts</th>'
+                            // +'<th align="right">Spare Parts</th>'
                             +'<th align="right">Total</th>'
                           +'</tr>'
                           +'<tr style="border:1px solid gray">'
                             +'<td align="left">Estimated</td>'
                             +'<td align="right">'+this.JobCard.EstiCostJob+'</td>'
-                            +'<td align="right">'+this.JobCard.EstiCostSpare+'</td>'
+                            // +'<td align="right">'+this.JobCard.EstiCostSpare+'</td>'
                             +'<td align="right">'+this.JobCard.EstiCostTotal+'</td>'
                           +'</tr>'
                           +'<tr style="border:1px solid gray">'
@@ -1095,13 +1109,13 @@ export class JobcardComponent {
     this.JobCard.VehicleNo=item.VehicleNo;
     this.JobCard.Model=item.Model;
     this.JobCard.JcStatus=item.JcStatus;
-    this.JobCard.ClientId=item.ClientId;
-    this.JobCard.ClientName=item.ClientName;
-    this.JobCard.ClientPhone=item.ClientPhone;
-    this.JobCard.ClientEmail=item.ClientEmail;
-    this.JobCard.ClientAddress=item.ClientAddress;
-    this.JobCard.ContactPerson=item.ContactPerson;
-    this.JobCard.ContactPersonNo=item.ContactPersonNo;
+    // this.JobCard.ClientId=item.ClientId;
+    // this.JobCard.ClientName=item.ClientName;
+    // this.JobCard.ClientPhone=item.ClientPhone;
+    // this.JobCard.ClientEmail=item.ClientEmail;
+    // this.JobCard.ClientAddress=item.ClientAddress;
+    // this.JobCard.ContactPerson=item.ContactPerson;
+    // this.JobCard.ContactPersonNo=item.ContactPersonNo;
     if(this.JobCard.ClientId>0){
       this.isNew = false;
     }
@@ -1158,6 +1172,8 @@ export class JobcardComponent {
     this.JobCard.ClientEmail=item.Email;
     this.JobCard.MembershipNo=item.MembershipNo;
     this.JobCard.Description=item.ClientInfo;
+    this.JobCard.ContactPerson=item.ContactPerson;
+    this.JobCard.ContactPersonNo=item.ContactPersonNo;
   }
 
   validateForm():boolean{

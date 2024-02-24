@@ -78,16 +78,16 @@
 <!-- End Pagination -->
 </div>
 <div *ngIf="!isList">
-  <h4 class="text-center">Supplier Entry</h4>
+  <h4 class="text-center">Supplier Entry Form</h4>
   <div class="row g-3">
     <div class="col-md-4">
       <label class="form-label required" for="SupplierName">Supplier Name:</label>
       <input type="text" id="SupplierName" [(ngModel)]="Supplier.Name" class="form-control" />
   </div>
-  <div class="col-md-4">
+  <!-- <div class="col-md-4">
     <label class="form-label" for="MembershipNo">Membership Card Number:</label>
     <input type="text" id="MembershipNo" [(ngModel)]="Supplier.MembershipNo" class="form-control" />
-  </div>
+  </div> -->
   <div class="col-md-4">
     <label class="form-label  required" for="Phone">Phone:</label>
     <input type="text" id="Phone" [(ngModel)]="Supplier.Phone"  class="form-control" />

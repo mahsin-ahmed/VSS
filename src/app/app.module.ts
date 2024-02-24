@@ -49,6 +49,7 @@ import { WorkgroupmemberComponent } from './operation/workgroupmember/workgroupm
 import { StorereqrecComponent } from './inventory/storereqrec/storereqrec.component';
 import { StockComponent } from './inventory/stock/stock.component';
 import { JcReqComponent } from './inventory/jc-req/jc-req.component';
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -103,7 +104,7 @@ import { JcReqComponent } from './inventory/jc-req/jc-req.component';
     ToastrModule.forRoot()//,
     //NgChartsModule
   ],
-  providers: [],
+  providers: [DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

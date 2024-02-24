@@ -3,6 +3,7 @@ import { HttpClient,HttpHeaders } from '@angular/common/http';
 import { CommonService, toastPayload } from '../../services/common.service';
 import { IndividualConfig } from 'ngx-toastr';
 import { AuthService } from 'src/app/auth/auth.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-paytran',
@@ -17,7 +18,7 @@ export class PaytranComponent {
   pageIndex: number = 0;
   pageSize:number = 5;
   rowCount:number = 0;
-  listPageSize:any = [5,10,20];
+  listPageSize:any = [5,10,20,50];
   pageStart:number = 0;
   pageEnd:number = 0;
   totalRowsInList:number=0;
@@ -32,11 +33,15 @@ export class PaytranComponent {
   //#endregion
   toast!: toastPayload;
 
+  currentDate:any = new Date();
+
   constructor(private cs:CommonService,
     private httpClient: HttpClient,
-    public authService:AuthService) {
+    public authService:AuthService,
+    private datePipe: DatePipe) {
     this.get();
     this.getCompany();
+    this.currentDate = this.datePipe.transform(this.currentDate, 'dd MMMM, yyyy');
   }
 
   switchView(view: string): void {
@@ -106,14 +111,14 @@ export class PaytranComponent {
         var itemType = this.listBillItem[i].ItemType == 1 ? 'Job':this.listBillItem[i].ItemType == 2?'SP':'N/A';
         htmlInvoice+='<tr style="border:1px solid gray">'
         +'<td style="border:1px solid gray;">'+sl+'</td>'
-        +'<td style="border:1px solid gray;">'+itemType+'</td>'
+        +'<td style="border:1px solid gray;">'+this.listBillItem[i].ItemName+' ('+itemType+')</td>'
         +'<td style="border:1px solid gray;text-align: right;">'+this.listBillItem[i].Qty+'</td>'
-        +'<td style="border:1px solid gray;text-align: right;">'+this.listBillItem[i].UnitPrice+'</td>'
-        +'<td style="border:1px solid gray;text-align: right;">'+this.listBillItem[i].TotalPrice+'</td>'
-        +'<td style="border:1px solid gray;text-align: right;">'+this.listBillItem[i].Discount+'</td>'
-        +'<td style="border:1px solid gray;text-align: right;">'+this.listBillItem[i].TpAfterDiscount+'</td>'
-        +'<td style="border:1px solid gray;text-align: right;">'+this.listBillItem[i].TotalVat+'</td>'
-        +'<td style="border:1px solid gray;text-align: right;">'+this.listBillItem[i].TotalAmount+'</td>'
+        +'<td style="border:1px solid gray;text-align: right;">'+this.listBillItem[i].UnitPrice+'.00</td>'
+        +'<td style="border:1px solid gray;text-align: right;">'+this.listBillItem[i].TotalPrice+'.00</td>'
+        +'<td style="border:1px solid gray;text-align: right;">'+this.listBillItem[i].Discount+'.00</td>'
+        +'<td style="border:1px solid gray;text-align: right;">'+this.listBillItem[i].TpAfterDiscount+'.00</td>'
+        +'<td style="border:1px solid gray;text-align: right;">'+this.listBillItem[i].TotalVat+'.00</td>'
+        +'<td style="border:1px solid gray;text-align: right;">'+this.listBillItem[i].TotalAmount+'.00</td>'
         +'</tr>'
       }
       var htmlPayment = '';
@@ -124,7 +129,7 @@ export class PaytranComponent {
             +'<td style="border:1px solid gray">'+sl+'</td>'
             +'<td style="border:1px solid gray">'+this.oBill.PaySettles[i].PayMethodName+'</td>'
             +'<td style="border:1px solid gray">'+PayDate+'</td>'
-            +'<td style="border:1px solid gray;text-align: right;">'+this.oBill.PaySettles[i].Amount+'</td>'
+            +'<td style="border:1px solid gray;text-align: right;">'+this.oBill.PaySettles[i].Amount+'.00</td>'
             +'</tr>'
       }
       //var Bill_Logo = location.origin + this.Bill_Logo;
@@ -137,8 +142,8 @@ export class PaytranComponent {
             +'<tr>'
               +'<td style="width:25%"><img style="width:180px" title="company_logo" style="width:102px" src="'+Bill_Logo+'" /></td>'
               +'<td style="width:50%">'
-                +'<div style="text-align:center;font-size:larger">'
-                +'<strong style="color:red">'+this.company.CompanyName+'</strong>'
+                +'<div style="text-align:center">'
+                +'<strong style="color:black;font-size:40px">'+this.company.CompanyName+'</strong>'
                 +'</div>'
                 +'<div style="text-align:center">'
                 +this.company.Address
@@ -152,31 +157,62 @@ export class PaytranComponent {
             +'</tr>'
           +'</table>'
           +'<div>'
-          +'<h3 style="text-align:center">Bill Copy</h3>'
+          +'<h2 style="text-align:center"><u>Bill Copy</u></h2>'
           +'<table style="width:100%;border-collapse: collapse;">'
             +'<tr>'
               +'<td>'
                 +'<strong>Client Name: </strong>'+this.oBill.ClientName
               +'</td>'
               +'<td>'
-                +'<strong>Job Card Number: </strong>'+this.oBill.JcNo
+              +'<strong>Invoice No: </strong>'+this.oBill.Id
               +'</td>'
+            +'</tr>'
+            +'<tr>'
+            +'<td>'
+              +'<strong>Membership No.: </strong>'+this.oBill.MembershipNo
+            +'</td>'
+              +'<td>'
+                +'<strong>JC No.: </strong>'+this.oBill.JcNo
               +'</td>'
             +'</tr>'
             +'<tr>'
               +'<td>'
-                +'<strong>Address: </strong>'+this.oBill.ClientAddress
+                +'<strong>Phone: </strong>'+this.oBill.ClientPhone
               +'</td>'
               +'<td>'
-                +'<strong>Balance: </strong>'+this.oBill.BalanceAmount
+              +'<strong>Balance: </strong>'+this.oBill.BalanceAmount
+              +'</td>'
+            +'</tr>'
+            +'<tr>'
+              +'<td>'
+                +'<strong>Email: </strong>'+this.oBill.ClientEmail
+              +'</td>'
+              +'<td>'
+              +'<strong>Car Reg.: </strong>'+this.oBill.VehicleNo
+              +'</td>'
+            +'</tr>'
+            +'<tr>'
+              +'<td>'
+              +'<strong>Address: </strong>'+this.oBill.ClientAddress
+              +'</td>'
+              +'<td>'
+              +'<strong>Vin: </strong>'+this.oBill.Vin
+              +'</td>'
+            +'</tr>'
+            +'<tr>'
+              +'<td>'
+              +'<strong>Driver: </strong>'+this.oBill.ContactPerson
+              +'</td>'
+              +'<td>'
+              +'<strong>Driver Contact: </strong>'+this.oBill.ContactPersonNo
               +'</td>'
             +'</tr>'
           +'</table>'
-          +'<h4>Bill Items</h4>'
+          +'<br/><div><table style="width:100%"><tr><td style="text-align:left;font-weight:bolder">Bill Items:</td><td style="text-align:right"><b>Billing Date: </b>'+this.currentDate+'</td></tr></table></div>'
           +'<table style="width:100%;border-collapse: collapse;">'
           +'<tr style="border:1px solid gray">'
             +'<th style="border:1px solid gray">#</th>'
-            +'<th style="border:1px solid gray">Item Type</th>'
+            +'<th style="border:1px solid gray">Item</th>'
             +'<th style="border:1px solid gray;text-align: right;">Qty</th>'
             +'<th style="border:1px solid gray;text-align: right;">Price</th>'
             +'<th style="border:1px solid gray;text-align: right;">Total Price</th>'
@@ -189,10 +225,10 @@ export class PaytranComponent {
           +'<tr>'
             +'<td colspan="7">In word: '+this.oBill.GrandTotalWord+'</td>'
             +'<th style="text-align: right;">Grand Total:</th>'
-            +'<th style="text-align: right;">'+this.oBill.GrandTotal+'</th>'
+            +'<th style="text-align: right;">'+this.oBill.GrandTotal+'.00</th>'
           +'</tr>'
           +'</table>'
-          +'<h4>Payment Information</h4>'
+          +'<br /><div style="font-weight:bolder">Payment Information</div>'
           +'<table style="width:100%;border-collapse: collapse;">'
             +'<tr style="border:1px solid gray">'
               +'<th style="border:1px solid gray">#</th>'
@@ -202,6 +238,14 @@ export class PaytranComponent {
             +'</tr>'
             +htmlPayment
             +'</table>'
+            +'<br /><br /><br /><br />'
+            +'<table style="width:100%">'
+            +'<tr>'
+              +'<td>Customer Signature<br/>Name:....................</td>'
+              +'<td>Floor Supervisor<br/>Name:....................</td>'
+              +'<td>Service Advisor Signature<br/>Name:....................</td>'
+            +'</tr>'
+          +'</table>'  
             +'</div>';
         myWindow.document.write(htmlPrint);
       }
@@ -215,6 +259,7 @@ export class PaytranComponent {
     ClientName:string,
     ClientMobile:string,
     ClientAddress:string,
+    MembershipNo:string,
     CreateDate:string,
     CreateBy:number,
     IsPaid:boolean,
@@ -225,13 +270,21 @@ export class PaytranComponent {
     InvoiceItems:any,
     IsInvoice:number,
     BalanceAmount:number,
-    PaySettles:any
+    PaySettles:any,
+    ClientPhone:string,
+    ClientEmail:string,
+    VehicleNo:string,
+    Vin:string,
+    ContactPerson:string,
+    ContactPersonNo:string,
+    ItemName:string
   }={
     Id:0,
     ClientId:0,
     ClientName:'',
     ClientMobile:'',
     ClientAddress:'',
+    MembershipNo:'',
     CreateDate:'',
     CreateBy:0,
     IsPaid:false,
@@ -242,7 +295,14 @@ export class PaytranComponent {
     InvoiceItems:[],
     IsInvoice:0,
     BalanceAmount:0,
-    PaySettles:[]
+    PaySettles:[],
+    ClientPhone:'',
+    ClientEmail:'',
+    VehicleNo:'',
+    Vin:'',
+    ContactPerson:'',
+    ContactPersonNo:'',
+    ItemName:''
   };
   listBillItem:any =[];
 
@@ -297,6 +357,15 @@ export class PaytranComponent {
     };
     this.cs.showToast(this.toast);
   }
+
+  
+changePageSize(){
+  this.get();
+}
+changePageNumber(pageIndex:number){
+  this.pageIndex = pageIndex;
+  this.get();
+}
 }
 
 export interface Company{

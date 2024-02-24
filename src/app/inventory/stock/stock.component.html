@@ -1,5 +1,6 @@
 <a href="javascript:void(0)" *ngIf="!isList;" (click)="isList=true;">List</a>
-<a href="javascript:void(0)" *ngIf="isList && authService.UserInfo.Menu.CanCreate" (click)="isList=false;get()">New</a>
+<!--<a href="javascript:void(0)" *ngIf="isList && authService.UserInfo.Menu.CanCreate" (click)="isList=false;get()">New</a>-->
+<br><br>
 <div *ngIf="isList">
   <div class="row">
     <div class="col-lg-4">
