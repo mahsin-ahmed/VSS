@@ -814,7 +814,7 @@ export class JobcardComponent {
               +'<td style="border:1px solid gray;text-align:right">'+this.JobCard.JcSpares[i].SalePrice+'</td>'
               +'<td style="border:1px solid gray;text-align:right">'+this.JobCard.JcSpares[i].Quantity+'</td>'
               +'<td style="border:1px solid gray;text-align:right">'+this.JobCard.JcSpares[i].SpareAmount+'</td>'
-              +'<td style="border:1px solid gray">'+this.JobCard.JcSpares[i].ItemStatusName+'</td>'
+              //+'<td style="border:1px solid gray">'+this.JobCard.JcSpares[i].ItemStatusName+'</td>'
             +'</tr>';
       }
       var Job_Card_Logo = location.origin + this.Job_Card_Logo;
@@ -941,7 +941,7 @@ export class JobcardComponent {
             +'<th align="right" style="border:1px solid gray">Price</th>'
             +'<th align="right" style="border:1px solid gray">Quantity</th>'
             +'<th align="right" style="border:1px solid gray">Amount</th>'
-            +'<th style="border:1px solid gray">Status</th>'
+            //+'<th style="border:1px solid gray">Status</th>'
           +'</tr>'
           +htmlSpare
         +'</table>'

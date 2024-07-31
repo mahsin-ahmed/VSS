@@ -45,8 +45,10 @@
         <td>{{item.ReceiveDate | date:'dd-MMM-yy HH:mm a'}}</td>
         <td>{{item.EstiCostTotal}}</td>
         <td>{{item.IsPaid == true ? 'Paid' : 'Due'}}</td>
-        <td>{{item.JcStatus==1?'Close':item.JcStatus==2?'Open' : 'Undefined'}}</td>
-        <td><button class="btn btn-sm btn-primary" (click)="edit(item)" *ngIf="authService.UserInfo.Menu.CanCreate && item.JcStatus != 1">Edit</button></td>
+        <td>{{item.JcStatus==1?'Close':item.JcStatus==2?'Open' : ''}}</td>
+        <td>
+          <button class="btn btn-sm btn-primary" (click)="edit(item)" *ngIf="authService.UserInfo.Menu.CanCreate && item.JcStatus != 1">Edit</button>
+        </td>
     </tr>
   </table>
   <div class="row" *ngIf="listJobCard.length>0">
@@ -334,7 +336,7 @@
                   <th>Price</th>
                   <th>Quantity</th>
                   <th>Amount</th>
-                  <th>Status</th>
+                  <!-- <th>Status</th> -->
                   <th>#</th>
               </tr>
               <tr *ngFor="let item of JobCard.JcSpares; let i = index">
@@ -345,7 +347,7 @@
                 <td>{{item.SalePrice}}</td>
                 <td>{{item.Quantity}}</td>
                 <td>{{item.SpareAmount}}</td>
-                <td>{{item.ItemStatusName}}</td>
+                <!-- <td>{{item.ItemStatusName}}</td> -->
                 <td>
                   <button class="btn btn-sm btn-primary" (click)="editSpare(item)">Edit</button>
                   <button class="btn btn-sm btn-danger" (click)="removeSpare(item)">Remove</button>
