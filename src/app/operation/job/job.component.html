@@ -70,14 +70,14 @@
     </table>
     <!-- Start Pagination  -->
     <div class="row" *ngIf="listJobGroup.length>0">
-        <div class="col-lg-3">
+        <div class="col-lg-12">
             <div class="pull-left ">
                 <span class="well well-sm">Showing <span class="text-success"><b>{{pageStart}}</b></span> to <span
                         class="text-success"><b>{{pageEnd}}</b></span> of <span
                         class="text-success"><b>{{rowCount}}</b></span> records</span>
             </div>
         </div>
-        <div class="col-lg-9">
+        <div class="col-lg-12">
             <div class="table-responsive">
                 <ul class="pagination" *ngIf="pager.pages && pager.pages.length">
                     <li>
