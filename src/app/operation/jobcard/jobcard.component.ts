@@ -1055,13 +1055,16 @@ export class JobcardComponent {
   };  
   //#endregion
   jcStatus:number = 2;
+  jcNo:string='';
+  startDate:string='';
+  endDate:string='';
   get(){
     const oHttpHeaders = new HttpHeaders(
     {
         'Token':this.authService.UserInfo.Token
     });
-    this.httpClient.get(this.authService.baseURL + '/api/JobCard?pi='+this.pageIndex+'&ps='+this.pageSize+'&jcStatus='+this.jcStatus,{headers: oHttpHeaders}).subscribe((res)=>{
-      if(res){
+    this.httpClient.get(this.authService.baseURL + '/api/JobCard?pi='+this.pageIndex+'&ps='+this.pageSize+'&jcStatus='+this.jcStatus+'&jcNo='+this.jcNo+'&startDate='+this.startDate+'&endDate='+this.endDate,{headers: oHttpHeaders}).subscribe((res)=> {
+      if(res) {
         this.listJobCard = res;
         //#region paging
         this.rowCount = this.listJobCard.length > 0 ? this.listJobCard[0].RowCount : 0;

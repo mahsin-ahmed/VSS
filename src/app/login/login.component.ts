@@ -62,4 +62,16 @@ export class LoginComponent {
     this.cs.showToast(this.toast);
   }
 
+  enterUsername(event:any):void{
+    if(event.key == 'Enter') {
+      document.getElementById('UserPass')?.focus();
+    }
+  }
+
+  enterPassword(event:any):void{
+    if(event.key == 'Enter') {
+      document.getElementById('btnLogin')?.focus();
+    }
+  }
+
 }

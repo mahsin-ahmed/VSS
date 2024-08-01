@@ -4,7 +4,16 @@
 
 <div *ngIf="isList">
   <div class="row">
-    <div class="col-lg-4"><br />
+    <div class="col-lg-4">
+    </div>
+    <div class="col-lg-4">
+      <h4 class="text-center">List of Job Card</h4>
+    </div>
+    <div class="col-lg-4">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-2">
       Show
       <select style="width: 50px;height: 32px;" [(ngModel)]="pageSize" (change)="changePageSize()">
           <option *ngFor="let item of listPageSize" value={{item}}>
@@ -13,12 +22,19 @@
       </select> 
       records
     </div>
-    <div class="col-lg-4">
-      <h4 class="text-center">List of Job Card</h4>
+    <div class="col-lg-5">
+      <label for="startDate" class="form-label">From:</label>
+      <input type="date" [(ngModel)]="startDate" (change)="get();" />
+      <label for="endDate" class="form-label">To:</label>
+      <input type="date" [(ngModel)]="endDate" (change)="get();" />
     </div>
-    <div class="col-lg-4">
+    <div class="col-lg-3">
+      <label for="jcNo" class="form-label">JC Number:</label>
+      <input type="text" [(ngModel)]="jcNo" (change)="get();" />
+    </div>
+    <div class="col-lg-2">
       <label for="jcStatus" class="form-label">JC Status:</label>
-      <select id="jcStatus" [(ngModel)]="jcStatus" (change)="get();">
+      <select id="jcStatus" [(ngModel)]="jcStatus" (change)="get();" style="height: 32px;">
         <option *ngFor="let item of listJcStatusFitler" value="{{item.Id}}">{{item.Name}}</option>
       </select>
     </div>
@@ -443,7 +459,7 @@
             <div class="col-md-4 mt-5">
               <button type="button" class="btn btn-secondary" (click)="searchItem();">Search</button>&nbsp;
               <!-- <a routerLink="/store-req" routerLinkActive="active" target="_blank" rel="bookmark">Requisition</a> -->
-              <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#jcReqModal" class="btn btn-primary" (click)="jcReq.PartNo=itemValue;jcReq.JcNo=JobCard.JcNo">Spare Requisition from Job-Card</a>
+              <!-- <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#jcReqModal" class="btn btn-primary" (click)="jcReq.PartNo=itemValue;jcReq.JcNo=JobCard.JcNo">Spare Requisition from Job-Card</a> -->
             </div>
             <div class="col-md-12">
               <table class="table table-bordered">
