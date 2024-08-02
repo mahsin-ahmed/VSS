@@ -34,8 +34,8 @@
             <th>#</th>
             <th>#</th>
         </tr>
-        <tr *ngFor="let item of listDesignation">
-            <td>{{item.DesignateId}}</td>
+        <tr *ngFor="let item of listDesignation; let i = index">
+            <td>{{i + 1}}</td>
             <td>{{item.Name}}</td>
             <td>{{item.Short}}</td>
             <td><button class="btn btn-sm btn-outline-primary" (click)="edit(item)"

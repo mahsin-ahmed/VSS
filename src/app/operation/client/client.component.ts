@@ -97,6 +97,17 @@ export class ClientComponent {
     this.httpClient.get(this.authService.baseURL + '/api/Client?pi='+this.pageIndex+'&ps='+this.pageSize+'&phone='+this.phone,{headers: oHttpHeaders}).subscribe((res)=>{
       if(res){
         this.listClient = res;
+        //#region paging
+        this.rowCount = this.listClient.length > 0 ? this.listClient[0].RowCount : 0;
+        this.totalRowsInList = this.listClient.length;
+        this.pager.totalPages = Math.ceil(this.rowCount / this.pageSize);
+        this.pager.pages = [];
+        for(var i = 0; i<this.pager.totalPages; i++){
+          this.pager.pages.push(i+1);
+        }
+        this.pageStart = (this.pageIndex * this.pageSize) + 1;
+        this.pageEnd = (this.pageStart - 1) + this.totalRowsInList;
+        //#endregion
       }else{
         this.showMessage('warning', 'Session expired, please login.');
       }

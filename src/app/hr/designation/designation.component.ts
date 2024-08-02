@@ -40,7 +40,7 @@ export class DesignationComponent {
         this.pageStart = (this.pageIndex * this.pageSize) + 1;
         this.pageEnd = (this.pageStart - 1) + this.totalRowsInList;
         //#endregion
-      }else{
+      } else {
         this.showMessage('warning', 'Session expired, please login.');
       }
     });
@@ -123,7 +123,10 @@ export class DesignationComponent {
       }
     });    
   }
-  search(){};
+
+  search():void{
+    this.get();
+  }
 
 
   Designation:{

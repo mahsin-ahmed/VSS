@@ -56,7 +56,7 @@ export class WorkgroupComponent {
     return isValid
   }
   
-  add() {
+  add():void {
     if(!this.validateForm()){
       return;
     }
@@ -76,7 +76,10 @@ export class WorkgroupComponent {
       }
     });
   }
-  search(){};
+
+  search():void{
+    this.get();
+  };
 
   reset() {
     this.WorkGroup ={

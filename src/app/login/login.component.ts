@@ -37,6 +37,8 @@ export class LoginComponent {
       var isLogIn:boolean = false;
       if(res != null){
         isLogIn = true;
+      }else{
+        this.showMessage('danger', 'User credentials not correct.');
       }
       this.authService.login(res, isLogIn).subscribe(() => {
         if (this.authService.UserInfo.IsLogIn) {

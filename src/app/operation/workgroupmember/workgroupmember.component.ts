@@ -50,7 +50,6 @@ export class WorkgroupmemberComponent {
   }
 
   getWorkGroup() {
-
     const oHttpHeaders = new HttpHeaders(
       {
         'Token': this.authService.UserInfo.Token
@@ -58,7 +57,8 @@ export class WorkgroupmemberComponent {
     this.httpClient.get(this.authService.baseURL + '/api/WorkGroup/GetWorkGroup', { headers: oHttpHeaders }).subscribe((res) => {
       this.listWorkGroup = res;
     });
-  };
+  }
+
   getEmployee() {
     const oHttpHeaders = new HttpHeaders(
       {
@@ -150,7 +150,8 @@ export class WorkgroupmemberComponent {
       }
     });    
   }
-  reset() {
+
+  reset():void {
     this.WorkGroupMember ={
       Id:0,
       WgId:0,
@@ -161,7 +162,10 @@ export class WorkgroupmemberComponent {
       LastName:'',
     };
   }
-  search() { };
+
+  search() :void{
+    this.get();
+   };
 
   listWorkGroupMember: any = [];
 
@@ -227,12 +231,12 @@ export class WorkgroupmemberComponent {
       totalPages: 0
     };
 
-  changePageSize() {
+  changePageSize():void {
     this.pageIndex = 0;
     this.get();
   }
 
-  changePageNumber(pageIndex: number) {
+  changePageNumber(pageIndex: number):void {
     this.pageIndex = pageIndex;
     this.get();
   }
