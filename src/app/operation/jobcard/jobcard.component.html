@@ -469,7 +469,7 @@
                     <th>Item</th>
                     <th>Brand</th>
                     <th>Sale Price</th>
-                    <th>Qty</th>
+                    <!-- <th>Qty</th> -->
                     <th>#</th>
                 </tr>
                 <tr *ngFor="let item of listItemS; let i = index">
@@ -478,7 +478,7 @@
                     <td>{{item.ItemName}}</td>
                     <td>{{item.BrandName}}</td>
                     <td>{{item.SalePrice}}</td>
-                    <td>{{item.Qty}}</td>
+                    <!-- <td>{{item.Qty}}</td> -->
                     <td><button class="btn btn-sm btn-primary" (click)="selectItem(item);" data-bs-dismiss="modal">Select</button></td>
                 </tr>
               </table>

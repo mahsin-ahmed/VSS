@@ -602,10 +602,10 @@ export class JobcardComponent {
     if(!this.validateJcSp()){
       return;
     }
-    if(this.JcSpare.Quantity > this.stockQty){
+    /*if(this.JcSpare.Quantity > this.stockQty){
       this.showMessage('warning', 'Stock is insufficient.');
       return;
-    }
+    }*/
     this.JcSpare.SpareAmount = this.JcSpare.Quantity * this.JcSpare.SalePrice;
     this.JobCard.JcSpares = this.JobCard.JcSpares == undefined ? [] : this.JobCard.JcSpares;
     this.JobCard.JcSpares.push({
