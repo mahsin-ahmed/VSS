@@ -208,6 +208,7 @@ export class JobcardComponent {
     Bay:number,
     VehicleNo:string,
     Model:string,
+    SubModel:string,
     JcStatus:number, // (Close/Open)
     UpdateDate:string,
     // Client
@@ -245,6 +246,7 @@ export class JobcardComponent {
     Bay:0,
     VehicleNo:'',
     Model:'',
+    SubModel:'',
     JcStatus:2,
     ClientId:0,
     ClientName:'',
@@ -283,6 +285,7 @@ export class JobcardComponent {
       Bay:0,
       VehicleNo:'',
       Model:'',
+      SubModel:'',
       JcStatus:2,
       ClientId:0,
       ClientName:'',
@@ -723,6 +726,7 @@ export class JobcardComponent {
         Bay:item.Bay,
         VehicleNo:item.VehicleNo,
         Model:item.Model,
+        SubModel:item.SubModel,
         JcStatus:item.JcStatus,
         ClientId:item.ClientId,
         ClientName:item.ClientName,
@@ -774,6 +778,7 @@ export class JobcardComponent {
         Bay:item.Bay,
         VehicleNo:item.VehicleNo,
         Model:item.Model,
+        SubModel:item.SubModel,
         JcStatus:item.JcStatus,
         ClientId:item.ClientId,
         ClientName:item.ClientName,
@@ -858,6 +863,7 @@ export class JobcardComponent {
                   +'<tr style="border:1px solid gray">'+'<td>Cont Person No.(Driver): '+this.JobCard.ContactPersonNo+'</td>'+'</tr>'
                   +'<tr style="border:1px solid gray">'+'<td>Membership ID: '+this.JobCard.MembershipNo+'</td>'+'</tr>'
                   +'<tr style="border:1px solid gray">'+'<td>Address: '+this.JobCard.ClientAddress+'</td>'+'</tr>'
+                  // +'<tr style="border:1px solid gray">'+'<td>Estimated Time: </td>'+'</tr>'
                   +'<tr style="border:1px solid gray">'
                     +'<td>'
                       +'<table style="width:100%;border-collapse: collapse">'
@@ -890,9 +896,9 @@ export class JobcardComponent {
                 +'<table style="width:100%;border-collapse: collapse">'
                   +'<tr style="border:1px solid gray">'+'<td>Vehicle Reg.: '+this.JobCard.VehicleNo+'</td>'+'</tr>'
                   +'<tr style="border:1px solid gray">'+'<td>Model: '+this.JobCard.Model+'</td>'+'</tr>'
+                  +'<tr style="border:1px solid gray">'+'<td>Sub-Model: '+this.JobCard.SubModel+'</td>'+'</tr>'
                   +'<tr style="border:1px solid gray">'+'<td>VIN/Frame: '+this.JobCard.Vin+'</td>'+'</tr>'
                   +'<tr style="border:1px solid gray">'+'<td>Mileage: '+this.JobCard.Mileage+'</td>'+'</tr>'
-                  +'<tr style="border:1px solid gray">'+'<td>Estimated Time: </td>'+'</tr>'
                   +'<tr style="border:1px solid gray">'+'<td>Supervisor:</td>'+'</tr>'
                   +'<tr>'
                     +'<td>'

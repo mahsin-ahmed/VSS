@@ -50,7 +50,7 @@ export class SalepriceComponent {
   //#endregion
   //baseUrl:string='http://localhost:56297';
   partNo:string = '';
-  get(){
+  get():void{
     const oHttpHeaders = new HttpHeaders(
     {
         'Token':this.authService.UserInfo.Token

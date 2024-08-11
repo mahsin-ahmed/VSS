@@ -128,7 +128,7 @@ export class ClientComponent {
   }
 
   isDisable:boolean = false;
-  add() {
+  add():void {
     this.isDisable = true;
     if(!this.validateForm()){
       return;
@@ -139,38 +139,41 @@ export class ClientComponent {
     });
     this.Client.CreateBy = this.authService.UserInfo.UserID;
     this.httpClient.post(this.authService.baseURL + '/api/Client', this.Client,{headers: oHttpHeaders}).subscribe((res)=>{
-      if(res == true) {
+      var data:any = res;
+      if(data.status == true) {
         this.isList = true;
+        this.showMessage('success', data.message);
         this.get();
         this.reset();
-        this.showMessage('success', 'data added.');
       } else {
-        this.showMessage('error', 'error occurred.');
+        this.showMessage('error', data.message);
+        this.isDisable = false;
       }
     });
   }
 
-  update() {
+  update():void {
     if(!this.validateForm()){
       return;
     }
     const oHttpHeaders = new HttpHeaders(
-      {
-          'Token':this.authService.UserInfo.Token
-      });
+    {
+        'Token':this.authService.UserInfo.Token
+    });
     this.Client.UpdateBy = this.authService.UserInfo.UserID;
     this.httpClient.put(this.authService.baseURL + '/api/Client', this.Client,{headers: oHttpHeaders}).subscribe((res)=>{
-      if(res == true){
+      var data:any = res;
+      if(data.status == true){
         this.isList = true;
         this.get();
-        this.showMessage('success', 'data updated.');
+        this.showMessage('success', data.message);
       }else{
-        this.showMessage('error', 'error occurred.');
+        this.showMessage('error', data.message);
       }
     });
   }
 
-  reset() {
+  reset():void {
     this.Client ={
     BpId:0,
     Name:'',
@@ -194,7 +197,7 @@ export class ClientComponent {
     this.isDisable = false;
   }
 
-  edit(item:any){
+  edit(item:any):void{
     this.Client ={
       BpId:item.BpId,
       Name:item.Name,
@@ -218,7 +221,7 @@ export class ClientComponent {
       this.isList = false;
   }
 
-  remove(item:any){
+  remove(item:any):void{
     const oHttpHeaders = new HttpHeaders(
     {
         'Token':this.authService.UserInfo.Token
@@ -235,7 +238,7 @@ export class ClientComponent {
 
   //type: 'success', 'error', 'warning', 'info'
   //message: '<span>Action in '+type+'</span>',
-  showMessage(type: string, message:string) {
+  showMessage(type: string, message:string):void {
     this.toast = {
       message:message,
       title: type.toUpperCase(),

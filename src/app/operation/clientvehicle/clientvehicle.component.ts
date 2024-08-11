@@ -15,7 +15,7 @@ export class ClientvehicleComponent {
     private httpClient: HttpClient,
     public authService:AuthService) {
     this.get();
-    this.getClient();
+    //this.getClient();
   }
   isList: boolean = true;
   listClientVehicle: any = [];
@@ -57,6 +57,17 @@ export class ClientvehicleComponent {
           'Token':this.authService.UserInfo.Token
       });
     this.httpClient.get(this.authService.baseURL + '/api/Client/GetClient',{headers: oHttpHeaders}).subscribe((res)=>{
+        this.listClient = res;
+    });
+  }
+
+  clientinfo:string='';
+  getClientByInfo():void{
+    const oHttpHeaders = new HttpHeaders(
+      {
+          'Token':this.authService.UserInfo.Token
+      });
+    this.httpClient.get(this.authService.baseURL + '/api/Client/GetClientByInfo?value='+this.clientinfo,{headers: oHttpHeaders}).subscribe((res)=>{
         this.listClient = res;
     });
   }
@@ -107,7 +118,8 @@ export class ClientvehicleComponent {
     ClientId: item.ClientId,
     VehicleNo: item.VehicleNo,
     Vin: item.Vin,
-    CreateBy:item.CreateBy
+    CreateBy:item.CreateBy,
+    Value:item.Value
     };
     this.isList = false;
   }
@@ -170,7 +182,8 @@ export class ClientvehicleComponent {
     ClientId: number,
     VehicleNo: string,
     Vin: string,
-    CreateBy:number
+    CreateBy:number,
+    Value:string
   } = {
     Id: 0,
     Manufacturer:'',
@@ -181,7 +194,8 @@ export class ClientvehicleComponent {
     ClientId:0,
     VehicleNo: '',
     Vin: '',
-    CreateBy:0
+    CreateBy:0,
+    Value:''
     };
     
     toast!: toastPayload;

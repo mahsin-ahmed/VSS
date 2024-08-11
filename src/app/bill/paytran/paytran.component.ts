@@ -160,52 +160,35 @@ export class PaytranComponent {
           +'<h2 style="text-align:center"><u>Bill Copy</u></h2>'
           +'<table style="width:100%;border-collapse: collapse;">'
             +'<tr>'
-              +'<td>'
-                +'<strong>Client Name: </strong>'+this.oBill.ClientName
-              +'</td>'
-              +'<td>'
-              +'<strong>Invoice No: </strong>'+this.oBill.Id
-              +'</td>'
+              +'<td>'+'<strong>Client Name: </strong>'+this.oBill.ClientName+'</td>'
+              +'<td>'+'<strong>Invoice No: </strong>'+this.oBill.Id+'</td>'
             +'</tr>'
             +'<tr>'
-            +'<td>'
-              +'<strong>Membership No.: </strong>'+this.oBill.MembershipNo
-            +'</td>'
-              +'<td>'
-                +'<strong>JC No.: </strong>'+this.oBill.JcNo
-              +'</td>'
+            +'<td>'+'<strong>Membership No.: </strong>'+this.oBill.MembershipNo+'</td>'
+              +'<td>'+'<strong>JC No.: </strong>'+this.oBill.JcNo+'</td>'
             +'</tr>'
             +'<tr>'
               +'<td>'
                 +'<strong>Phone: </strong>'+this.oBill.ClientPhone
               +'</td>'
-              +'<td>'
-              +'<strong>Balance: </strong>'+this.oBill.BalanceAmount
-              +'</td>'
+              +'<td>'+'<strong>Vin: </strong>'+this.oBill.Vin+'</td>'
+              // +'<td>'+'<strong>Balance: </strong>'+this.oBill.BalanceAmount+'</td>'
             +'</tr>'
             +'<tr>'
-              +'<td>'
-                +'<strong>Email: </strong>'+this.oBill.ClientEmail
-              +'</td>'
-              +'<td>'
-              +'<strong>Car Reg.: </strong>'+this.oBill.VehicleNo
-              +'</td>'
+              +'<td>'+'<strong>Email: </strong>'+this.oBill.ClientEmail+'</td>'
+              +'<td>'+'<strong>Car Reg.: </strong>'+this.oBill.VehicleNo+'</td>'
             +'</tr>'
             +'<tr>'
-              +'<td>'
-              +'<strong>Address: </strong>'+this.oBill.ClientAddress
-              +'</td>'
-              +'<td>'
-              +'<strong>Vin: </strong>'+this.oBill.Vin
-              +'</td>'
+              +'<td>'+'<strong>Address: </strong>'+this.oBill.ClientAddress+'</td>'
+              +'<td>'+'<strong>Model: </strong>'+this.oBill.Model+'</td>'
             +'</tr>'
             +'<tr>'
-              +'<td>'
-              +'<strong>Driver: </strong>'+this.oBill.ContactPerson
-              +'</td>'
-              +'<td>'
-              +'<strong>Driver Contact: </strong>'+this.oBill.ContactPersonNo
-              +'</td>'
+              +'<td>'+'<strong>Driver: </strong>'+this.oBill.ContactPerson+'</td>'
+              +'<td>'+'<strong>Sub-Model: </strong>'+this.oBill.SubModel+'</td>'
+            +'</tr>'
+            +'<tr>'
+              +'<td>'+'<strong>Driver Contact: </strong>'+this.oBill.ContactPersonNo+'</td>'
+              +'<td></td>'
             +'</tr>'
           +'</table>'
           +'<br/><div><table style="width:100%"><tr><td style="text-align:left;font-weight:bolder">Bill Items:</td><td style="text-align:right"><b>Billing Date: </b>'+this.currentDate+'</td></tr></table></div>'
@@ -277,7 +260,9 @@ export class PaytranComponent {
     Vin:string,
     ContactPerson:string,
     ContactPersonNo:string,
-    ItemName:string
+    ItemName:string,
+    Model:string,
+    SubModel:string
   }={
     Id:0,
     ClientId:0,
@@ -302,7 +287,9 @@ export class PaytranComponent {
     Vin:'',
     ContactPerson:'',
     ContactPersonNo:'',
-    ItemName:''
+    ItemName:'',
+    Model:'',
+    SubModel:''
   };
   listBillItem:any =[];
 
