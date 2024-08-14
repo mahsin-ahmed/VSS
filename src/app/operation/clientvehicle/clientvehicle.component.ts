@@ -61,13 +61,13 @@ export class ClientvehicleComponent {
     });
   }
 
-  clientinfo:string='';
+  //clientinfo:string='';
   getClientByInfo():void{
     const oHttpHeaders = new HttpHeaders(
       {
           'Token':this.authService.UserInfo.Token
       });
-    this.httpClient.get(this.authService.baseURL + '/api/Client/GetClientByInfo?value='+this.clientinfo,{headers: oHttpHeaders}).subscribe((res)=>{
+    this.httpClient.get(this.authService.baseURL + '/api/Client/GetClientByInfo?value='+this.ClientVehicle.Value,{headers: oHttpHeaders}).subscribe((res)=>{
         this.listClient = res;
     });
   }
@@ -75,11 +75,15 @@ export class ClientvehicleComponent {
   validateForm():boolean{
     var isValid:boolean=true;
 
-    if(this.ClientVehicle.VehicleNo==undefined||this.ClientVehicle.VehicleNo==null||this.ClientVehicle.VehicleNo==""){
+    if(this.ClientVehicle.VehicleNo==undefined || this.ClientVehicle.VehicleNo==null || this.ClientVehicle.VehicleNo==''){
       isValid = false;
       this.showMessage('warning', 'Vehicle registration No. is required.');
     }
-    if(this.ClientVehicle.ClientId==undefined||this.ClientVehicle.ClientId==null||this.ClientVehicle.ClientId==0){
+    /*if(this.ClientVehicle.ClientId==undefined||this.ClientVehicle.ClientId==null||this.ClientVehicle.ClientId==0){
+      isValid = false;
+      this.showMessage('warning', 'Client name is required.');
+    }*/
+    if(this.ClientVehicle.Value==undefined || this.ClientVehicle.Value==null || this.ClientVehicle.Value=='' || this.ClientVehicle.Value.includes('-') == false) {
       isValid = false;
       this.showMessage('warning', 'Client name is required.');
     }
@@ -235,7 +239,7 @@ export class ClientvehicleComponent {
     {
         'Token':this.authService.UserInfo.Token
     });
-    this.httpClient.get(this.authService.baseURL + '/api/ClientVehicle/GetManufacturer?manufacturer='+this.ClientVehicle.Manufacturer+'&offset=0&fetch=100',{headers: oHttpHeaders}).subscribe((res) => {
+    this.httpClient.get(this.authService.baseURL + '/api/ClientVehicle/GetManufacturer?manufacturer='+this.ClientVehicle.Manufacturer+'&offset=0&fetch=20',{headers: oHttpHeaders}).subscribe((res) => {
       if(res) {
         this.listManufacturer = res;
       } else{
@@ -253,7 +257,7 @@ export class ClientvehicleComponent {
     {
         'Token':this.authService.UserInfo.Token
     });
-    this.httpClient.get(this.authService.baseURL + '/api/ClientVehicle/GetModel?manufacturer='+this.ClientVehicle.Manufacturer+'&model='+this.ClientVehicle.Model+'&offset=0&fetch=100',{headers: oHttpHeaders}).subscribe((res) => {
+    this.httpClient.get(this.authService.baseURL + '/api/ClientVehicle/GetModel?manufacturer='+this.ClientVehicle.Manufacturer+'&model='+this.ClientVehicle.Model+'&offset=0&fetch=20',{headers: oHttpHeaders}).subscribe((res) => {
       if(res){
         this.listModel = res;
       } else{
@@ -270,7 +274,7 @@ export class ClientvehicleComponent {
     {
         'Token':this.authService.UserInfo.Token
     });
-    this.httpClient.get(this.authService.baseURL + '/api/ClientVehicle/GetSubModel?manufacturer='+this.ClientVehicle.Manufacturer+'&model='+this.ClientVehicle.Model+'&subModel='+this.ClientVehicle.SubModel+'&offset=0&fetch=100',{headers: oHttpHeaders}).subscribe((res) => {
+    this.httpClient.get(this.authService.baseURL + '/api/ClientVehicle/GetSubModel?manufacturer='+this.ClientVehicle.Manufacturer+'&model='+this.ClientVehicle.Model+'&subModel='+this.ClientVehicle.SubModel+'&offset=0&fetch=20',{headers: oHttpHeaders}).subscribe((res) => {
       if(res){
         this.listSubModel = res;
       }else{
@@ -312,6 +316,20 @@ export class ClientvehicleComponent {
 
   reset():void {
 
+  }
+
+  changeVin():void{
+    const oHttpHeaders = new HttpHeaders(
+    {
+        //'Token':this.authService.UserInfo.Token
+    });
+    this.httpClient.get(this.authService.baseURL + '/home/test?vin='+this.ClientVehicle.Vin,{headers: oHttpHeaders}).subscribe((res) => {
+      if(res){
+        console.log(res);  
+      }else{
+        this.showMessage('warning', 'Session expired, please login.');
+      }
+    });
   }
 
 }
