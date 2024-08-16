@@ -17,6 +17,7 @@ export class ClientvehicleComponent {
     this.get();
     //this.getClient();
   }
+
   isList: boolean = true;
   listClientVehicle: any = [];
   listClient:any=[];
@@ -47,34 +48,33 @@ export class ClientvehicleComponent {
     });
   }
 
-  search():void{
+  search():void {
     this.get();
   }
 
-  getClient():void{
+  getClient():void {
     const oHttpHeaders = new HttpHeaders(
       {
           'Token':this.authService.UserInfo.Token
       });
-    this.httpClient.get(this.authService.baseURL + '/api/Client/GetClient',{headers: oHttpHeaders}).subscribe((res)=>{
+    this.httpClient.get(this.authService.baseURL + '/api/Client/GetClient', {headers: oHttpHeaders}).subscribe((res)=>{
         this.listClient = res;
     });
   }
 
   //clientinfo:string='';
-  getClientByInfo():void{
+  getClientByInfo():void {
     const oHttpHeaders = new HttpHeaders(
-      {
-          'Token':this.authService.UserInfo.Token
-      });
-    this.httpClient.get(this.authService.baseURL + '/api/Client/GetClientByInfo?value='+this.ClientVehicle.Value,{headers: oHttpHeaders}).subscribe((res)=>{
+    {
+      'Token':this.authService.UserInfo.Token
+    });
+    this.httpClient.get(this.authService.baseURL + '/api/Client/GetClientByInfo?value=' + this.ClientVehicle.Value,{headers: oHttpHeaders}).subscribe((res)=>{
         this.listClient = res;
     });
   }
 
-  validateForm():boolean{
+  validateForm():boolean {
     var isValid:boolean=true;
-
     if(this.ClientVehicle.VehicleNo==undefined || this.ClientVehicle.VehicleNo==null || this.ClientVehicle.VehicleNo==''){
       isValid = false;
       this.showMessage('warning', 'Vehicle registration No. is required.');
@@ -220,7 +220,7 @@ export class ClientvehicleComponent {
   switchView(view: string): void {
     if (view == 'form') {
       this.isList = false;
-      this.getManufacturer();
+      //this.getManufacturer();
     } else {
       this.isList = true;
       this.reset();
@@ -229,8 +229,8 @@ export class ClientvehicleComponent {
     }
   }
 
-  listManufacturer:any=[];
-  getManufacturer():void {
+  //listManufacturer:any=[];
+  /*getManufacturer():void {
     this.ClientVehicle.Model = '';
     this.ClientVehicle.SubModel = '';
     this.ClientVehicle.From = '';
@@ -246,10 +246,10 @@ export class ClientvehicleComponent {
         this.showMessage('warning', 'Session expired, please login.');
       }
     });
-  }
+  }*/
 
-  listModel:any=[];
-  getModel():void {
+  //listModel:any=[];
+  /*getModel():void {
     this.ClientVehicle.SubModel = '';
     this.ClientVehicle.From = '';
     this.ClientVehicle.To = '';
@@ -264,10 +264,10 @@ export class ClientvehicleComponent {
         this.showMessage('warning', 'Session expired, please login.');
       }
     });
-  }
+  }*/
 
-  listSubModel:any = [];
-  getSubModel():void {
+  //listSubModel:any = [];
+  /*getSubModel():void {
     this.ClientVehicle.From = '';
     this.ClientVehicle.To = '';
     const oHttpHeaders = new HttpHeaders(
@@ -281,10 +281,10 @@ export class ClientvehicleComponent {
         this.showMessage('warning', 'Session expired, please login.');
       }
     });
-  }
+  }*/
 
-  listFrom:any = [];
-  getFrom():void {
+  //listFrom:any = [];
+  /*getFrom():void {
     this.ClientVehicle.To = '';
     const oHttpHeaders = new HttpHeaders(
     {
@@ -297,10 +297,10 @@ export class ClientvehicleComponent {
         this.showMessage('warning', 'Session expired, please login.');
       }
     });
-  }
+  }*/
 
-  listTo:any = [];
-  getTo():void {
+  //listTo:any = [];
+  /*getTo():void {
     const oHttpHeaders = new HttpHeaders(
     {
         'Token':this.authService.UserInfo.Token
@@ -312,13 +312,13 @@ export class ClientvehicleComponent {
         this.showMessage('warning', 'Session expired, please login.');
       }
     });
-  }
+  }*/
 
   reset():void {
 
   }
 
-  changeVin():void{
+  searchVin():void{
     const oHttpHeaders = new HttpHeaders(
     {
         //'Token':this.authService.UserInfo.Token
