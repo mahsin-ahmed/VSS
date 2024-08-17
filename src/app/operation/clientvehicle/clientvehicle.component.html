@@ -65,7 +65,6 @@
             <div class="pull-left ">
                 <span class="well well-sm">Showing  <span class="text-success"><b>{{pageStart}}</b></span> to <span class="text-success"><b>{{pageEnd}}</b></span> of <span class="text-success"><b>{{rowCount}}</b></span> records</span>
             </div>
-            
         </div>
         <div class="col-lg-12 ">
             <div class="table-responsive">
@@ -97,7 +96,7 @@
 <div *ngIf="!isList">
     <h4>Client's Vehicle Entry Form</h4>
     <div class="row">
-        <a href="javascript:void(0);" (click)="searchVin()">Search</a>
+        <a href="javascript:void(0);" (click)="searchVin()"><i *ngIf="isSearching" class="fa fa-spinner fa-spin" style="font-size:24px;color:blue"></i> {{isSearching == true ? 'Searching...': 'Search'}}</a>
         <div class="col-md-6">
             <div class="entryForm">
                 <div class="row">
@@ -110,7 +109,7 @@
                         <!-- <datalist id="Manufacturers">
                             <option value="{{item.Manufacturer}}" *ngFor="let item of listManufacturer">
                         </datalist> -->
-                        <label for="Manufacturer">Manufacturer</label>
+                        <label for="Manufacturer">Make</label>
                     </div>
                     <div class="form-floating mb-2">
                         <input type="text" name="Model" id="Model" [(ngModel)]="ClientVehicle.Model" class="form-control" placeholder="" autocomplete="off">
@@ -120,26 +119,41 @@
                         <label for="Model">Model</label>
                     </div>
                     <div class="form-floating mb-2">
-                        <input type="text" name="SubModel" id="SubModel" [(ngModel)]="ClientVehicle.SubModel" class="form-control" placeholder="" autocomplete="off">
-                        <!-- <datalist id="SubModels">
-                            <option value="{{item.SubModel}}" *ngFor="let item of listSubModel">
-                        </datalist> -->
-                        <label for="SubModel">Sub-Model</label>
-                    </div>
-                    <div class="form-floating mb-2">
                         <input type="text" name="From" id="From" [(ngModel)]="ClientVehicle.From" class="form-control" placeholder="" autocomplete="off">
                         <!-- <datalist id="Froms">
                             <option value="{{item.From}}" *ngFor="let item of listFrom">
                         </datalist> -->
-                        <label for="From">From</label>
+                        <label for="From">Year</label>
                     </div>
                     <div class="form-floating mb-2">
-                        <input type="text" name="To" id="To" [(ngModel)]="ClientVehicle.To" class="form-control" placeholder="" autocomplete="off">
-                        <!-- <datalist id="Tos">
-                            <option value="{{item.To}}" *ngFor="let item of listTo">
-                        </datalist> -->
-                        <label for="To">To</label>
+                        <input type="text" [(ngModel)]="ClientVehicle.Body" class="form-control" id="Body" name="Body" placeholder="" autocomplete="off">
+                        <label for="Body" title="">Body: </label>
                     </div>
+                    <div class="form-floating mb-2">
+                        <input type="text" [(ngModel)]="ClientVehicle.Engine" class="form-control" id="Engine" name="Engine" placeholder="" autocomplete="off">
+                        <label for="Engine" title="">Engine: </label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="text" [(ngModel)]="ClientVehicle.Transmission" class="form-control" id="Transmission" name="Transmission" placeholder="" autocomplete="off">
+                        <label for="Transmission" title="">Transmission: </label>
+                    </div>
+
+                    <!-- <div class="form-floating mb-2">
+                        <input type="text" name="SubModel" id="SubModel" [(ngModel)]="ClientVehicle.SubModel" class="form-control" placeholder="" autocomplete="off">
+                        <datalist id="SubModels">
+                            <option value="{{item.SubModel}}" *ngFor="let item of listSubModel">
+                        </datalist>
+                        <label for="SubModel">Sub-Model</label>
+                    </div> -->
+                    
+                    <!-- <div class="form-floating mb-2">
+                        <input type="text" name="To" id="To" [(ngModel)]="ClientVehicle.To" class="form-control" placeholder="" autocomplete="off">
+                        <datalist id="Tos">
+                            <option value="{{item.To}}" *ngFor="let item of listTo">
+                        </datalist>
+                        <label for="To">To</label>
+                    </div> -->
+
                 </div>
             </div>
         </div>
@@ -160,6 +174,11 @@
                             <option value="{{item.Name}}" *ngFor="let item of listClient">
                         </datalist>
                         <label for="ClientId" class="required">Car Owner Name<sup><span style="color:red">*</span></sup></label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <!-- <input type="text" [(ngModel)]="ClientVehicle.Remark" class="form-control" id="Remark" name="Remark" placeholder="" autocomplete="off"> -->
+                        <textarea [(ngModel)]="ClientVehicle.Remark" class="form-control" id="Remark" name="Remark" placeholder="" autocomplete="off"></textarea>
+                        <label for="Remark" title="">Remark: </label>
                     </div>
                     <div class="col-auto  mb-2">
                         <button type="button" class="btn btn-success mb-3" *ngIf="ClientVehicle.Id==0 && authService.UserInfo.Menu.CanCreate"

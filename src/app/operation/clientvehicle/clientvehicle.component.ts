@@ -95,9 +95,9 @@ export class ClientvehicleComponent {
       return;
     }
     const oHttpHeaders = new HttpHeaders(
-      {
-          'Token':this.authService.UserInfo.Token
-      });
+    {
+        'Token':this.authService.UserInfo.Token
+    });
     this.ClientVehicle.CreateBy = this.authService.UserInfo.UserID;
     this.httpClient.post(this.authService.baseURL + '/api/ClientVehicle', this.ClientVehicle,{headers: oHttpHeaders}).subscribe((res) => {
       if (res == true) {
@@ -123,7 +123,11 @@ export class ClientvehicleComponent {
     VehicleNo: item.VehicleNo,
     Vin: item.Vin,
     CreateBy:item.CreateBy,
-    Value:item.Value
+    Value:item.Value,
+    Body:item.Body,
+    Engine:item.Engine,
+    Transmission:item.Transmission,
+    Remark:item.Remark
     };
     this.isList = false;
   }
@@ -165,12 +169,12 @@ export class ClientvehicleComponent {
     totalPages:0
   };  
 
-  changePageSize():void{
+  changePageSize():void {
     this.pageIndex = 0;
     this.get();
   }
 
-  changePageNumber(pageIndex:number):void{
+  changePageNumber(pageIndex:number):void {
     this.pageIndex = pageIndex;
     this.get();
   }
@@ -187,7 +191,11 @@ export class ClientvehicleComponent {
     VehicleNo: string,
     Vin: string,
     CreateBy:number,
-    Value:string
+    Value:string,
+    Body:string,
+    Engine:string,
+    Transmission:string,
+    Remark:string
   } = {
     Id: 0,
     Manufacturer:'',
@@ -199,7 +207,11 @@ export class ClientvehicleComponent {
     VehicleNo: '',
     Vin: '',
     CreateBy:0,
-    Value:''
+    Value:'',
+    Body:'',
+    Engine:'',
+    Transmission:'',
+    Remark:''
     };
     
     toast!: toastPayload;
@@ -318,14 +330,23 @@ export class ClientvehicleComponent {
 
   }
 
+  isSearching:boolean = false;
   searchVin():void{
+    this.isSearching = true;
     const oHttpHeaders = new HttpHeaders(
     {
         //'Token':this.authService.UserInfo.Token
     });
-    this.httpClient.get(this.authService.baseURL + '/home/test?vin='+this.ClientVehicle.Vin,{headers: oHttpHeaders}).subscribe((res) => {
+    this.httpClient.get(this.authService.baseURL + '/api/ClientVehicle/GetCarByVin?vin='+this.ClientVehicle.Vin,{headers: oHttpHeaders}).subscribe((res) => {
       if(res){
-        console.log(res);  
+        var oClientVehicle:any = res;
+        this.ClientVehicle.Manufacturer = oClientVehicle.Manufacturer;
+        this.ClientVehicle.Model = oClientVehicle.Model;
+        this.ClientVehicle.From = oClientVehicle.From;
+        this.ClientVehicle.Body = oClientVehicle.Body;
+        this.ClientVehicle.Engine = oClientVehicle.Engine;
+        this.ClientVehicle.Transmission = oClientVehicle.Transmission;
+        this.isSearching = false;
       }else{
         this.showMessage('warning', 'Session expired, please login.');
       }
