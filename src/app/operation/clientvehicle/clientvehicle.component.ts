@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { IndividualConfig } from 'ngx-toastr';
 import { AuthService } from 'src/app/auth/auth.service';
 import { CommonService, toastPayload } from 'src/app/services/common.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-clientvehicle',
@@ -11,7 +12,9 @@ import { CommonService, toastPayload } from 'src/app/services/common.service';
 })
 export class ClientvehicleComponent {
 
-  constructor(private cs: CommonService, 
+  constructor(
+    private router: Router,
+    private cs: CommonService, 
     private httpClient: HttpClient,
     public authService:AuthService) {
     this.get();
@@ -351,6 +354,14 @@ export class ClientvehicleComponent {
         this.showMessage('warning', 'Session expired, please login.');
       }
     });
+  }
+
+  newClient():void {
+    var w = window.location;
+    var myWindow = window.open(window.origin + '/client', "", "width=800,height=400");
+    //window.open(this.authService.baseURL + '/client', '_blank');
+    //this.router.navigate([this.authService.baseURL + '/client']);
+    
   }
 
 }

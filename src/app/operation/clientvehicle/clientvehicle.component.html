@@ -4,7 +4,8 @@
 
 <div *ngIf="isList">
     <div class="row">
-        <div class="col-lg-4"><br />
+        <div class="col-lg-4">
+            <br />
             Show
             <select style="width: 50px;height: 32px;" [(ngModel)]="pageSize" (change)="search()">
                 <option *ngFor="let item of listPageSize" value={{item}}>
@@ -96,46 +97,53 @@
 <div *ngIf="!isList">
     <h4>Client's Vehicle Entry Form</h4>
     <div class="row">
-        <a href="javascript:void(0);" (click)="searchVin()"><i *ngIf="isSearching" class="fa fa-spinner fa-spin" style="font-size:24px;color:blue"></i> {{isSearching == true ? 'Searching...': 'Search'}}</a>
+        <!-- <a href="javascript:void(0);" (click)="searchVin()"><i *ngIf="isSearching" class="fa fa-spinner fa-spin" style="font-size:24px;color:blue"></i> {{isSearching == true ? 'Searching...': 'Search'}}</a> -->
         <div class="col-md-6">
             <div class="entryForm">
                 <div class="row">
-                    <div class="form-floating mb-2">
-                        <input type="text" [(ngModel)]="ClientVehicle.Vin" class="form-control" id="Vin" name="Vin" placeholder="" autocomplete="off">
-                        <label for="Name" title="VIN = Vehicle Identification Number">Chassis/VIN: </label>
+                    <div class="mb-3">
+                        <label for="Vin" title="VIN = Vehicle Identification Number" class="form-label">Chassis/VIN:</label>
+                        <div class="input-group">
+                            <input type="text" [(ngModel)]="ClientVehicle.Vin" class="form-control" id="Vin" name="Vin" placeholder="" autocomplete="off" (change)="searchVin();">
+                            <button class="btn btn-outline-secondary" type="button" (click)="searchVin();">
+                                <i *ngIf="isSearching" class="fa fa-spinner fa-spin" style="font-size:18px;color:blue"></i>
+                                <i class="fa fa-search" style="font-size:18px;color:blue"></i>
+                            </button>
+                        </div>
                     </div>
-                    <div class="form-floating mb-2">
+                    <div class="mb-3">
+                        <label for="Manufacturer" class="form-label">Make</label>
                         <input type="text" [(ngModel)]="ClientVehicle.Manufacturer" class="form-control" id="Manufacturer" name="Manufacturer" placeholder="" autocomplete="off">
                         <!-- <datalist id="Manufacturers">
                             <option value="{{item.Manufacturer}}" *ngFor="let item of listManufacturer">
                         </datalist> -->
-                        <label for="Manufacturer">Make</label>
                     </div>
-                    <div class="form-floating mb-2">
+
+                    <div class="mb-3">
+                        <label for="Model" class="form-label">Model</label>
                         <input type="text" name="Model" id="Model" [(ngModel)]="ClientVehicle.Model" class="form-control" placeholder="" autocomplete="off">
                         <!-- <datalist id="Models">
                             <option value="{{item.Model}}" *ngFor="let item of listModel">
                         </datalist> -->
-                        <label for="Model">Model</label>
                     </div>
-                    <div class="form-floating mb-2">
+                    <div class="mb-3">
+                        <label for="From" class="form-label">Year</label>
                         <input type="text" name="From" id="From" [(ngModel)]="ClientVehicle.From" class="form-control" placeholder="" autocomplete="off">
                         <!-- <datalist id="Froms">
                             <option value="{{item.From}}" *ngFor="let item of listFrom">
                         </datalist> -->
-                        <label for="From">Year</label>
                     </div>
-                    <div class="form-floating mb-2">
+                    <div class="mb-3">
+                        <label for="Body" title="" class="form-label">Body: </label>
                         <input type="text" [(ngModel)]="ClientVehicle.Body" class="form-control" id="Body" name="Body" placeholder="" autocomplete="off">
-                        <label for="Body" title="">Body: </label>
                     </div>
-                    <div class="form-floating mb-2">
+                    <div class="mb-3">
+                        <label for="Engine" title="" class="form-label">Engine: </label>
                         <input type="text" [(ngModel)]="ClientVehicle.Engine" class="form-control" id="Engine" name="Engine" placeholder="" autocomplete="off">
-                        <label for="Engine" title="">Engine: </label>
                     </div>
-                    <div class="form-floating mb-2">
+                    <div class="mb-3">
+                        <label for="Transmission" title="" class="form-label">Transmission: </label>
                         <input type="text" [(ngModel)]="ClientVehicle.Transmission" class="form-control" id="Transmission" name="Transmission" placeholder="" autocomplete="off">
-                        <label for="Transmission" title="">Transmission: </label>
                     </div>
 
                     <!-- <div class="form-floating mb-2">
@@ -160,27 +168,27 @@
         <div class="col-md-6">
             <div class="entryForm">
                 <div class="row">
-                    <div class="form-floating mb-2">
-                        <input type="text" [(ngModel)]="ClientVehicle.VehicleNo" class="form-control" id="VehicleNo"
-                            placeholder="">
-                        <label for="Name" class="required">Car Reg. Number</label>
+                    <div class="mb-3">
+                        <label for="Name" class="form-label">Car Reg. Number</label>
+                        <input type="text" [(ngModel)]="ClientVehicle.VehicleNo" class="form-control" id="VehicleNo" placeholder="">
                     </div>
-                    <div class="form-floating mb-2">
-                        <!-- <select id="ClientId" class="form-control" [(ngModel)]="ClientVehicle.ClientId">
-                            <option *ngFor="let item of listClient" value="{{item.BpId}}">{{item.Name}}</option>
-                        </select> -->
-                        <input list="clients" name="ClientId" id="ClientId" [(ngModel)]="ClientVehicle.Value" class="form-control" (keyup)="getClientByInfo();" autocomplete="off">
-                        <datalist id="clients">
-                            <option value="{{item.Name}}" *ngFor="let item of listClient">
-                        </datalist>
-                        <label for="ClientId" class="required">Car Owner Name<sup><span style="color:red">*</span></sup></label>
+                    <div class="mb-3">
+                        <label for="ClientId" class="form-label">Car Owner Name<sup><span style="color:red">*</span></sup></label>
+                        <div class="input-group">
+                            <input list="clients" name="ClientId" id="ClientId" [(ngModel)]="ClientVehicle.Value" class="form-control" (keyup)="getClientByInfo();" autocomplete="off">
+                            <datalist id="clients">
+                                <option value="{{item.Name}}" *ngFor="let item of listClient">
+                            </datalist>
+                            <button class="btn btn-outline-secondary" type="button" (click)="newClient();">
+                                <i class="fa fa-plus" style="font-size:18px;color:green"></i>
+                            </button>
+                        </div>
                     </div>
-                    <div class="form-floating mb-2">
-                        <!-- <input type="text" [(ngModel)]="ClientVehicle.Remark" class="form-control" id="Remark" name="Remark" placeholder="" autocomplete="off"> -->
+                    <div class="mb-3">
+                        <label for="Remark" title="" class="form-label">Remark: </label>
                         <textarea [(ngModel)]="ClientVehicle.Remark" class="form-control" id="Remark" name="Remark" placeholder="" autocomplete="off"></textarea>
-                        <label for="Remark" title="">Remark: </label>
                     </div>
-                    <div class="col-auto  mb-2">
+                    <div class="mb-3">
                         <button type="button" class="btn btn-success mb-3" *ngIf="ClientVehicle.Id==0 && authService.UserInfo.Menu.CanCreate"
                             (click)="add()">Add Client Vehicle</button>
                         <button type="button" class="btn btn-success mb-3" *ngIf="ClientVehicle.Id>0 && authService.UserInfo.Menu.CanEdit"
