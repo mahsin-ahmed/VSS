@@ -1321,6 +1321,14 @@ export class JobcardComponent {
     });
   }
 
+  newClient():void {
+    var myWindow = window.open(window.origin + '/client', "", "width=600,height=950");
+  }
+
+  newVehicle():void {
+    var myWindow = window.open(window.origin + '/client-vehicle', "", "width=600,height=950");
+  }
+
   resetJcReq():void{
     this.jcReq={
       Id:0,
@@ -1336,6 +1344,7 @@ export class JobcardComponent {
       IsRead:false,
       ReadBy:0
     }
+    
   }
 
   jcReq:JcReq={

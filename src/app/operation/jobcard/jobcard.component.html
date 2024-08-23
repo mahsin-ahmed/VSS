@@ -113,8 +113,11 @@
           <div class="row g-3">
             <div class="col-md-4">
               <label class="form-label required" for="ClientName">
-                Client Name(Car Owner):
-                <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#searchClientModal">Search</a>  
+                Client Name (Car Owner):
+                &nbsp;
+                <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#searchClientModal"> <i class="fa fa-search"></i></a>
+                &nbsp;
+                <a href="javascript:void" (click)="newClient();"><i class="fa fa-plus" style="color:green"></i></a>
               </label>
               <input type="text" id="ClientName" [(ngModel)]="JobCard.ClientName" placeholder="Client Name" class="form-control" />
             </div>
@@ -167,7 +170,9 @@
             <div class="col-md-4">
               <label for="VehicleNo" class="form-label">
                 Vehicle No.: 
-                <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#searchVehicleNoModal" (click)="getVehicleByClient()">Search</a>  
+                <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#searchVehicleNoModal" (click)="getVehicleByClient()"> <i class="fa fa-search"></i></a>
+                &nbsp;
+                <a href="javascript:void" (click)="newVehicle();"><i class="fa fa-plus" style="color:green"></i></a>  
               </label>
               <input type="text" id="VehicleNo" [(ngModel)]="JobCard.VehicleNo" class="form-control" placeholder="example: DM-GA-11-1632" />
             </div>
@@ -491,6 +496,7 @@
     </div>
   </div>
 </div>
+
 <div class="modal" id="jcReqModal" data-backdrop="static">
   <div class="modal-dialog modal-xl">
     <div class="modal-content">

@@ -357,11 +357,7 @@ export class ClientvehicleComponent {
   }
 
   newClient():void {
-    var w = window.location;
-    var myWindow = window.open(window.origin + '/client', "", "width=800,height=400");
-    //window.open(this.authService.baseURL + '/client', '_blank');
-    //this.router.navigate([this.authService.baseURL + '/client']);
-    
+    var myWindow = window.open(window.origin + '/client', "", "width=600,height=950");
   }
 
 }
