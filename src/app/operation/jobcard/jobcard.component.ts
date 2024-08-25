@@ -754,6 +754,12 @@ export class JobcardComponent {
     {
         'Token':this.authService.UserInfo.Token
     });
+    let path = 'assets/job-card.html';
+    let jobCardHtml = '';
+    this.httpClient.get(path, {responseType: "text"}).subscribe(data => {
+      //now you have the file content in 'data'
+      jobCardHtml = data;
+    });
     this.httpClient.get(this.authService.baseURL + '/api/JobCard/'+id,{headers:oHttpHeaders}).subscribe((res)=>{
       let item:any = res;
       this.JobCard ={
@@ -863,7 +869,6 @@ export class JobcardComponent {
                   +'<tr style="border:1px solid gray">'+'<td>Cont Person No.(Driver): '+this.JobCard.ContactPersonNo+'</td>'+'</tr>'
                   +'<tr style="border:1px solid gray">'+'<td>Membership ID: '+this.JobCard.MembershipNo+'</td>'+'</tr>'
                   +'<tr style="border:1px solid gray">'+'<td>Address: '+this.JobCard.ClientAddress+'</td>'+'</tr>'
-                  // +'<tr style="border:1px solid gray">'+'<td>Estimated Time: </td>'+'</tr>'
                   +'<tr style="border:1px solid gray">'
                     +'<td>'
                       +'<table style="width:100%;border-collapse: collapse">'
@@ -966,7 +971,18 @@ export class JobcardComponent {
           +'</table>'     
         +'</div>'
         +'</body></html>';
-        myWindow.document.write(jcForTem);
+        //myWindow.document.write(jcForTem);
+        jobCardHtml = jobCardHtml.replace('##Job_Card_Logo##', Job_Card_Logo);
+        jobCardHtml = jobCardHtml.replace('##CompanyName##', this.company.CompanyName);
+
+        jobCardHtml = jobCardHtml.replace('##JcNo##', this.JobCard.JcNo);
+        jobCardHtml = jobCardHtml.replace('##ReceiveDate##', this.JobCard.ReceiveDate);
+        jobCardHtml = jobCardHtml.replace('##CreateByName##', this.JobCard.CreateByName);
+        jobCardHtml = jobCardHtml.replace('##jcStatus##', jcStatus);
+        jobCardHtml = jobCardHtml.replace('##ContactPerson##', this.JobCard.ContactPerson);
+        jobCardHtml = jobCardHtml.replace('##ContactPersonNo##', this.JobCard.ContactPersonNo);
+        jobCardHtml = jobCardHtml.replace('##MembershipNo##', this.JobCard.MembershipNo);
+        myWindow.document.write(jobCardHtml);
       }
       
     });
@@ -1032,6 +1048,7 @@ export class JobcardComponent {
       this.listJobCardS = res;
     });
   }*/
+
   listVehicle:any=[];
   getVehicleByClient(){
     const oHttpHeaders = new HttpHeaders(
