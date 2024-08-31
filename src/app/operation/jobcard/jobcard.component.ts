@@ -971,7 +971,7 @@ export class JobcardComponent {
           +'</table>'     
         +'</div>'
         +'</body></html>';
-        //myWindow.document.write(jcForTem);
+        myWindow.document.write(jcForTem);
         jobCardHtml = jobCardHtml.replace('##Job_Card_Logo##', Job_Card_Logo);
         jobCardHtml = jobCardHtml.replace('##CompanyName##', this.company.CompanyName);
 
@@ -982,7 +982,7 @@ export class JobcardComponent {
         jobCardHtml = jobCardHtml.replace('##ContactPerson##', this.JobCard.ContactPerson);
         jobCardHtml = jobCardHtml.replace('##ContactPersonNo##', this.JobCard.ContactPersonNo);
         jobCardHtml = jobCardHtml.replace('##MembershipNo##', this.JobCard.MembershipNo);
-        myWindow.document.write(jobCardHtml);
+        //myWindow.document.write(jobCardHtml);
       }
       
     });
