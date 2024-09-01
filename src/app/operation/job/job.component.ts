@@ -54,26 +54,27 @@ export class JobComponent {
   jobDescription:string = '';
   jobGroupId:number=0;
   listJobs: any = [];
-  get() {
+  get() : void {
     const oHttpHeaders = new HttpHeaders(
-      {
-          'Token':this.authService.UserInfo.Token
-      });
+    {
+        'Token':this.authService.UserInfo.Token
+    });
     this.httpClient.get(this.authService.baseURL + '/api/Job?description='+this.jobDescription+'&jobGroupId='+this.jobGroupId+'&pi='+this.pageIndex+'&ps='+this.pageSize,{headers: oHttpHeaders}).subscribe((res) => {
-      if(res){
+      if(res) {
         this.listJobs = res;
         //#region paging
         this.rowCount = this.listJobs.length > 0 ? this.listJobs[0].RowCount : 0;
         this.totalRowsInList = this.listJobs.length;
         this.pager.totalPages = Math.ceil(this.rowCount / this.pageSize);
+        //var totalPages:number = this.pager.totalPages > 10 ? 10 : this.pager.totalPages;
         this.pager.pages = [];
-        for(var i = 0; i<this.pager.totalPages; i++){
+        for(var i = 0; i < this.pager.totalPages; i++){
           this.pager.pages.push(i+1);
         }
         this.pageStart = (this.pageIndex * this.pageSize) + 1;
         this.pageEnd = (this.pageStart - 1) + this.totalRowsInList;
         //#endregion
-      }else{
+      } else {
         this.showMessage('warning', 'Session expired, please login.');
       }
     });

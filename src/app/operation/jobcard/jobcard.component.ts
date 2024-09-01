@@ -1060,7 +1060,7 @@ export class JobcardComponent {
     });
   }
 
-  //#region paging varible
+  //#region paging variable
   pageIndex: number = 0;
   pageSize:number = 5;
   rowCount:number = 0;
@@ -1077,11 +1077,11 @@ export class JobcardComponent {
     totalPages:0
   };  
   //#endregion
-  jcStatus:number = 2;
+  jcStatus:number = 0;
   jcNo:string='';
   startDate:string='';
   endDate:string='';
-  get(){
+  get() : void {
     const oHttpHeaders = new HttpHeaders(
     {
         'Token':this.authService.UserInfo.Token
@@ -1094,29 +1094,28 @@ export class JobcardComponent {
         this.totalRowsInList = this.listJobCard.length;
         this.pager.totalPages = Math.ceil(this.rowCount / this.pageSize);
         this.pager.pages = [];
-        for(var i = 0; i<this.pager.totalPages; i++){
+        for(var i = 0; i< this.pager.totalPages; i++) {
           this.pager.pages.push(i+1);
         }
         this.pageStart = (this.pageIndex * this.pageSize) + 1;
         this.pageEnd = (this.pageStart - 1) + this.totalRowsInList;
         //#endregion
-      }else{
+      } else { 
         this.showMessage('warning', 'Session expired, please login.');
       }
     });
   }
 
-  changePageSize(){
+  changePageSize() : void {
     this.get();
   }
 
-  changePageNumber(pageIndex:number){
+  changePageNumber(pageIndex:number) : void {
     this.pageIndex = pageIndex;
     this.get();
   }
 
-  selectVehicle(item:any){
-    //this.JobCard.JcNo=item.JcNo;
+  selectVehicle(item:any) : void {
     this.JobCard.JobDate=item.JobDate;
     this.JobCard.CreateBy=item.CreateBy;
     this.JobCard.Vin=item.Vin;
@@ -1135,13 +1134,6 @@ export class JobcardComponent {
     this.JobCard.VehicleNo=item.VehicleNo;
     this.JobCard.Model=item.Model;
     this.JobCard.JcStatus=item.JcStatus;
-    // this.JobCard.ClientId=item.ClientId;
-    // this.JobCard.ClientName=item.ClientName;
-    // this.JobCard.ClientPhone=item.ClientPhone;
-    // this.JobCard.ClientEmail=item.ClientEmail;
-    // this.JobCard.ClientAddress=item.ClientAddress;
-    // this.JobCard.ContactPerson=item.ContactPerson;
-    // this.JobCard.ContactPersonNo=item.ContactPersonNo;
     if(this.JobCard.ClientId>0){
       this.isNew = false;
     }
@@ -1150,7 +1142,7 @@ export class JobcardComponent {
   itemValue:string = '';
   listItemS:any = [];
   //value:string ='';
-  searchItem(){
+  searchItem() : void {
     const oHttpHeaders = new HttpHeaders(
       {
           'Token':this.authService.UserInfo.Token

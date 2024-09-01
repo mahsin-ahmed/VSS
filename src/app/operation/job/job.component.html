@@ -72,8 +72,7 @@
     <div class="row" *ngIf="listJobGroup.length>0">
         <div class="col-lg-12">
             <div class="pull-left ">
-                <span class="well well-sm">Showing <span class="text-success"><b>{{pageStart}}</b></span> to <span
-                        class="text-success"><b>{{pageEnd}}</b></span> of <span
+                <span class="well well-sm">Showing <span class="text-success"><b>{{pageStart}}</b></span> to <span class="text-success"><b>{{pageEnd}}</b></span> of <span
                         class="text-success"><b>{{rowCount}}</b></span> records</span>
             </div>
         </div>
@@ -95,10 +94,11 @@
                             href="javascript:void(0);" (click)="changePageNumber(page - 1)">{{page}}</a>
                     </li>
                     <li>
-                        <a class="btn btn-sm btn-outline-info"
-                            [ngClass]="{disabled:pageIndex == (pager.totalPages - 1)}" href="javascript:void(0);"
-                            (click)="changePageNumber(pageIndex + 1)"><i class="fa fa-angle-right"
-                                aria-hidden="true"></i>Next</a>
+                        <a class="btn btn-sm btn-outline-info" 
+                            [ngClass]="{disabled:pageIndex == (pager.totalPages - 1)}" 
+                            href="javascript:void(0);" 
+                            (click)="changePageNumber(pageIndex + 1)">
+                            <i class="fa fa-angle-right" aria-hidden="true"></i>Next</a>
                     </li>
                     <li>
                         <a class="btn btn-sm btn-outline-secondary"
