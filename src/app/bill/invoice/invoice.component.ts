@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CommonService, toastPayload } from '../../services/common.service';
 import { IndividualConfig } from 'ngx-toastr';
 import { AuthService } from 'src/app/auth/auth.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-invoice',
@@ -34,9 +35,11 @@ export class InvoiceComponent {
 
   constructor(private cs:CommonService,
     private httpClient: HttpClient,
-    public authService:AuthService) {
+    public authService:AuthService,
+    private datePipe: DatePipe) {
     this.get();
     this.getCompany();
+    this.currentDate = this.datePipe.transform(this.currentDate, 'dd MMMM, yyyy');
   }
 
   //company: Array<Company>=[];
@@ -91,30 +94,58 @@ export class InvoiceComponent {
     Id:number,
     ClientId:number,
     ClientName:string,
+    ClientMobile:string,
     ClientAddress:string,
+    MembershipNo:string,
     CreateDate:string,
     CreateBy:number,
     IsPaid:boolean,
     JcId:number,
     JcNo:string,
     GrandTotal:number,
+    GrandTotalWord:string
     InvoiceItems:any,
     IsInvoice:number,
-    BalanceAmount:number
+    BalanceAmount:number,
+    PaySettles:any,
+    ClientPhone:string,
+    ClientEmail:string,
+    VehicleNo:string,
+    Vin:string,
+    ContactPerson:string,
+    ContactPersonNo:string,
+    ItemName:string,
+    Model:string,
+    SubModel:string,
+    Mileage:number
   }={
     Id:0,
     ClientId:0,
     ClientName:'',
+    ClientMobile:'',
     ClientAddress:'',
+    MembershipNo:'',
     CreateDate:'',
     CreateBy:0,
     IsPaid:false,
     JcId:0,
     JcNo:'',
     GrandTotal:0,
+    GrandTotalWord:'',
     InvoiceItems:[],
     IsInvoice:0,
-    BalanceAmount:0
+    BalanceAmount:0,
+    PaySettles:[],
+    ClientPhone:'',
+    ClientEmail:'',
+    VehicleNo:'',
+    Vin:'',
+    ContactPerson:'',
+    ContactPersonNo:'',
+    ItemName:'',
+    Model:'',
+    SubModel:'',
+    Mileage:0
   };
   listBillItem:any =[];
   getFromJc(id:number):void{
@@ -275,6 +306,13 @@ export class InvoiceComponent {
    changeDiscount():void{
     for(var i = 0; i <this.listBillItem.length; i++) {
       this.listBillItem[i].Discount = this.Discount;
+    }
+    this.calculateTotals();
+   }
+
+   changeVat():void{
+    for(var i = 0; i <this.listBillItem.length; i++) {
+      this.listBillItem[i].TotalVat = this.VAT;
     }
     this.calculateTotals();
    }
@@ -448,6 +486,8 @@ export class InvoiceComponent {
     this.getFromInvoicePrint(jcId);
   }
 
+  currentDate:any = new Date();
+
   getFromInvoicePrint(id:number):void{
     const oHttpHeaders = new HttpHeaders(
     {
@@ -458,7 +498,162 @@ export class InvoiceComponent {
       this.oBill = item;
       this.listBillItem = this.oBill.InvoiceItems;
       var htmlInvoice ='';
+      var showVat = '';
+      var showDiscount = '';
       for(var i = 0; i < this.listBillItem.length; i++){
+        showVat = this.listBillItem[i].TotalVat > 0 ? '' : 'display:none';
+        showDiscount = this.listBillItem[i].Discount > 0 ? '' : 'display:none';
+        var sl = i + 1;
+        var itemType = this.listBillItem[i].ItemType == 1 ? 'Job':this.listBillItem[i].ItemType == 2?'SP':'N/A';
+        htmlInvoice+='<tr style="border:1px solid gray">'
+        +'<td style="border:1px solid gray;">'+sl+'</td>'
+        +'<td style="border:1px solid gray;">'+this.listBillItem[i].ItemName+' ('+itemType+')</td>'
+        +'<td style="border:1px solid gray;text-align: right;">'+this.listBillItem[i].Qty+'</td>'
+        +'<td style="border:1px solid gray;text-align: right;">'+this.listBillItem[i].UnitPrice+'.00</td>'
+        +'<td style="border:1px solid gray;text-align: right;">'+this.listBillItem[i].TotalPrice+'.00</td>'
+        +'<td style="border:1px solid gray;text-align: right;'+showDiscount+'">'+this.listBillItem[i].Discount+'</td>'
+        +'<td style="border:1px solid gray;text-align: right;'+showDiscount+'">'+this.listBillItem[i].TpAfterDiscount+'</td>'
+        +'<td style="border:1px solid gray;text-align: right;'+showVat+'">'+this.listBillItem[i].TotalVat+'</td>'
+        +'<td style="border:1px solid gray;text-align: right;">'+this.listBillItem[i].TotalAmount+'.00</td>'
+        +'</tr>'
+      }
+      var oVat = this.listBillItem.filter((x:any)=>x.TotalVat > 0)[0];
+      showVat = oVat == undefined ? 'display:none' : '';
+      var oDiscount = this.listBillItem.filter((x:any)=>x.Discount > 0)[0];
+      showDiscount = oDiscount == undefined ? 'display:none' : '';
+      var colspan = 4;
+      colspan += oVat == undefined ? 0 : 1;
+      colspan += oDiscount == undefined ? 0 : 2;
+      var htmlPayment = '';
+      for(var i = 0; i < this.oBill.PaySettles.length; i++) {
+        var sl = i + 1;
+        var PayDate = this.oBill.PaySettles[i].PayDate.substr(0,16);
+        htmlPayment+='<tr style="border:1px solid gray">'
+            +'<td style="border:1px solid gray">'+sl+'</td>'
+            +'<td style="border:1px solid gray">'+this.oBill.PaySettles[i].PayMethodName+'</td>'
+            +'<td style="border:1px solid gray">'+PayDate+'</td>'
+            +'<td style="border:1px solid gray;text-align: right;">'+this.oBill.PaySettles[i].Amount+'.00</td>'
+            +'</tr>'
+      }
+      var strMileage = this.oBill.Mileage > 0 ? this.oBill.Mileage.toString() : '';
+      //var Bill_Logo = location.origin + this.Bill_Logo;
+      var Bill_Logo = this.Bill_Logo;
+      const myWindow: Window | null = window.open("", "", "width=793,height=1123");
+      if(myWindow !=undefined) {
+        var htmlPrint = '<!DOCTYPE html><html lang="en"><head><title>Bill-Copy</title></head><body>'
+        +'<div style="margin-left:12px;margin-right:12px;margin-bottom:12px;margin-top:12px;">' 
+          +'<table style="width:100%;border-collapse: collapse;">'
+            +'<tr>'
+              +'<td style="width:25%"><img style="width:180px" title="company_logo" style="width:102px" src="'+Bill_Logo+'" /></td>'
+              +'<td style="width:50%">'
+                +'<div style="text-align:center">'
+                +'<strong style="color:black;font-size:40px">'+this.company.CompanyName+'</strong>'
+                +'</div>'
+                +'<div style="text-align:center">'
+                +this.company.Address
+                +'<br/>('+this.company.Description+')'
+                +'</div>'  
+                +'<div style="text-align:center">Phone: '+this.company.Phone+'</div>'
+                +'<div style="text-align:center">Email: '+this.company.Email+'</div>'
+                +'<div style="text-align:center">Website: '+this.company.Website+'</div>'  
+              +'</td>'
+              +'<td style="width:25%"></td>'
+            +'</tr>'
+          +'</table>'
+          +'<div>'
+          +'<h2 style="text-align:center"><u>Bill Copy</u></h2>'
+          +'<table style="width:100%;border-collapse: collapse;">'
+            +'<tr>'
+              +'<td>'+'<strong>Client Name: </strong>'+this.oBill.ClientName+'</td>'
+              +'<td>'+'<strong>Invoice No: </strong>'+this.oBill.Id+'</td>'
+            +'</tr>'
+            +'<tr>'
+            +'<td>'+'<strong>Membership No.: </strong>'+this.oBill.MembershipNo+'</td>'
+              +'<td>'+'<strong>JC No.: </strong>'+this.oBill.JcNo+'</td>'
+            +'</tr>'
+            +'<tr>'
+              +'<td>'
+                +'<strong>Phone: </strong>'+this.oBill.ClientPhone
+              +'</td>'
+              +'<td>'+'<strong>Chassis/VIN: </strong>'+this.oBill.Vin+'</td>'
+              // +'<td>'+'<strong>Balance: </strong>'+this.oBill.BalanceAmount+'</td>'
+            +'</tr>'
+            +'<tr>'
+              +'<td>'+'<strong>Email: </strong>'+this.oBill.ClientEmail+'</td>'
+              +'<td>'+'<strong>Car Reg.: </strong>'+this.oBill.VehicleNo+'</td>'
+            +'</tr>'
+            +'<tr>'
+              +'<td>'+'<strong>Address: </strong>'+this.oBill.ClientAddress+'</td>'
+              +'<td>'+'<strong>Model: </strong>'+this.oBill.Model+'</td>'
+            +'</tr>'
+            +'<tr>'
+              +'<td>'+'<strong>Driver: </strong>'+this.oBill.ContactPerson+'</td>'
+              +'<td>'+'<strong>Sub-Model: </strong>'+this.oBill.SubModel+'</td>'
+            +'</tr>'
+            +'<tr>'
+              +'<td>'+'<strong>Driver Contact: </strong>'+this.oBill.ContactPersonNo+'</td>'
+              +'<td>'+'<strong>Mileage(km): </strong>'+strMileage+'</td>'
+            +'</tr>'
+          +'</table>'
+          +'<br/><div><table style="width:100%"><tr><td style="text-align:left;font-weight:bolder">Bill Items:</td><td style="text-align:right"><b>Billing Date: </b>'+this.currentDate+'</td></tr></table></div>'
+          +'<table style="width:100%;border-collapse: collapse;">'
+          +'<tr style="border:1px solid gray">'
+            +'<th style="border:1px solid gray">#</th>'
+            +'<th style="border:1px solid gray">Item</th>'
+            +'<th style="border:1px solid gray;text-align: right;">Qty</th>'
+            +'<th style="border:1px solid gray;text-align: right;">Price</th>'
+            +'<th style="border:1px solid gray;text-align: right;">Total Price</th>'
+            +'<th style="border:1px solid gray;text-align: right;'+showDiscount+'">Discount(%)</th>'
+            +'<th style="border:1px solid gray;text-align: right;'+showDiscount+'">Total Price After Discount</th>'
+            +'<th style="border:1px solid gray;text-align: right;'+showVat+'">Total VAT</th>'
+            +'<th style="border:1px solid gray;text-align: right;">Total Amount</th>'
+          +'</tr>'
+          +htmlInvoice
+          +'<tr>'
+            +'<td colspan="'+colspan+'">In word: <strong>'+this.oBill.GrandTotalWord+'</strong></td>'
+            +'<th style="text-align: right;">Grand Total:</th>'
+            +'<th style="text-align: right;">'+this.oBill.GrandTotal+'.00</th>'
+          +'</tr>'
+          +'</table>'
+          +'<br /><div style="font-weight:bolder">Payment Information</div>'
+          +'<table style="width:100%;border-collapse: collapse;">'
+            +'<tr style="border:1px solid gray">'
+              +'<th style="border:1px solid gray">#</th>'
+              +'<th style="border:1px solid gray">Pay Method</th>'
+              +'<th style="border:1px solid gray">Pay Date</th>'
+              +'<th style="border:1px solid gray;text-align: right;">Amount</th>'
+            +'</tr>'
+            +htmlPayment
+            +'</table>'
+            +'<br /><br /><br /><br />'
+            +'<table style="width:100%">'
+            +'<tr>'
+              +'<td>Customer Signature<br/>Name:....................</td>'
+              +'<td>Floor Supervisor<br/>Name:....................</td>'
+              +'<td>Service Advisor Signature<br/>Name:....................</td>'
+            +'</tr>'
+          +'</table>'  
+            +'</div>';
+        myWindow.document.write(htmlPrint);
+      }
+    });
+  }
+
+  getFromInvoicePrint1(id:number):void{
+    const oHttpHeaders = new HttpHeaders(
+    {
+        'Token':this.authService.UserInfo.Token
+    });
+    this.httpClient.get(this.authService.baseURL + '/api/Invoice/GetByJc?jcId='+id,{headers:oHttpHeaders}).subscribe((res)=>{
+      let item:any = res;
+      this.oBill = item;
+      this.listBillItem = this.oBill.InvoiceItems;
+      var htmlInvoice ='';
+      var showVat = '';
+      var showDiscount = '';
+      for(var i = 0; i < this.listBillItem.length; i++){
+        showVat = this.listBillItem[i].TotalVat > 0 ? '' : 'display:none';
+        showDiscount = this.listBillItem[i].Discount > 0 ? '' : 'display:none';
         var sl = i + 1;
         var itemType = this.listBillItem[i].ItemType == 1 ? 'Job':this.listBillItem[i].ItemType == 2?'SP':'N/A';
         htmlInvoice+='<tr style="border:1px solid gray">'
@@ -467,22 +662,16 @@ export class InvoiceComponent {
         +'<td style="border:1px solid gray;text-align: right;">'+this.listBillItem[i].Qty+'</td>'
         +'<td style="border:1px solid gray;text-align: right;">'+this.listBillItem[i].UnitPrice+'</td>'
         +'<td style="border:1px solid gray;text-align: right;">'+this.listBillItem[i].TotalPrice+'</td>'
-        +'<td style="border:1px solid gray;text-align: right;">'+this.listBillItem[i].Discount+'</td>'
-        +'<td style="border:1px solid gray;text-align: right;">'+this.listBillItem[i].TpAfterDiscount+'</td>'
-        +'<td style="border:1px solid gray;text-align: right;">'+this.listBillItem[i].TotalVat+'</td>'
+        +'<td style="border:1px solid gray;text-align: right;'+showDiscount+'">'+this.listBillItem[i].Discount+'</td>'
+        +'<td style="border:1px solid gray;text-align: right;'+showDiscount+'">'+this.listBillItem[i].TpAfterDiscount+'</td>'
+        +'<td style="border:1px solid gray;text-align: right;'+showVat+'">'+this.listBillItem[i].TotalVat+'</td>'
         +'<td style="border:1px solid gray;text-align: right;">'+this.listBillItem[i].TotalAmount+'</td>'
         +'</tr>'
       }
-      /*var htmlPayment = '';
-      for(var i = 0; i < this.oBill.PaySettles.length; i++){
-        var sl = i + 1;
-        htmlPayment+='<tr style="border:1px solid gray">'
-            +'<td style="border:1px solid gray">'+sl+'</td>'
-            +'<td style="border:1px solid gray">'+this.oBill.PaySettles[i].PayMethodName+'</td>'
-            +'<td style="border:1px solid gray">'+this.oBill.PaySettles[i].PayDate+'</td>'
-            +'<td style="border:1px solid gray;text-align: right;">'+this.oBill.PaySettles[i].Amount+'</td>'
-            +'</tr>'
-      }*/
+      var oVat = this.listBillItem.filter((x:any)=>x.TotalVat > 0)[0];
+      showVat = oVat == undefined ? 'display:none' : '';
+      var oDiscount = this.listBillItem.filter((x:any)=>x.Discount > 0)[0];
+      showDiscount = oDiscount == undefined ? 'display:none' : '';
       var Bill_Logo = location.origin + this.Bill_Logo;
       const myWindow: Window | null = window.open("", "", "width=793,height=1123");
       if(myWindow !=undefined) {
@@ -523,7 +712,6 @@ export class InvoiceComponent {
                 +'<strong>Address: </strong>'+this.oBill.ClientAddress
               +'</td>'
               +'<td>'
-                +'<strong>Balance: </strong>'+this.oBill.BalanceAmount
               +'</td>'
             +'</tr>'
           +'</table>'
@@ -535,9 +723,9 @@ export class InvoiceComponent {
             +'<th style="border:1px solid gray;text-align: right;">Qty</th>'
             +'<th style="border:1px solid gray;text-align: right;">Price</th>'
             +'<th style="border:1px solid gray;text-align: right;">Total Price</th>'
-            +'<th style="border:1px solid gray;text-align: right;">Discount(%)</th>'
-            +'<th style="border:1px solid gray;text-align: right;">Total Price After Discount</th>'
-            +'<th style="border:1px solid gray;text-align: right;">Total VAT ('+this.VAT+'%)</th>'
+            +'<th style="border:1px solid gray;text-align: right;'+showDiscount+'">Discount(%)</th>'
+            +'<th style="border:1px solid gray;text-align: right;'+showDiscount+'">Total Price After Discount</th>'
+            +'<th style="border:1px solid gray;text-align: right;'+showVat+'">Total VAT</th>'
             +'<th style="border:1px solid gray;text-align: right;">Total Amount</th>'
           +'</tr>'
           +htmlInvoice
@@ -547,10 +735,10 @@ export class InvoiceComponent {
             +'<th></th>'
             +'<th></th>'
             +'<th></th>'
-            +'<th></th>'
-            +'<th></th>'
-            +'<th style="text-align: right;">Grand Total:</th>'
-            +'<th style="text-align: right;">'+this.oBill.GrandTotal+'</th>'
+            +'<th style="text-align: right;'+showDiscount+'"></th>'
+            +'<th style="text-align: right;'+showDiscount+'"></th>'
+            +'<th style="text-align: right;'+showVat+'"></th>'
+            +'<th style="text-align: right;">Grand Total: '+this.oBill.GrandTotal+'</th>'
           +'</tr>'
           +'</table>'
           +'<h4>Payment Information</h4>'
@@ -568,6 +756,7 @@ export class InvoiceComponent {
       }
     });
   }
+
   validatePay():boolean{
     var isValid:boolean=true;
     if(this.PayTran.PayMethodId==0 || this.PayTran.PayMethodId == null || this.PayTran.PayMethodId == undefined){

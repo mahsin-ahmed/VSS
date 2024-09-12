@@ -61,7 +61,7 @@
             <th style="text-align: right;">Total Price</th>
             <th style="text-align: right;">Discount(<input type="text" [(ngModel)]="Discount" (change)="changeDiscount()" style="text-align: right;width: 50px;height: 30px;" />%)</th>
             <th style="text-align: right;">Total Price After Discount</th>
-            <th style="text-align: right;">Total VAT ({{VAT}}%)</th>
+            <th style="text-align: right;">Total VAT (<input type="text" [(ngModel)]="VAT" (change)="changeVat()" style="text-align: right;width: 50px;height: 30px;" />%)</th>
             <th style="text-align: right;">Total Amount</th>
         </tr>
         <tr *ngFor="let item of listBillItem; let i = index">
@@ -72,7 +72,7 @@
             <td style="text-align: right;">{{item.TotalPrice}}</td>
             <td style="text-align: right;"><input type="text" name="Discount" [(ngModel)]="item.Discount" style="text-align: right;width: 50px;height: 30px;" (change)="calculateTotals()" /></td>
             <td style="text-align: right;">{{item.TpAfterDiscount}}</td>
-            <td style="text-align: right;">{{item.TotalVat}}</td>
+            <td style="text-align: right;"><input type="text" name="TotalVat" [(ngModel)]="item.TotalVat" style="text-align: right;width: 50px;height: 30px;" (change)="calculateTotals()" /></td>
             <td style="text-align: right;">{{item.TotalAmount}}</td>
         </tr>
         <tr>

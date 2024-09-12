@@ -749,16 +749,19 @@ export class JobcardComponent {
     });
   }
 
-  getByIdView(id:number):void{
-    const oHttpHeaders = new HttpHeaders(
-    {
-        'Token':this.authService.UserInfo.Token
-    });
+  getJobCardHTML():void{
     let path = 'assets/job-card.html';
     let jobCardHtml = '';
     this.httpClient.get(path, {responseType: "text"}).subscribe(data => {
       //now you have the file content in 'data'
       jobCardHtml = data;
+    });
+  }
+
+  getByIdView(id:number):void{
+    const oHttpHeaders = new HttpHeaders(
+    {
+        'Token':this.authService.UserInfo.Token
     });
     this.httpClient.get(this.authService.baseURL + '/api/JobCard/'+id,{headers:oHttpHeaders}).subscribe((res)=>{
       let item:any = res;
@@ -972,16 +975,16 @@ export class JobcardComponent {
         +'</div>'
         +'</body></html>';
         myWindow.document.write(jcForTem);
-        jobCardHtml = jobCardHtml.replace('##Job_Card_Logo##', Job_Card_Logo);
-        jobCardHtml = jobCardHtml.replace('##CompanyName##', this.company.CompanyName);
-
-        jobCardHtml = jobCardHtml.replace('##JcNo##', this.JobCard.JcNo);
-        jobCardHtml = jobCardHtml.replace('##ReceiveDate##', this.JobCard.ReceiveDate);
-        jobCardHtml = jobCardHtml.replace('##CreateByName##', this.JobCard.CreateByName);
-        jobCardHtml = jobCardHtml.replace('##jcStatus##', jcStatus);
-        jobCardHtml = jobCardHtml.replace('##ContactPerson##', this.JobCard.ContactPerson);
-        jobCardHtml = jobCardHtml.replace('##ContactPersonNo##', this.JobCard.ContactPersonNo);
-        jobCardHtml = jobCardHtml.replace('##MembershipNo##', this.JobCard.MembershipNo);
+        
+        // jobCardHtml = jobCardHtml.replace('##Job_Card_Logo##', Job_Card_Logo);
+        // jobCardHtml = jobCardHtml.replace('##CompanyName##', this.company.CompanyName);
+        // jobCardHtml = jobCardHtml.replace('##JcNo##', this.JobCard.JcNo);
+        // jobCardHtml = jobCardHtml.replace('##ReceiveDate##', this.JobCard.ReceiveDate);
+        // jobCardHtml = jobCardHtml.replace('##CreateByName##', this.JobCard.CreateByName);
+        // jobCardHtml = jobCardHtml.replace('##jcStatus##', jcStatus);
+        // jobCardHtml = jobCardHtml.replace('##ContactPerson##', this.JobCard.ContactPerson);
+        // jobCardHtml = jobCardHtml.replace('##ContactPersonNo##', this.JobCard.ContactPersonNo);
+        // jobCardHtml = jobCardHtml.replace('##MembershipNo##', this.JobCard.MembershipNo);
         //myWindow.document.write(jobCardHtml);
       }
       

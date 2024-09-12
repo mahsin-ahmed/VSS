@@ -4,24 +4,42 @@
 <div *ngIf="isList"><br />    
   <div class="row">
     <div class="col-lg-4">
-      Show
-      <select style="width: 50px;height: 32px;" [(ngModel)]="pageSize" (change)="changePageSize()">
-          <option *ngFor="let item of listPageSize" value={{item}}>
-              {{item}}
-          </option>
-      </select> 
-      records
+        
     </div>
     <div class="col-lg-4">
-        <h4 class="text-center">List of Payment Transaction</h4><br />
+        <h4 class="text-center">List of Paid Bills</h4>
     </div>
-    <!-- <div class="col-lg-4">
-      <label for="jcStatus" class="form-label">JC Status:</label>
-      <select id="jcStatus" [(ngModel)]="jcStatus" (change)="get();">
-        <option *ngFor="let item of listJcStatusFitler" value="{{item.Id}}">{{item.Name}}</option>
-      </select>
-    </div> -->
+    <div class="col-lg-4">
+        
+    </div>
   </div>    
+  <div class="row">
+    <div class="col-lg-2">
+        Show
+        <select style="width: 50px;height: 32px;" [(ngModel)]="pageSize" (change)="changePageSize()">
+            <option *ngFor="let item of listPageSize" value={{item}}>
+                {{item}}
+            </option>
+        </select> 
+        records
+      </div>
+    <div class="col-lg-5">
+        <label for="startDate" class="form-label">From:</label>
+        <input type="date" [(ngModel)]="startDate" (change)="get();" />
+        <label for="endDate" class="form-label">To:</label>
+        <input type="date" [(ngModel)]="endDate" (change)="get();" />
+      </div>
+      <div class="col-lg-3">
+        <label for="jcNo" class="form-label">JC Number:</label>
+        <input type="text" [(ngModel)]="jcNo" (change)="get();" />
+      </div>
+      <div class="col-lg-2">
+        <label for="jcStatus" class="form-label">JC Status:</label>
+        <select id="jcStatus" [(ngModel)]="jcStatus" (change)="get();" style="height: 32px;">
+          <option *ngFor="let item of listJcStatusFitler" value="{{item.Id}}">{{item.Name}}</option>
+        </select>
+      </div>
+  </div>
     <table class="table table-bordered">
         <tr class="table-secondary">
             <th>#</th>
