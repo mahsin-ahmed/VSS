@@ -20,11 +20,9 @@ export class JobComponent {
   phone:string = '';
   //baseUrl: string = 'http://localhost:56297';
 
-  // Pagination part Start
-  //----------------------------------------------------------------------------
-  //#region paging varible
+  //#region Pagination 1
   pageIndex: number = 0;
-  pageSize:number = 5;
+  pageSize:number = 10;
   rowCount:number = 0;
   listPageSize:any = [5,10,20];
   pageStart:number = 0;
@@ -32,25 +30,28 @@ export class JobComponent {
   totalRowsInList:number=0;
   pagedItems:any = [];
   pager:{
+    pagesSource:any,
     pages:any,
     totalPages:number
   } = {
+    pagesSource:[],
     pages:[],
     totalPages:0
   };  
-  //#endregion
-
   changePageSize(){
     this.pageIndex = 0;
+    this.pagerIndex = 10;
     this.get();
   }
   changePageNumber(pageIndex:number){
     this.pageIndex = pageIndex;
+    this.pagerIndex = pageIndex < 10 ? 10 : Math.ceil((pageIndex + 1) / this.pageIndexSize) * this.pageIndexSize;
     this.get();
   }
-
-  // Pagination part End
-  //----------------------------------------------------------------------
+  pageIndexSize:number = 10;
+  pagerIndex:number = 10;
+  pageDot:boolean=true;
+  //#endregion
   jobDescription:string = '';
   jobGroupId:number=0;
   listJobs: any = [];
@@ -62,13 +63,18 @@ export class JobComponent {
     this.httpClient.get(this.authService.baseURL + '/api/Job?description='+this.jobDescription+'&jobGroupId='+this.jobGroupId+'&pi='+this.pageIndex+'&ps='+this.pageSize,{headers: oHttpHeaders}).subscribe((res) => {
       if(res) {
         this.listJobs = res;
-        //#region paging
+        //#region Pagination 2
         this.rowCount = this.listJobs.length > 0 ? this.listJobs[0].RowCount : 0;
         this.totalRowsInList = this.listJobs.length;
         this.pager.totalPages = Math.ceil(this.rowCount / this.pageSize);
-        //var totalPages:number = this.pager.totalPages > 10 ? 10 : this.pager.totalPages;
-        this.pager.pages = [];
+        this.pager.pagesSource = [];
         for(var i = 0; i < this.pager.totalPages; i++){
+          this.pager.pagesSource.push(i+1);
+        }
+        this.pager.pages = [];
+        var pagerIn = this.pager.totalPages < this.pagerIndex ? this.pager.totalPages : this.pagerIndex;
+        this.pageDot = this.pager.totalPages < this.pagerIndex ? false : true;
+        for(var i = this.pagerIndex - this.pageIndexSize; i < pagerIn; i++) {
           this.pager.pages.push(i+1);
         }
         this.pageStart = (this.pageIndex * this.pageSize) + 1;
@@ -92,6 +98,7 @@ export class JobComponent {
     }
     return isValid
   }
+
   addJob() {
     if(!this.validateForm()){
       return;
