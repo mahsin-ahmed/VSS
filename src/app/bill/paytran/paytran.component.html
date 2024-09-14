@@ -88,6 +88,12 @@
                     <li *ngFor="let page of pager.pages">
                         <a class="btn btn-sm btn-outline-secondary" [ngClass]="{active:pageIndex == (page - 1)}" href="javascript:void(0);" (click)="changePageNumber(page - 1)">{{page}}</a>
                     </li>
+                    <li *ngIf="pageDot">
+                        <a class="btn btn-sm btn-outline-success"
+                            href="javascript:void(0);" 
+                            (click)="changePageNumber(pager.pages[pager.pages.length - 1])">
+                            <i class="fa fa-ellipsis-h" aria-hidden="true"></i></a>
+                    </li>
                     <li>
                         <a class="btn btn-sm btn-outline-info" [ngClass]="{disabled:pageIndex == (pager.totalPages - 1)}" href="javascript:void(0);" (click)="changePageNumber(pageIndex + 1)"><i class="fa fa-angle-right" aria-hidden="true"></i>Next</a>
                     </li>

@@ -21,7 +21,7 @@ export class SalepriceComponent {
     this.get();
   }
 
-  //#region paging varible
+  //#region Pagination 1
   pageIndex: number = 0;
   pageSize:number = 10;
   rowCount:number = 0;
@@ -31,23 +31,29 @@ export class SalepriceComponent {
   totalRowsInList:number=0;
   pagedItems:any = [];
   pager:{
+    pagesSource:any,
     pages:any,
     totalPages:number
   } = {
+    pagesSource:[],
     pages:[],
     totalPages:0
   };  
-
   changePageSize(){
     this.pageIndex = 0;
+    this.pagerIndex = 10;
     this.get();
   }
-
   changePageNumber(pageIndex:number){
     this.pageIndex = pageIndex;
+    this.pagerIndex = pageIndex < 10 ? 10 : Math.ceil((pageIndex + 1) / this.pageIndexSize) * this.pageIndexSize;
     this.get();
   }
+  pageIndexSize:number = 10;
+  pagerIndex:number = 10;
+  pageDot:boolean=true;
   //#endregion
+
   //baseUrl:string='http://localhost:56297';
   partNo:string = '';
   get():void{
@@ -58,7 +64,24 @@ export class SalepriceComponent {
     this.httpClient.get(this.authService.baseURL + '/api/SalePrice?pi='+this.pageIndex+'&ps='+this.pageSize+'&partNo='+this.partNo,{headers: oHttpHeaders}).subscribe((res)=>{
       if(res){
         this.listSalePrice = res;
-      }else{
+        //#region Pagination 2
+        this.rowCount = this.listSalePrice.length > 0 ? this.listSalePrice[0].RowCount : 0;
+        this.totalRowsInList = this.listSalePrice.length;
+        this.pager.totalPages = Math.ceil(this.rowCount / this.pageSize);
+        this.pager.pagesSource = [];
+        for(var i = 0; i < this.pager.totalPages; i++){
+          this.pager.pagesSource.push(i+1);
+        }
+        this.pager.pages = [];
+        var pagerIn = this.pager.totalPages < this.pagerIndex ? this.pager.totalPages : this.pagerIndex;
+        this.pageDot = this.pager.totalPages < this.pagerIndex ? false : true;
+        for(var i = this.pagerIndex - this.pageIndexSize; i < pagerIn; i++) {
+          this.pager.pages.push(i+1);
+        }
+        this.pageStart = (this.pageIndex * this.pageSize) + 1;
+        this.pageEnd = (this.pageStart - 1) + this.totalRowsInList;
+        //#endregion
+      } else{
         this.showMessage('warning', 'Session expired, please login.');
       }
     });
