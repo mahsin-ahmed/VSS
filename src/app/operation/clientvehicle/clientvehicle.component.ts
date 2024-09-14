@@ -351,7 +351,7 @@ export class ClientvehicleComponent {
     {
         //'Token':this.authService.UserInfo.Token
     });
-    this.httpClient.get(this.authService.baseURL + '/api/ClientVehicle/GetCarByVin?vin='+this.ClientVehicle.Vin,{headers: oHttpHeaders}).subscribe((res) => {
+    this.httpClient.get(this.authService.baseURL + '/api/ClientVehicle/GetCarByChassis?chassis='+this.ClientVehicle.Vin,{headers: oHttpHeaders}).subscribe((res) => {
       if(res){
         var oClientVehicle:any = res;
         this.ClientVehicle.Manufacturer = oClientVehicle.Manufacturer;
