@@ -349,10 +349,11 @@ export class ClientvehicleComponent {
     this.isSearching = true;
     const oHttpHeaders = new HttpHeaders(
     {
-        //'Token':this.authService.UserInfo.Token
+        'Token':this.authService.UserInfo.Token
     });
-    this.httpClient.get(this.authService.baseURL + '/api/ClientVehicle/GetCarByChassis?chassis='+this.ClientVehicle.Vin,{headers: oHttpHeaders}).subscribe((res) => {
-      if(res){
+    var actionURL = this.ClientVehicle.Vin.length > 16 ? '/GetCarByVin?vin=' : '/GetCarByChassis?chassis=';
+    this.httpClient.get(this.authService.baseURL + '/api/ClientVehicle'+actionURL+this.ClientVehicle.Vin,{headers: oHttpHeaders}).subscribe((res) => {
+      if(res) {
         var oClientVehicle:any = res;
         this.ClientVehicle.Manufacturer = oClientVehicle.Manufacturer;
         this.ClientVehicle.Model = oClientVehicle.Model;
@@ -361,7 +362,7 @@ export class ClientvehicleComponent {
         this.ClientVehicle.Engine = oClientVehicle.Engine;
         this.ClientVehicle.Transmission = oClientVehicle.Transmission;
         this.isSearching = false;
-      }else{
+      } else {
         this.showMessage('warning', 'Session expired, please login.');
       }
     });

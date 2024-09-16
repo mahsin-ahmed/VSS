@@ -43,6 +43,7 @@ import { WorkgroupComponent } from './operation/workgroup/workgroup.component';
 import { WorkgroupmemberComponent } from './operation/workgroupmember/workgroupmember.component';
 import { StockComponent } from './inventory/stock/stock.component';
 import { JcReqComponent } from './inventory/jc-req/jc-req.component';
+import { PoComponent } from './purchase/po/po.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -93,7 +94,9 @@ const routes: Routes = [
   { path: 'role', component: RoleComponent, canActivate:[authGuard] },
   { path: 'user', component: UserComponent, canActivate:[authGuard] },
   { path: 'user-role', component: UserroleComponent, canActivate:[authGuard] },
-  { path: 'dashboard', component: DashboardComponent, canActivate:[authGuard] }
+  { path: 'dashboard', component: DashboardComponent, canActivate:[authGuard] },
+
+  { path: 'po', component: PoComponent, canActivate:[authGuard] }
 
 ];
 
