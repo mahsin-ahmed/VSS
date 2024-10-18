@@ -2,16 +2,14 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PoComponent } from './po.component';
 
-describe('PoComponent', () => {
+describe('StorereqComponent', () => {
   let component: PoComponent;
   let fixture: ComponentFixture<PoComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [PoComponent]
-    })
-    .compileComponents();
-    
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      declarations: [PoComponent]
+    });
     fixture = TestBed.createComponent(PoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

@@ -50,6 +50,7 @@ import { StorereqrecComponent } from './inventory/storereqrec/storereqrec.compon
 import { StockComponent } from './inventory/stock/stock.component';
 import { JcReqComponent } from './inventory/jc-req/jc-req.component';
 import { DatePipe } from '@angular/common';
+import { PoComponent } from './purchase/po/po.component';
 
 @NgModule({
   declarations: [
@@ -93,7 +94,8 @@ import { DatePipe } from '@angular/common';
     WorkgroupmemberComponent,
     StorereqrecComponent,
     StockComponent,
-    JcReqComponent
+    JcReqComponent,
+    PoComponent
   ],
   imports: [
     BrowserModule,

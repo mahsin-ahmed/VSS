@@ -1,1 +1,176 @@
-<p>po works!</p>
+<a href="javascript:void(0)" *ngIf="!isList" (click)="switchView('list')">List</a>
+<a href="javascript:void(0)" *ngIf="isList" (click)="switchView('form')">New</a>
+
+<!-- start store requisition view part  -->
+<!-- ================================================== -->
+<div *ngIf="isList">
+  <div class="row">
+    <div class="col-lg-4">
+      Show
+      <select style="width: 50px;height: 32px;" [(ngModel)]="pageSize" (change)="changePageSize()">
+        <option *ngFor="let x of listPageSize" value={{x}}>
+          {{x}}
+        </option>
+      </select>
+      records
+    </div>
+    <div class="col-lg-4 mb-5">
+      <h4 class="text-center">List of Purchase Order</h4>
+    </div>
+    <div class="col-lg-4">
+        <!-- <label for="jcStatus" class="form-label">JC Status:</label>
+        <select id="jcStatus" [(ngModel)]="reqStatus" (change)="get();">
+            <option value="1">Initial</option>
+            <option value="2">Approve</option>
+          </select> -->
+    </div>
+  </div>
+  <div class="itemList">
+    <div class="row">
+      <div class="col-md-12">
+        <table class="table table-bordered">
+          <tr class="table-secondary">
+            <th>Warehouse</th>
+            <th>Part Name</th>
+            <th>Supplier</th>
+            <th>Quantity</th>
+            <th>Remarks</th>
+            <th colspan="2">Action</th>
+          </tr>
+          <tr *ngFor="let item of listStoreReq">
+            <td>{{item.WHName}}</td>
+            <td>{{item.ItemName}}</td>
+            <td>{{item.SupplierName}}</td>
+            <td>{{item.Qty}}</td>
+            <td>{{item.Remark}}</td>
+            <td><button class="btn btn-sm btn-outline-primary" (click)="edit(item)">Edit</button></td>
+            <td><button class="btn btn-sm btn-outline-danger" (click)="oStoreReq=item" data-bs-toggle="modal" data-bs-target="#confirmModal">Remove</button></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ================================================== -->
+<!-- End store requisition view part -->
+<!-- Start Entry Form -->
+<!-- ========================================================= -->
+<div *ngIf="!isList">
+  <h4 class="mb-3 text-center">Purchase Order</h4>
+  <div class="row g-3">
+    <div class="col-md-4">
+      <label for="WarehouseId" class="form-label required">Warehouse Name</label>
+      <select class="form-control" id="WarehouseId" aria-label="Default select example" [(ngModel)]="wareHouseId">
+        <option *ngFor="let listWH of listWareHouse" value="{{listWH.Id}}">{{listWH.Name}}</option>
+      </select>
+    </div>
+    <div class="col-md-4">
+      <label for="itemName" class="form-label">Spare Parts: <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#searchPartNo">Search</a></label>
+      <input type="text" id="Quantity" [(ngModel)]="PartNo" class="form-control" placeholder="part-no" readonly />
+    </div>
+    <div class="col-md-4">
+        <label for="Qty" class="form-label required">Quantity:</label>
+        <input type="number" id="Qty" [(ngModel)]="oStoreReq.Qty" class="form-control" style="text-align: right;" />
+    </div>
+    <div class="col-md-4">
+      <label for="SuplierName" class="form-label required">Supplier Name:</label>
+      <select class="form-control" id="SuplierName" aria-label="Default select example" [(ngModel)]="oStoreReq.SupplierId">
+        <option *ngFor="let listSP of listSupplier" value="{{listSP.BpId}}">{{listSP.Name}}</option>
+      </select>
+    </div>
+    <div class="col-md-4">
+      <label for="ReqUrgentType" class="form-label">Urgency:</label>
+      <select class="form-control" id="ReqUrgentType" aria-label="Default select example" [(ngModel)]="oStoreReq.ReqUrgentType">
+        <option value="1">Very Urgent</option>
+        <option value="2">Semi Urgent</option>
+        <option value="3">Regular</option>
+      </select>
+    </div>
+    <div class="col-md-4">
+      <label for="Qty" class="form-label">Delivery (Hours):</label>
+      <input type="number" id="Qty" [(ngModel)]="oStoreReq.DeliveryTime" class="form-control" style="text-align: right;" />
+    </div>
+    
+    <div class="col-md-12">
+      <label for="Description" class="form-label">Description</label>
+      <textarea class="form-control" id="Description" rows="3" [(ngModel)]="oStoreReq.Remark"></textarea>
+    </div>
+    <div class="col-md-4">
+      <div class="col-auto  mb-2">
+        <button type="button" class="btn btn-success mb-3" *ngIf="oStoreReq.Id==0" (click)="add()"> Add Requisition</button>
+        <button type="button" class="btn btn-success mb-3" *ngIf="oStoreReq.Id>0" (click)="update()">Update Requisition</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ========================================================= -->
+<!-- End Entry Form -->
+
+<!-- Start Moal Part -->
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title text-primary">Are you sure to remove?</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-danger">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" (click)="reset();">No</button>/
+        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal"
+          (click)="remove(oStoreReq)">Yes</button>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End Modal Part -->
+
+<div class="modal fade" id="searchPartNo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title text-primary">Search A Spare Parts</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="row g-3">
+              <div class="col-md-4">
+                <label class="form-label" for="PartNo">Part No.</label>
+                <input type="text" id="PartNo" [(ngModel)]="PartNo"  class="form-control" />
+              </div>
+              <div class="col-md-4 mt-5">
+                <button type="button" class="btn btn-secondary" (click)="searchItem();">Search</button>
+              </div>
+              <div class="col-md-12">
+                <table class="table table-bordered">
+                  <tr class="table-secondary">
+                      <th scope="col">#</th>
+                      <th>Code</th>
+                      <th>Part No Old</th>
+                      <th>Part No New</th>
+                      <th>Item</th>
+                      <th>Brand</th>
+                      <th>Model</th>
+                      <th>#</th>
+                  </tr>
+                  <tr *ngFor="let item of listItem; let i = index">
+                      <td>{{i+1}}</td>
+                      <td>{{item.PartNoOld}}</td>
+                      <td>{{item.PartNoNew}}</td>
+                      <td>{{item.ItemName}}</td>
+                      <td>{{item.BrandName}}</td>
+                      <td>{{item.ModelCode}}</td>
+                      <td><button class="btn btn-sm btn-primary" (click)="selectItem(item);" data-bs-dismiss="modal">Select</button></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
